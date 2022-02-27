@@ -14,6 +14,7 @@
  * @package             kernel
  * @since               2.3.0
  */
+
 /**
  * XOOPS Block legacy Instance handler
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
@@ -41,12 +42,13 @@ class XoopsBlockInstance
     /**
      * Call Magic Function
      *
-     * @param  string $name
-     * @param  array  $args
+     * @param string $name
+     * @param array  $args
      * @return null
      */
-    public function __call($name, $args)
+    public function __call($name, array $args)
     {
+        $name = (string)$name;
         trigger_error("Class '" . __CLASS__ . "' is deprecated" . (empty($name) ? '' : " thus the method '{$name}' is not executed") . '!', E_USER_WARNING);
 
         return null;
@@ -55,12 +57,13 @@ class XoopsBlockInstance
     /**
      * Set Magic Function
      *
-     * @param  string $name
-     * @param  array  $args
+     * @param string $name
+     * @param array  $args
      * @return null
      */
-    public function __set($name, $args)
+    public function __set($name, array $args)
     {
+        $name = (string)$name;
         trigger_error("Class '" . __CLASS__ . "' is deprecated" . (empty($name) ? '' : " thus the variable '{$name}' is not set") . '!', E_USER_WARNING);
 
         return null;
@@ -69,11 +72,12 @@ class XoopsBlockInstance
     /**
      * Get Magic Function
      *
-     * @param  string $name
+     * @param string $name
      * @return null
      */
     public function __get($name)
     {
+        $name = (string)$name;
         trigger_error("Class '" . __CLASS__ . "' is deprecated" . (empty($name) ? '' : " thus the variable '{$name}' is not vailable") . '!', E_USER_WARNING);
 
         return null;
@@ -104,12 +108,13 @@ class XoopsBlockInstanceHandler
     /**
      * Call Magic Function
      *
-     * @param  string $name
-     * @param  array  $args
+     * @param string $name
+     * @param array  $args
      * @return null
      */
-    public function __call($name, $args)
+    public function __call($name, array $args)
     {
+        $name = (string)$name;
         trigger_error("Class '" . __CLASS__ . "' is deprecated" . (empty($name) ? '' : " thus the method '{$name}' is not executed") . '!', E_USER_WARNING);
 
         return null;
@@ -118,12 +123,13 @@ class XoopsBlockInstanceHandler
     /**
      * Set Magic Function
      *
-     * @param  string $name
-     * @param  array  $args
+     * @param string $name
+     * @param array  $args
      * @return null
      */
-    public function __set($name, $args)
+    public function __set($name, array $args)
     {
+        $name = (string)$name;
         trigger_error("Class '" . __CLASS__ . "' is deprecated" . (empty($name) ? '' : " thus the variable '{$name}' is not set") . '!', E_USER_WARNING);
 
         return false;
@@ -132,11 +138,12 @@ class XoopsBlockInstanceHandler
     /**
      * Get Magic Function
      *
-     * @param  string $name
+     * @param string $name
      * @return null
      */
     public function __get($name)
     {
+        $name = (string)$name;
         trigger_error("Class '" . __CLASS__ . "' is deprecated" . (empty($name) ? '' : " thus the variable '{$name}' is not available") . '!', E_USER_WARNING);
 
         return null;

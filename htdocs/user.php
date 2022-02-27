@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS User
  *
@@ -51,7 +52,7 @@ if ($op === 'main') {
 
     $redirect = Request::getUrl('xoops_redirect', '', 'GET');
     if (!empty($redirect)) {
-        $urlParts = parse_url($redirect);
+        $urlParts      = parse_url($redirect);
         $xoopsUrlParts = parse_url(XOOPS_URL);
         if (false !== $urlParts) {
             // make sure $redirect is somewhere inside XOOPS_URL
@@ -61,8 +62,8 @@ if ($op === 'main') {
             $hostMatch = (!isset($urlParts['host'])) || (0 === strcasecmp($urlParts['host'], $xoopsUrlParts['host']));
             // path only, or path matches
             $pathMatch = (isset($urlParts['path']) && !isset($urlParts['host']) && !isset($urlParts['scheme']))
-                || ($hostMatch && isset($urlParts['path']) && isset($xoopsUrlParts['path'])
-                    && 0 === strncmp($urlParts['path'], $xoopsUrlParts['path'], strlen($xoopsUrlParts['path'])));
+                         || ($hostMatch && isset($urlParts['path']) && isset($xoopsUrlParts['path'])
+                             && 0 === strncmp($urlParts['path'], $xoopsUrlParts['path'], strlen($xoopsUrlParts['path'])));
             if ($badScheme || !($hostMatch && $pathMatch)) {
                 $redirect = XOOPS_URL;
             }
@@ -120,10 +121,13 @@ if ($op === 'delete') {
         $ok = Request::getInt('ok', 0, 'POST');
         if ($ok != 1) {
             include $GLOBALS['xoops']->path('header.php');
-            xoops_confirm(array('op' => 'delete', 'ok' => 1), 'user.php', _US_SURETODEL . '<br>' . _US_REMOVEINFO);
+            xoops_confirm(array(
+                              'op' => 'delete',
+                              'ok' => 1,
+                          ), 'user.php', _US_SURETODEL . '<br>' . _US_REMOVEINFO);
             include $GLOBALS['xoops']->path('footer.php');
         } else {
-            $del_uid        = $GLOBALS['xoopsUser']->getVar('uid');
+            $del_uid = $GLOBALS['xoopsUser']->getVar('uid');
             /* @var XoopsMemberHandler $member_handler */
             $member_handler = xoops_getHandler('member');
             if (false !== $member_handler->deleteUser($GLOBALS['xoopsUser'])) {

@@ -216,7 +216,7 @@ class XoopsUserUtility
      *
      * Adapted from PMA_getIp() [phpmyadmin project]
      *
-     * @param  bool $asString requiring integer or dotted string
+     * @param bool $asString requiring integer or dotted string
      * @return mixed string or integer value for the IP
      */
     public static function getIP($asString = false)
@@ -257,9 +257,9 @@ class XoopsUserUtility
     /**
      * XoopsUserUtility::getUnameFromIds()
      *
-     * @param  mixed $uid
-     * @param  mixed $usereal
-     * @param  mixed $linked
+     * @param mixed $uid
+     * @param mixed $usereal
+     * @param mixed $linked
      * @return array
      */
     public static function getUnameFromIds($uid, $usereal = false, $linked = false)
@@ -300,9 +300,9 @@ class XoopsUserUtility
     /**
      * XoopsUserUtility::getUnameFromId()
      *
-     * @param  mixed $userid
-     * @param  mixed $usereal
-     * @param  mixed $linked
+     * @param mixed $userid
+     * @param mixed $usereal
+     * @param mixed $linked
      * @return string
      */
     public static function getUnameFromId($userid, $usereal = false, $linked = false)

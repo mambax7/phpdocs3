@@ -36,12 +36,19 @@ class Upgrade_230 extends XoopsUpgrade
     {
         parent::__construct(basename(__DIR__));
         $this->usedFiles = array('mainfile.php');
-        $this->tasks     = array('config', 'cache', 'path', 'db', 'bmlink');
+        $this->tasks     = array(
+            'config',
+            'cache',
+            'path',
+            'db',
+            'bmlink',
+        );
     }
 
     /**
      * Check if cpanel config already exists
      *
+     * @return bool
      */
     public function check_config()
     {
@@ -57,6 +64,7 @@ class Upgrade_230 extends XoopsUpgrade
     /**
      * Check if cache_model table already exists
      *
+     * @return bool
      */
     public function check_cache()
     {
@@ -67,7 +75,6 @@ class Upgrade_230 extends XoopsUpgrade
         }
 
         return $GLOBALS['xoopsDB']->getRowsNum($result) > 0;
-
         /*
         $sql = "SELECT COUNT(*) FROM `" . $GLOBALS['xoopsDB']->prefix('cache_model') . "`";
         if ( !$result = $GLOBALS['xoopsDB']->queryF( $sql ) ) {
@@ -81,6 +88,7 @@ class Upgrade_230 extends XoopsUpgrade
     /**
      * Check if primary key for `block_module_link` is already set
      *
+     * @return bool
      */
     public function check_bmlink()
     {
@@ -114,7 +122,10 @@ class Upgrade_230 extends XoopsUpgrade
             if ($row['Key_name'] === 'PRIMARY') {
                 $primary_add = false;
             }
-            if (in_array($row['Key_name'], array('block_id', 'module_id'))) {
+            if (in_array($row['Key_name'], array(
+                'block_id',
+                'module_id',
+            ))) {
                 $keys_drop[] = $row['Key_name'];
             }
         }
@@ -257,7 +268,7 @@ class Upgrade_230 extends XoopsUpgrade
      * @param $charset
      * @param $collation
      *
-     * @return bool
+     * @return bool|null
      */
     public function convert_db($charset, $collation)
     {
@@ -279,6 +290,7 @@ class Upgrade_230 extends XoopsUpgrade
     }
 
     // Some code not ready to use
+
     /**
      * @param $tables
      * @param $charset

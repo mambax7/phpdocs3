@@ -18,7 +18,7 @@
 
 /**
  * call htmlspecialchars with standard arguments
- * @param $value string
+ * @param string $value
  * @return string
  */
 function installerHtmlSpecialChars($value)
@@ -32,15 +32,15 @@ function install_acceptUser($hash = '')
     $assertClaims = array(
         'sub' => 'xoopsinstall',
     );
-    $claims = \Xmf\Jwt\TokenReader::fromCookie('install', 'xo_install_user', $assertClaims);
+    $claims               = \Xmf\Jwt\TokenReader::fromCookie('install', 'xo_install_user', $assertClaims);
     if (false === $claims || empty($claims->uname)) {
         return false;
     }
     $uname = $claims->uname;
     /* @var XoopsMemberHandler $memberHandler */
     $memberHandler = xoops_getHandler('member');
-    $users = $memberHandler->getUsers(new Criteria('uname', $uname));
-    $user = array_pop($users);
+    $users         = $memberHandler->getUsers(new Criteria('uname', $uname));
+    $user          = array_pop($users);
 
     if (is_object($GLOBALS['xoops']) && method_exists($GLOBALS['xoops'], 'acceptUser')) {
         $res = $GLOBALS['xoops']->acceptUser($uname, true, '');
@@ -69,9 +69,9 @@ function install_finalize($installer_modified)
 }
 
 /**
- * @param        $name
- * @param        $value
- * @param        $label
+ * @param string $name
+ * @param string $value
+ * @param string $label
  * @param string $help
  */
 function xoFormField($name, $value, $label, $help = '')
@@ -84,14 +84,14 @@ function xoFormField($name, $value, $label, $help = '')
     if ($help) {
         echo '<div class="xoform-help alert alert-info">' . $help . '</div>';
     }
-    echo '<input type="text" class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'">';
+    echo '<input type="text" class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '">';
     echo '</div>';
 }
 
 /**
- * @param        $name
- * @param        $value
- * @param        $label
+ * @param string $name
+ * @param string $value
+ * @param string $label
  * @param string $help
  */
 function xoPassField($name, $value, $label, $help = '')
@@ -105,22 +105,22 @@ function xoPassField($name, $value, $label, $help = '')
         echo '<div class="xoform-help alert alert-info">' . $help . '</div>';
     }
     if ($name === 'adminpass') {
-        echo '<input type="password" class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'"  onkeyup="passwordStrength(this.value)">';
+        echo '<input type="password" class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '"  onkeyup="passwordStrength(this.value)">';
     } else {
-        echo '<input type="password" class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'">';
+        echo '<input type="password" class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '">';
     }
     echo '</div>';
 }
 
 /**
- * @param        $name
- * @param        $value
- * @param        $label
+ * @param string $name
+ * @param string $value
+ * @param string $label
  * @param array  $options
  * @param string $help
- * @param        $extra
+ * @param string $extra
  */
-function xoFormSelect($name, $value, $label, $options, $help = '', $extra='')
+function xoFormSelect($name, $value, $label, array $options, $help = '', $extra = '')
 {
     $label = installerHtmlSpecialChars($label);
     $name  = installerHtmlSpecialChars($name);
@@ -130,10 +130,10 @@ function xoFormSelect($name, $value, $label, $options, $help = '', $extra='')
     if ($help) {
         echo '<div class="xoform-help alert alert-info">' . $help . '</div>';
     }
-    echo '<select class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'" '.$extra.'>';
+    echo '<select class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '" ' . $extra . '>';
     foreach ($options as $optionValue => $optionReadable) {
         $selected = ($value === $optionValue) ? ' selected' : '';
-        echo '<option value="'.$optionValue . '"' . $selected . '>' . $optionReadable . '</option>';
+        echo '<option value="' . $optionValue . '"' . $selected . '>' . $optionReadable . '</option>';
     }
     echo '</select>';
     echo '</div>';
@@ -143,7 +143,7 @@ function xoFormSelect($name, $value, $label, $options, $help = '', $extra='')
  * gets list of name of directories inside a directory
  */
 /**
- * @param $dirname
+ * @param string $dirname
  *
  * @return array
  */
@@ -165,7 +165,7 @@ function getDirList($dirname)
 }
 
 /**
- * @param        $status
+ * @param int    $status
  * @param string $str
  *
  * @return string
@@ -175,8 +175,16 @@ function xoDiag($status = -1, $str = '')
     if ($status == -1) {
         $GLOBALS['error'] = true;
     }
-    $classes = array(-1 => 'fa fa-fw fa-ban text-danger', 0 => 'fa fa-fw fa-square-o text-warning', 1 => 'fa fa-fw fa-check text-success');
-    $strings = array(-1 => FAILED, 0 => WARNING, 1 => SUCCESS);
+    $classes = array(
+        -1 => 'fa fa-fw fa-ban text-danger',
+        0  => 'fa fa-fw fa-square-o text-warning',
+        1  => 'fa fa-fw fa-check text-success',
+    );
+    $strings = array(
+        -1 => FAILED,
+        0  => WARNING,
+        1  => SUCCESS,
+    );
     if (empty($str)) {
         $str = $strings[$status];
     }
@@ -185,16 +193,16 @@ function xoDiag($status = -1, $str = '')
 }
 
 /**
- * @param      $name
- * @param bool $wanted
- * @param bool $severe
+ * @param string $name
+ * @param bool   $wanted
+ * @param bool   $severe
  *
  * @return string
  */
 function xoDiagBoolSetting($name, $wanted = false, $severe = false)
 {
-    $setting = (bool) ini_get($name);
-    if ($setting === (bool) $wanted) {
+    $setting = (bool)ini_get($name);
+    if ($setting === (bool)$wanted) {
         return xoDiag(1, $setting ? 'ON' : 'OFF');
     } else {
         return xoDiag($severe ? -1 : 0, $setting ? 'ON' : 'OFF');
@@ -239,8 +247,8 @@ function xoPhpVersion()
 }
 
 /**
- * @param $path
- * @param $valid
+ * @param string $path
+ * @param int   $valid
  *
  * @return string
  */
@@ -278,9 +286,9 @@ function genPathCheckHtml($path, $valid)
 }
 
 /**
- * @param $link
+ * @param mysqli $link
  *
- * @return mixed
+ * @return array
  */
 function getDbCharsets($link)
 {
@@ -325,7 +333,7 @@ function getDbCollations($link, $charset)
  * @param $charset
  * @param $collation
  *
- * @return null|string
+ * @return string|null
  */
 function validateDbCharset($link, &$charset, &$collation)
 {
@@ -367,7 +375,7 @@ function xoFormFieldCollation($name, $value, $label, $help, $link, $charset)
         return '';
     }
 
-    $options           = array();
+    $options = array();
     foreach ($collations as $key => $isDefault) {
         if ($isDefault) {  // 'Yes' or ''
             $options = array($key => $key . ' (Default)') + $options;
@@ -422,8 +430,8 @@ function xoFormFieldCharset($name, $value, $label, $help, $link)
 /**
  * *#@+
  * Xoops Write Licence System Key
- * @param        $system_key
- * @param        $licensefile
+ * @param string $system_key
+ * @param string $licensefile
  * @param string $license_file_dist
  * @return string
  */
@@ -452,9 +460,12 @@ function xoPutLicenseKey($system_key, $licensefile, $license_file_dist = 'licens
 function xoBuildLicenceKey()
 {
     $xoops_serdat = array();
-    $checksums = array(1 => 'md5', 2 => 'sha1');
-    $type      = mt_rand(1, 2);
-    $func      = $checksums[$type];
+    $checksums    = array(
+        1 => 'md5',
+        2 => 'sha1',
+    );
+    $type         = mt_rand(1, 2);
+    $func         = $checksums[$type];
 
     error_reporting(0);
 
@@ -497,8 +508,8 @@ function xoBuildLicenceKey()
 /**
  * *#@+
  * Xoops Stripe Licence System Key
- * @param $xoops_key
- * @return mixed|string
+ * @param string $xoops_key
+ * @return string
  */
 function xoStripeKey($xoops_key)
 {
@@ -507,13 +518,13 @@ function xoStripeKey($xoops_key)
     $length = 30;
     $strip  = floor(strlen($xoops_key) / 6);
     $strlen = strlen($xoops_key);
-    $ret = '';
+    $ret    = '';
     for ($i = 0; $i < $strlen; ++$i) {
         if ($i < $length) {
             ++$uu;
             if ($uu == $strip) {
                 $ret .= substr($xoops_key, $i, 1) . '-';
-                $uu = 0;
+                $uu  = 0;
             } else {
                 if (substr($xoops_key, $i, 1) != '-') {
                     $ret .= substr($xoops_key, $i, 1);
@@ -533,7 +544,6 @@ function xoStripeKey($xoops_key)
 
     return $ret;
 }
-
 
 /**
  * @return string

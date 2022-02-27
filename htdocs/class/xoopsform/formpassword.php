@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Password form element
  *
@@ -31,7 +32,6 @@ class XoopsFormPassword extends XoopsFormElement
      * @access private
      */
     public $_size;
-
     /**
      * Maximum length of the text
      *
@@ -39,7 +39,6 @@ class XoopsFormPassword extends XoopsFormElement
      * @access private
      */
     public $_maxlength;
-
     /**
      * Initial content of the field.
      *
@@ -47,12 +46,11 @@ class XoopsFormPassword extends XoopsFormElement
      * @access private
      */
     public $_value;
-
     /**
      * Cache password with browser. Disabled by default for security consideration
      * Added in 2.3.1
      *
-     * @var boolean
+     * @var bool
      * @access public
      */
     public $autoComplete = false;
@@ -101,7 +99,7 @@ class XoopsFormPassword extends XoopsFormElement
     /**
      * Get the "value" attribute
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string
      */
     public function getValue($encode = false)
@@ -127,6 +125,8 @@ class XoopsFormPassword extends XoopsFormElement
      */
     public function render()
     {
-        return XoopsFormRenderer::getInstance()->get()->renderFormPassword($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormPassword($this);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 include '../../../include/cp_header.php';
 include 'admin_header.php';
 require_once dirname(__DIR__) . '/class/gtickets.php';
@@ -59,7 +60,6 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
 
     redirect_header('index.php?page=prefix_manager', 1, _AM_MSG_DBUPDATED);
     exit;
-
     // DUMP INTO A LOCAL FILE
 } elseif (!empty($_POST['backup']) && !empty($_POST['prefix'])) {
     if (preg_match('/[^0-9A-Za-z_-]/', $_POST['prefix'])) {
@@ -80,7 +80,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
     }
 
     $exportString = '';
-    $rowLimit = 100;
+    $rowLimit     = 100;
 
     while (false !== ($row_table = $db->fetchArray($srs))) {
         $table = $row_table['Name'];
@@ -88,34 +88,34 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
             continue;
         }
         $drawCreate = $db->queryF("SHOW CREATE TABLE `$table`");
-        $create = $db->fetchRow($drawCreate);
+        $create     = $db->fetchRow($drawCreate);
         $db->freeRecordSet($drawCreate);
 
         $exportString .= "\nDROP TABLE IF EXISTS `$table`;\n{$create[1]};\n\n";
-        $result      = $db->query("SELECT * FROM `$table`");
-        $fieldCount  = $db->getFieldsNum($result);
+        $result       = $db->query("SELECT * FROM `$table`");
+        $fieldCount   = $db->getFieldsNum($result);
 
         $insertValues = '';
 
-        if ($db->getRowsNum($result)>0) {
-            $fieldInfo = array();
+        if ($db->getRowsNum($result) > 0) {
+            $fieldInfo   = array();
             $insertNames = "INSERT INTO `$table` (";
             for ($j = 0; $j < $fieldCount; ++$j) {
-                $field = $result->fetch_field_direct($j);
+                $field                   = $result->fetch_field_direct($j);
                 $fieldInfo[$field->name] = $field;
-                $insertNames .= ((0 === $j) ? '' : ', ') . $field->name;
+                $insertNames             .= ((0 === $j) ? '' : ', ') . $field->name;
             }
             $insertNames .= ")\nVALUES\n";
 
-            $rowCount = 0;
+            $rowCount     = 0;
             $insertValues = $insertNames;
             while (false !== ($row = $db->fetchArray($result))) {
                 if ($rowCount >= $rowLimit) {
                     $insertValues .= ");\n\n" . $insertNames;
-                    $rowCount = 0;
+                    $rowCount     = 0;
                 }
                 $insertValues .= (0 === $rowCount++) ? '(' : "),\n(";
-                $firstField = true;
+                $firstField   = true;
                 foreach ($fieldInfo as $name => $field) {
                     if (null === $row[$name]) {
                         $value = 'null';
@@ -142,7 +142,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
                         }
                     }
                     $insertValues .= ($firstField ? '' : ', ') . $value;
-                    $firstField = false;
+                    $firstField   = false;
                 }
             }
             $insertValues .= ");\n\n";
@@ -158,7 +158,6 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
     set_time_limit(0);
     echo $exportString;
     exit;
-
     // DROP TABLES
 } elseif (!empty($_POST['delete']) && !empty($_POST['prefix'])) {
     if (preg_match('/[^0-9A-Za-z_-]/', $_POST['prefix'])) {
@@ -222,7 +221,8 @@ while (false !== ($row_table = $db->fetchArray($srs))) {
     if (substr($row_table['Name'], -6) === '_users') {
         $prefixes[] = array(
             'name'    => substr($row_table['Name'], 0, -6),
-            'updated' => $row_table['Update_time']);
+            'updated' => $row_table['Update_time'],
+        );
     }
     $tables[] = $row_table['Name'];
 }
@@ -241,7 +241,6 @@ echo '
 ';
 
 foreach ($prefixes as $prefix) {
-
     // count the number of tables with the prefix
     $table_count       = 0;
     $has_xoopscomments = false;

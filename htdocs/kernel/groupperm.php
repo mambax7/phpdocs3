@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -136,11 +137,11 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
      *
      * @param bool $isNew Flag the object as "new"?
      *
-     * @return XoopsGroupPerm   {@link XoopsGroupPerm}
+     * @return \XoopsGroupPerm   {@link XoopsGroupPerm}
      */
     public function create($isNew = true)
     {
-        $perm = new XoopsGroupPerm();
+        $perm = new \XoopsGroupPerm();
         if ($isNew) {
             $perm->setNew();
         }
@@ -153,12 +154,12 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
      *
      * @param int $id ID
      *
-     * @return XoopsGroupPerm {@link XoopsGroupPerm}, FALSE on fail
+     * @return false|\XoopsGroupPerm {@link XoopsGroupPerm}, FALSE on fail
      */
     public function get($id)
     {
-        $id   = (int)$id;
-        $perm = false;
+        $id = (int)$id;
+        $perm   = false;
         if ($id > 0) {
             $sql = sprintf('SELECT * FROM %s WHERE gperm_id = %u', $this->db->prefix('group_permission'), $id);
             if (!$result = $this->db->query($sql)) {
@@ -166,7 +167,7 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $perm = new XoopsGroupPerm();
+                $perm = new \XoopsGroupPerm();
                 $perm->assignVars($this->db->fetchArray($result));
             }
         }
@@ -238,7 +239,7 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
      * Retrieve multiple {@link XoopsGroupPerm}s
      *
      * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param bool   $id_as_key Use IDs as array keys?
+     * @param bool                          $id_as_key Use IDs as array keys?
      *
      * @return array Array of {@link XoopsGroupPerm}s
      */
@@ -248,7 +249,7 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('group_permission');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -315,8 +316,8 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
     /**
      * Delete all module specific permissions assigned for a group
      *
-     * @param int $gperm_groupid ID of a group
-     * @param int $gperm_modid   ID of a module
+     * @param int      $gperm_groupid ID of a group
+     * @param int|null $gperm_modid   ID of a module
      *
      * @return bool TRUE on success
      */
@@ -333,9 +334,9 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
     /**
      * Delete all module specific permissions
      *
-     * @param int    $gperm_modid  ID of a module
-     * @param string $gperm_name   Name of a module permission
-     * @param int    $gperm_itemid ID of a module item
+     * @param int         $gperm_modid  ID of a module
+     * @param string|null $gperm_name   Name of a module permission
+     * @param int|null    $gperm_itemid ID of a module item
      *
      * @return bool TRUE on success
      */
@@ -416,9 +417,9 @@ class XoopsGroupPermHandler extends XoopsObjectHandler
     /**
      * Get all item IDs that a group is assigned a specific permission
      *
-     * @param string    $gperm_name    Name of permission
+     * @param string $gperm_name  Name of permission
      * @param int|array $gperm_groupid A group ID or an array of group IDs
-     * @param int       $gperm_modid   ID of a module
+     * @param int    $gperm_modid ID of a module
      *
      * @return array array of item IDs
      */

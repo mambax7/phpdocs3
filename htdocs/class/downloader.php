@@ -27,10 +27,14 @@ class XoopsDownloader
     /**
      * *#@+
      * file information
+     * @var string
      */
     public $mimetype;
+    /**
+     * @var string
+     */
     public $ext;
-    public $archiver;
+    public $archiver; //mb TODO - could be Zipfile or Tar class
     /**
      * *#@-
      */
@@ -56,7 +60,7 @@ class XoopsDownloader
             mb_http_output('pass');
         }
         header('Content-Type: ' . $this->mimetype);
-        if (preg_match("/MSIE (\d\.\d{1,2})/", $_SERVER['HTTP_USER_AGENT'])) {
+        if (preg_match('/MSIE (\d\.\d{1,2})/', $_SERVER['HTTP_USER_AGENT'])) {
             header('Content-Disposition: attachment; filename="' . $filename . '"');
             header('Expires: 0');
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -71,8 +75,8 @@ class XoopsDownloader
     /**
      * XoopsDownloader::addFile()
      *
-     * @param string $filepath
-     * @param string $newfilename
+     * @param string      $filepath
+     * @param string|null $newfilename
      */
     public function addFile($filepath, $newfilename = null)
     {
@@ -82,8 +86,8 @@ class XoopsDownloader
     /**
      * XoopsDownloader::addBinaryFile()
      *
-     * @param string $filepath
-     * @param string $newfilename
+     * @param string      $filepath
+     * @param string|null $newfilename
      */
     public function addBinaryFile($filepath, $newfilename = null)
     {
@@ -93,9 +97,9 @@ class XoopsDownloader
     /**
      * XoopsDownloader::addFileData()
      *
-     * @param mixed   $data
-     * @param string  $filename
-     * @param integer $time
+     * @param mixed  $data
+     * @param string $filename
+     * @param int    $time
      */
     public function addFileData(&$data, $filename, $time = 0)
     {
@@ -105,9 +109,9 @@ class XoopsDownloader
     /**
      * XoopsDownloader::addBinaryFileData()
      *
-     * @param mixed   $data
-     * @param string  $filename
-     * @param integer $time
+     * @param mixed  $data
+     * @param string $filename
+     * @param int    $time
      */
     public function addBinaryFileData(&$data, $filename, $time = 0)
     {
@@ -117,8 +121,8 @@ class XoopsDownloader
     /**
      * XoopsDownloader::download()
      *
-     * @param string  $name
-     * @param boolean $gzip
+     * @param string $name
+     * @param bool   $gzip
      */
     public function download($name, $gzip = true)
     {

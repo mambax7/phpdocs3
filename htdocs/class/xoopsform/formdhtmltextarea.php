@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Formatted textarea form
  *
@@ -52,7 +53,6 @@ class XoopsFormDhtmlTextArea extends XoopsFormTextArea
      * </ul>
      */
     public $htmlEditor = array();
-
     /**
      * Hidden text
      *
@@ -60,10 +60,18 @@ class XoopsFormDhtmlTextArea extends XoopsFormTextArea
      * @access private
      */
     public $_hiddenText;
-
+    /**
+     * @var bool
+     */
     public $skipPreview = false;
-    public $doHtml      = false;
-    public $js          = '';
+    /**
+     * @var bool
+     */
+    public $doHtml = false;
+    /**
+     * @var string
+     */
+    public $js = '';
 
     /**
      * Constructor
@@ -76,7 +84,7 @@ class XoopsFormDhtmlTextArea extends XoopsFormTextArea
      * @param string $hiddentext Identifier for hidden Text
      * @param array  $options    Extra options
      */
-    public function __construct($caption, $name, $value = '', $rows = 5, $cols = 50, $hiddentext = 'xoopsHiddenText', $options = array())
+    public function __construct($caption, $name, $value = '', $rows = 5, $cols = 50, $hiddentext = 'xoopsHiddenText', array $options = array())
     {
         global $xoopsConfig;
         static $inLoop = 0;
@@ -141,7 +149,9 @@ class XoopsFormDhtmlTextArea extends XoopsFormTextArea
             }
         }
 
-        return XoopsFormRenderer::getInstance()->get()->renderFormDhtmlTextArea($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormDhtmlTextArea($this);
     }
 
     /**

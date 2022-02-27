@@ -98,8 +98,8 @@ $available_languages = array(
  * Analyzes some PHP environment variables to find the most probable language
  * that should be used
  *
- * @param string  $str     string to analyze
- * @param integer $envType type of the PHP environment variable which value is $str
+ * @param string $str     string to analyze
+ * @param int    $envType type of the PHP environment variable which value is $str
  * @global        array    the list of available translations
  * @global        string   the retained translation keyword
  * @access   private

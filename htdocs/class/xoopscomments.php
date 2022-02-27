@@ -36,6 +36,9 @@ $GLOBALS['xoopsLogger']->addDeprecated("'/class/xoopscommments.php' is deprecate
  */
 class XoopsComments extends XoopsObject
 {
+    /**
+     * @var string
+     */
     public $ctable;
     /**
      * @var \XoopsMySQLDatabase
@@ -43,10 +46,10 @@ class XoopsComments extends XoopsObject
     public $db;
 
     /**
-     * @param      $ctable
-     * @param null|array $id
+     * @param string     $ctable
+     * @param array|null $id
      */
-    public function __construct($ctable, $id = null)
+    public function __construct($ctable, array $id = null)
     {
         $this->ctable = $ctable;
         $this->db     = XoopsDatabaseFactory::getDatabaseConnection();
@@ -129,7 +132,7 @@ class XoopsComments extends XoopsObject
     /**
      * Enter description here...
      *
-     * @return int
+     * @return int|false
      */
     public function delete()
     {
@@ -163,7 +166,7 @@ class XoopsComments extends XoopsObject
     /**
      * Get Comments Tree
      *
-     * @return mixed
+     * @return array
      */
     public function getCommentTree()
     {
@@ -180,11 +183,11 @@ class XoopsComments extends XoopsObject
     /**
      * Get All Comments using criteria match
      *
-     * @param  array  $criteria
-     * @param  bool   $asobject
-     * @param  string $orderby
-     * @param  int    $limit
-     * @param  int    $start
+     * @param array  $criteria
+     * @param bool   $asobject
+     * @param string $orderby
+     * @param int    $limit
+     * @param int    $start
      * @return array
      */
     public function getAllComments($criteria = array(), $asobject = true, $orderby = 'comment_id ASC', $limit = 0, $start = 0)
@@ -313,13 +316,13 @@ class XoopsComments extends XoopsObject
             if ($poster->getVar('attachsig')) {
                 $text .= '<p><br>_________________<br>' . $poster->user_sig() . '</p>';
             }
-            $reg_date = _CM_JOINED;
-            $reg_date .= formatTimestamp($poster->getVar('user_regdate'), 's');
-            $posts = _CM_POSTS;
-            $posts .= $poster->getVar('posts');
+            $reg_date  = _CM_JOINED;
+            $reg_date  .= formatTimestamp($poster->getVar('user_regdate'), 's');
+            $posts     = _CM_POSTS;
+            $posts     .= $poster->getVar('posts');
             $user_from = _CM_FROM;
             $user_from .= $poster->getVar('user_from');
-            $rank = $poster->rank();
+            $rank      = $poster->rank();
             if ($rank['image'] != '') {
                 $rank['image'] = "<img src='" . XOOPS_UPLOAD_URL . '/' . $rank['image'] . "' alt='' />";
             }

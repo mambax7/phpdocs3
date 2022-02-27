@@ -33,19 +33,14 @@ use Xmf\Yaml;
  */
 class Migrate
 {
-
-    /** @var false|\Xmf\Module\Helper|\Xoops\Module\Helper\HelperAbstract  */
+    /** @var false|\Xmf\Module\Helper|\Xoops\Module\Helper\HelperAbstract */
     protected $helper;
-
     /** @var string[] table names used by module */
     protected $moduleTables;
-
     /** @var Tables */
     protected $tableHandler;
-
     /** @var string yaml definition file */
     protected $tableDefinitionFile;
-
     /** @var array target table definitions in Xmf\Database\Tables::dumpTables() format */
     protected $targetDefinitions;
 
@@ -63,14 +58,14 @@ class Migrate
         if (false === $this->helper) {
             throw new \InvalidArgumentException("Invalid module $dirname specified");
         }
-        $module = $this->helper->getModule();
+        $module             = $this->helper->getModule();
         $this->moduleTables = $module->getInfo('tables');
         if (empty($this->moduleTables)) {
-            throw new \RuntimeException("No tables established in module");
+            throw new \RuntimeException('No tables established in module');
         }
-        $version = $module->getInfo('version');
+        $version                   = $module->getInfo('version');
         $this->tableDefinitionFile = $this->helper->path("sql/{$dirname}_{$version}_migrate.yml");
-        $this->tableHandler = new Tables();
+        $this->tableHandler        = new Tables();
     }
 
     /**
@@ -121,7 +116,7 @@ class Migrate
         if (!isset($this->targetDefinitions)) {
             $this->targetDefinitions = Yaml::read($this->tableDefinitionFile);
             if (null === $this->targetDefinitions) {
-                throw new \RuntimeException("No schema definition " . $this->tableDefinitionFile);
+                throw new \RuntimeException('No schema definition ' . $this->tableDefinitionFile);
             }
         }
         return $this->targetDefinitions;
@@ -245,7 +240,7 @@ class Migrate
                     if (!isset($existingIndexes[$key])) {
                         $this->tableHandler->addIndex($key, $tableName, $keyData['columns'], $keyData['unique']);
                     } elseif ($existingIndexes[$key]['unique'] !== $keyData['unique']
-                        || $existingIndexes[$key]['columns'] !== $keyData['columns']
+                              || $existingIndexes[$key]['columns'] !== $keyData['columns']
                     ) {
                         $this->tableHandler->dropIndex($key, $tableName);
                         $this->tableHandler->addIndex($key, $tableName, $keyData['columns'], $keyData['unique']);

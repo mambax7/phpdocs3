@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -20,11 +21,11 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 /**
  * A block
  *
- * @author  Kazumi Ono <onokazu@xoops.org>
+ * @author   Kazumi Ono <onokazu@xoops.org>
  *
- * @package kernel
+ * @package  kernel
  *
- * @todo reconcile the two XoopsBlock classes.
+ * @todo     reconcile the two XoopsBlock classes.
  * @internal This handler appears to only be loaded by system/class/group.php
  * @internal The other, in class/xoopsblock.php is loaded all over
  */
@@ -297,8 +298,8 @@ class XoopsBlock extends XoopsObject
     /**
      * return the content of the block for output
      *
-     * @param  string $format
-     * @param  string $c_type type of content
+     * @param string $format
+     * @param string $c_type  type of content
      *                        Valid values for the type of content:
      *                        H : custom HTML block
      *                        P : custom PHP block
@@ -383,7 +384,8 @@ class XoopsBlock extends XoopsObject
     {
         return in_array($this->getVar('block_type'), array(
             'C',
-            'E'));
+            'E',
+        ));
     }
 
     /**
@@ -409,7 +411,7 @@ class XoopsBlock extends XoopsObject
      */
     public function load($id)
     {
-        $id  = (int)$id;
+        $id = (int)$id;
         /** @var XoopsBlockHandler $blkhandler */
         $blkhandler = xoops_getHandler('block');
         $obj        = $blkhandler->get($id);
@@ -493,18 +495,18 @@ class XoopsBlock extends XoopsObject
     }
 
     /*
-    * Aligns the content of a block
-    * If position is 0, content in DB is positioned
-    * before the original content
-    * If position is 1, content in DB is positioned
-    * after the original content
-    */
+     * Aligns the content of a block
+     * If position is 0, content in DB is positioned
+     * before the original content
+     * If position is 1, content in DB is positioned
+     * after the original content
+     */
     /**
      * @param int    $position
      * @param string $content
      * @param string $contentdb
      *
-     * @return string
+     * @return string|null
      *
      * @deprecated
      */
@@ -523,8 +525,8 @@ class XoopsBlock extends XoopsObject
     /**
      * Enter description here...
      *
-     * @param  string $originaltitle
-     * @param  string $newtitle
+     * @param string $originaltitle
+     * @param string $newtitle
      * @return string title
      *
      * @deprecated
@@ -555,6 +557,7 @@ class XoopsBlock extends XoopsObject
      * @param int         $isactive
      * @returns array of block objects
      *
+     * @return array
      * @deprecated
      */
     public static function getAllBlocksByGroup($groupid, $asobject = true, $side = null, $visible = null, $orderby = 'b.weight,b.bid', $isactive = 1)
@@ -567,7 +570,7 @@ class XoopsBlock extends XoopsObject
         }
         $sql .= 'FROM ' . $db->prefix('newblocks') . ' b LEFT JOIN ' . $db->prefix('group_permission') . " l ON l.gperm_itemid=b.bid WHERE gperm_name = 'block_read' AND gperm_modid = 1";
         if (is_array($groupid)) {
-            $sql .= ' AND (l.gperm_groupid=' . $groupid[0] . '';
+            $sql  .= ' AND (l.gperm_groupid=' . $groupid[0] . '';
             $size = count($groupid);
             if ($size > 1) {
                 for ($i = 1; $i < $size; ++$i) {
@@ -595,7 +598,7 @@ class XoopsBlock extends XoopsObject
         if (isset($visible)) {
             $sql .= " AND b.visible=$visible";
         }
-        $sql .= " ORDER BY $orderby";
+        $sql    .= " ORDER BY $orderby";
         $result = $db->query($sql);
         $added  = array();
         while (false !== ($myrow = $db->fetchArray($result))) {
@@ -615,11 +618,11 @@ class XoopsBlock extends XoopsObject
     /**
      * XoopsBlock::getAllBlocks()
      *
-     * @param  string  $rettype
-     * @param  mixed   $side
-     * @param  mixed   $visible
-     * @param  string  $orderby
-     * @param  integer $isactive
+     * @param string  $rettype
+     * @param mixed   $side
+     * @param mixed   $visible
+     * @param string  $orderby
+     * @param int $isactive
      * @return array
      *
      * @deprecated
@@ -679,8 +682,8 @@ class XoopsBlock extends XoopsObject
     /**
      * XoopsBlock::getByModule()
      *
-     * @param  mixed $moduleid
-     * @param  mixed $asobject
+     * @param mixed $moduleid
+     * @param mixed $asobject
      * @return array
      *
      * @deprecated (This also appears, dead, in XoopsBlockHandler)
@@ -710,12 +713,12 @@ class XoopsBlock extends XoopsObject
     /**
      * XoopsBlock::getAllByGroupModule()
      *
-     * @param int|int[] $groupid
-     * @param integer   $module_id
-     * @param mixed     $toponlyblock
-     * @param mixed     $visible
-     * @param string    $orderby
-     * @param integer   $isactive
+     * @param mixed   $groupid
+     * @param int $module_id
+     * @param mixed   $toponlyblock
+     * @param mixed   $visible
+     * @param string  $orderby
+     * @param int $isactive
      * @return array
      *
      * @deprecated (This also appears, dead, in XoopsBlockHandler)
@@ -765,7 +768,7 @@ class XoopsBlock extends XoopsObject
         if (!empty($blockids)) {
             $sql .= ' AND b.bid IN (' . implode(',', $blockids) . ')';
         }
-        $sql .= ' ORDER BY ' . $orderby;
+        $sql    .= ' ORDER BY ' . $orderby;
         $result = $db->query($sql);
         while (false !== ($myrow = $db->fetchArray($result))) {
             $block              = new XoopsBlock($myrow);
@@ -779,11 +782,11 @@ class XoopsBlock extends XoopsObject
     /**
      * XoopsBlock::getNonGroupedBlocks()
      *
-     * @param  integer $module_id
-     * @param  mixed   $toponlyblock
-     * @param  mixed   $visible
-     * @param  string  $orderby
-     * @param  integer $isactive
+     * @param int $module_id
+     * @param mixed   $toponlyblock
+     * @param mixed   $visible
+     * @param string  $orderby
+     * @param int $isactive
      * @return array
      *
      * @deprecated
@@ -827,8 +830,8 @@ class XoopsBlock extends XoopsObject
                     $sql .= ' AND m.module_id=0';
                 }
             }
-            $sql .= ' AND b.bid IN (' . implode(',', $non_grouped) . ')';
-            $sql .= ' ORDER BY ' . $orderby;
+            $sql    .= ' AND b.bid IN (' . implode(',', $non_grouped) . ')';
+            $sql    .= ' ORDER BY ' . $orderby;
             $result = $db->query($sql);
             while (false !== ($myrow = $db->fetchArray($result))) {
                 $block              = new XoopsBlock($myrow);
@@ -843,9 +846,9 @@ class XoopsBlock extends XoopsObject
     /**
      * XoopsBlock::countSimilarBlocks()
      *
-     * @param  mixed $moduleId
-     * @param  mixed $funcNum
-     * @param  mixed $showFunc
+     * @param mixed $moduleId
+     * @param mixed $funcNum
+     * @param mixed $showFunc
      * @return int
      *
      * @deprecated
@@ -885,17 +888,17 @@ class XoopsBlock extends XoopsObject
  * @package             kernel
  * @subpackage          block
  *
- * @todo Why is this not a XoopsPersistableObjectHandler?
+ * @todo                Why is this not a XoopsPersistableObjectHandler?
  */
 class XoopsBlockHandler extends XoopsObjectHandler
 {
     /**
      * create a new block
      *
-     * @see XoopsBlock
-     * @param  bool $isNew is the new block new??
-     * @return XoopsBlock XoopsBlock reference to the new block
-     **/
+     * @see \XoopsBlock
+     * @param bool $isNew is the new block new??
+     * @return \XoopsBlock XoopsBlock reference to the new block
+     */
     public function create($isNew = true)
     {
         $block = new XoopsBlock();
@@ -909,14 +912,14 @@ class XoopsBlockHandler extends XoopsObjectHandler
     /**
      * retrieve a specific {@link XoopsBlock}
      *
-     * @see XoopsBlock
-     * @param  int $id bid of the block to retrieve
+     * @param int $id bid of the block to retrieve
      * @return XoopsBlock reference to the block
-     **/
+     *                    *@see XoopsBlock
+     */
     public function get($id)
     {
-        $block = false;
-        $id    = (int)$id;
+        $block  = false;
+        $id = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('newblocks') . ' WHERE bid=' . $id;
             if ($result = $this->db->query($sql)) {
@@ -951,25 +954,25 @@ class XoopsBlockHandler extends XoopsObjectHandler
             return false;
         }
 
-        $bid = $block->getVar('bid', 'n');
-        $mid = $block->getVar('mid', 'n');
-        $func_num = $block->getVar('func_num', 'n');
-        $options = $block->getVar('options', 'n');
-        $name = $block->getVar('name', 'n');
-        $title = $block->getVar('title', 'n');
-        $content = $block->getVar('content', 'n');
-        $side = $block->getVar('side', 'n');
-        $weight = $block->getVar('weight', 'n');
-        $visible = $block->getVar('visible', 'n');
-        $c_type = $block->getVar('c_type', 'n');
-        $isactive = $block->getVar('isactive', 'n');
-        $func_file = $block->getVar('func_file', 'n');
-        $show_func = $block->getVar('show_func', 'n');
-        $edit_func = $block->getVar('edit_func', 'n');
-        $template = $block->getVar('template', 'n');
+        $bid        = $block->getVar('bid', 'n');
+        $mid        = $block->getVar('mid', 'n');
+        $func_num   = $block->getVar('func_num', 'n');
+        $options    = $block->getVar('options', 'n');
+        $name       = $block->getVar('name', 'n');
+        $title      = $block->getVar('title', 'n');
+        $content    = $block->getVar('content', 'n');
+        $side       = $block->getVar('side', 'n');
+        $weight     = $block->getVar('weight', 'n');
+        $visible    = $block->getVar('visible', 'n');
+        $c_type     = $block->getVar('c_type', 'n');
+        $isactive   = $block->getVar('isactive', 'n');
+        $func_file  = $block->getVar('func_file', 'n');
+        $show_func  = $block->getVar('show_func', 'n');
+        $edit_func  = $block->getVar('edit_func', 'n');
+        $template   = $block->getVar('template', 'n');
         $bcachetime = $block->getVar('bcachetime', 'n');
         $block_type = $block->getVar('block_type', 'n');
-        $dirname = $block->getVar('dirname', 'n');
+        $dirname    = $block->getVar('dirname', 'n');
 
         if ($block->isNew()) {
             $bid = $this->db->genId('newblocks_bid_seq');
@@ -1062,8 +1065,8 @@ class XoopsBlockHandler extends XoopsObjectHandler
 
     /**
      * retrieve array of {@link XoopsBlock}s meeting certain conditions
-     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the blocks
-     * @param  bool   $id_as_key should the blocks' bid be the key for the returned array?
+     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the blocks
+     * @param bool                          $id_as_key should the blocks' bid be the key for the returned array?
      * @return array  {@link XoopsBlock}s matching the conditions
      **/
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -1071,9 +1074,9 @@ class XoopsBlockHandler extends XoopsObjectHandler
         $ret   = array();
         $limit = $start = 0;
         $sql   = 'SELECT DISTINCT(b.bid), b.* FROM ' . $this->db->prefix('newblocks') . ' b LEFT JOIN '
-            . $this->db->prefix('block_module_link') . ' l ON b.bid=l.block_id';
+                 . $this->db->prefix('block_module_link') . ' l ON b.bid=l.block_id';
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -1098,7 +1101,7 @@ class XoopsBlockHandler extends XoopsObjectHandler
     /**
      * get a list of blocks matchich certain conditions
      *
-     * @param  CriteriaElement $criteria conditions to match
+     * @param \CriteriaElement|null $criteria conditions to match
      * @return array  array of blocks matching the conditions
      **/
     public function getList(CriteriaElement $criteria = null)
@@ -1117,8 +1120,8 @@ class XoopsBlockHandler extends XoopsObjectHandler
     /* These are not deprecated, they are dead and should be removed */
     /**
      * @param mixed $moduleid
-     * @param bool  $asobject
-     * @param bool  $id_as_key
+     * @param bool $asobject
+     * @param bool $id_as_key
      * @return bool
      * @deprecated
      */
@@ -1131,11 +1134,11 @@ class XoopsBlockHandler extends XoopsObjectHandler
 
     /**
      * @param int|int[] $groupid
-     * @param int       $module_id
-     * @param bool      $toponlyblock
+     * @param int    $module_id
+     * @param bool   $toponlyblock
      * @param bool|null $visible
-     * @param string    $orderby
-     * @param int       $isactive
+     * @param string $orderby
+     * @param int    $isactive
      *
      * @return bool
      * @deprecated

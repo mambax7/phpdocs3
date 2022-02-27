@@ -30,12 +30,10 @@ class JsonWebToken
      * @var KeyAbstract
      */
     protected $key;
-
     /**
      * @var string
      */
     protected $algorithm = 'HS256';
-
     /**
      * @var array
      */
@@ -100,8 +98,8 @@ class JsonWebToken
     /**
      * Create a signed token string for a payload
      *
-     * @param array|\ArrayObject $payload          traversable set of claims, claim => value
-     * @param int                $expirationOffset seconds from now that token will expire. If not specified,
+     * @param array|\ArrayObject $payload           traversable set of claims, claim => value
+     * @param int                $expirationOffset  seconds from now that token will expire. If not specified,
      *                                              an "exp" claim will not be added or updated
      *
      * @return string encoded and signed jwt string
@@ -112,8 +110,8 @@ class JsonWebToken
      */
     public function create($payload, $expirationOffset = 0)
     {
-        if ((int) $expirationOffset > 0) {
-            $payload['exp'] = time() + (int) $expirationOffset;
+        if ((int)$expirationOffset > 0) {
+            $payload['exp'] = time() + (int)$expirationOffset;
         }
         $value = JWT::encode($payload, $this->key->getSigning(), $this->algorithm);
         return $value;

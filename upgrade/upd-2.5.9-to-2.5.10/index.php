@@ -22,7 +22,10 @@ class Upgrade_2510 extends XoopsUpgrade
     public function __construct()
     {
         parent::__construct(basename(__DIR__));
-        $this->tasks = array('metarobots', 'protectordata');
+        $this->tasks     = array(
+            'metarobots',
+            'protectordata',
+        );
         $this->usedFiles = array();
     }
 
@@ -39,7 +42,7 @@ class Upgrade_2510 extends XoopsUpgrade
         $table = $db->prefix('config');
 
         $sql = sprintf(
-            'SELECT count(*) FROM `%s` '
+            'SELECT COUNT(*) FROM `%s` '
             . "WHERE `conf_formtype` = 'select' AND `conf_name` = 'meta_robots' AND `conf_modid` = 0",
             $db->escape($table)
         );
@@ -50,7 +53,7 @@ class Upgrade_2510 extends XoopsUpgrade
             $row = $db->fetchRow($result);
             if ($row) {
                 $count = $row[0];
-                return (0 === (int) $count) ? true : false;
+                return (0 === (int)$count) ? true : false;
             }
         }
         return false;
@@ -92,8 +95,8 @@ class Upgrade_2510 extends XoopsUpgrade
      */
     public function apply_protectordata()
     {
-        $returnResult = false;
-        $sourcePath = XOOPS_PATH . '/modules/protector/configs/';
+        $returnResult    = false;
+        $sourcePath      = XOOPS_PATH . '/modules/protector/configs/';
         $destinationPath = XOOPS_VAR_PATH . '/protector/';
 
         if (!file_exists($destinationPath)) {
@@ -104,8 +107,8 @@ class Upgrade_2510 extends XoopsUpgrade
             $returnResult = true;
             while (false !== ($entry = $directory->read())) {
                 if ('.' !== $entry && '..' !== $entry) {
-                    $src = $sourcePath . $entry;
-                    $dest = $destinationPath . $entry;
+                    $src    = $sourcePath . $entry;
+                    $dest   = $destinationPath . $entry;
                     $result = copy($src, $dest);
                     if (false === $result) {
                         $returnResult = false;

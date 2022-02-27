@@ -68,7 +68,7 @@ class TokenReader
     /**
      * Validate and decode a JSON Web Token string from a request (i.e. POST body)
      *
-     * @param KeyAbstract|string $key          the key to use to sign the token, or name of key to build
+     * @param KeyAbstract|string $key           the key to use to sign the token, or name of key to build
      * @param string             $attributeName name of cookie that sources the token
      * @param array|\Traversable $assertClaims  traversable set of claims, claim => value, to assert
      *
@@ -103,7 +103,7 @@ class TokenReader
             return false;
         }
         $header = trim($header);
-        $space = strpos($header, ' '); // expecting "Bearer base64-token-string"
+        $space  = strpos($header, ' '); // expecting "Bearer base64-token-string"
         if (false !== $space) {
             $header = substr($header, $space);
         }

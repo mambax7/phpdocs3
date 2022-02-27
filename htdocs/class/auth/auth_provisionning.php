@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Authentification provisionning class
  *
@@ -29,12 +30,15 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
  */
 class XoopsAuthProvisionning
 {
+    /**
+     * @var \XoopsAuth
+     */
     protected $_auth_instance;
 
     /**
      * XoopsAuthProvisionning::getInstance()
      *
-     * @param mixed $auth_instance
+     * @param \XoopsAuth|null $auth_instance
      *
      * @return \XoopsAuthProvisionning
      */
@@ -56,8 +60,8 @@ class XoopsAuthProvisionning
     {
         $this->_auth_instance = $auth_instance;
         /* @var XoopsConfigHandler $config_handler */
-        $config_handler       = xoops_getHandler('config');
-        $config               = $config_handler->getConfigsByCat(XOOPS_CONF_AUTH);
+        $config_handler = xoops_getHandler('config');
+        $config         = $config_handler->getConfigsByCat(XOOPS_CONF_AUTH);
         foreach ($config as $key => $val) {
             $this->$key = $val;
         }
@@ -72,7 +76,7 @@ class XoopsAuthProvisionning
      * Return a Xoops User Object
      *
      * @param $uname
-     * @return XoopsUser or false
+     * @return XoopsUser|false
      */
     public function getXoopsUser($uname)
     {
@@ -92,7 +96,7 @@ class XoopsAuthProvisionning
      *
      * @param       $datas
      * @param       $uname
-     * @param  null $pwd
+     * @param null  $pwd
      * @return bool
      */
     public function sync($datas, $uname, $pwd = null)
@@ -116,14 +120,14 @@ class XoopsAuthProvisionning
     /**
      * Add a new user to the system
      *
-     * @param       $datas
-     * @param       $uname
-     * @param  null $pwd
+     * @param array       $datas
+     * @param string      $uname
+     * @param string|null $pwd
      * @return bool
      */
     public function add($datas, $uname, $pwd = null)
     {
-        $ret            = false;
+        $ret = false;
         /* @var XoopsMemberHandler $member_handler */
         $member_handler = xoops_getHandler('member');
         // Create XOOPS Database User
@@ -160,15 +164,15 @@ class XoopsAuthProvisionning
     /**
      * Modify user information
      *
-     * @param       $xoopsUser
-     * @param       $datas
-     * @param       $uname
-     * @param  null $pwd
+     * @param XoopsUser   $xoopsUser
+     * @param array       $datas
+     * @param string      $uname
+     * @param string|null $pwd
      * @return bool
      */
     public function change(&$xoopsUser, $datas, $uname, $pwd = null)
     {
-        $ret            = false;
+        $ret = false;
         /* @var XoopsMemberHandler $member_handler */
         $member_handler = xoops_getHandler('member');
         $xoopsUser->setVar('pass', password_hash(stripcslashes($pwd), PASSWORD_DEFAULT));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Object factory class.
  *
@@ -30,6 +31,7 @@ class XoopsModelFactory
 {
     /**
      * static private
+     * @var array
      */
     public $handlers = array();
 
@@ -44,6 +46,7 @@ class XoopsModelFactory
      * Get singleton instance
      *
      * @access public
+     * @return XoopsModelFactory
      */
     public function getInstance()
     {
@@ -62,13 +65,12 @@ class XoopsModelFactory
      * @access   public
      *
      * @param \XoopsPersistableObjectHandler $ohandler reference to {@link XoopsPersistableObjectHandler}
-     * @param string $name     handler name
-     * @param mixed  $args     args
+     * @param string                        $name     handler name
+     * @param array|null                    $args     args
      *
-     * @internal param XoopsPersistableObjectHandler $ohandler reference to {@link XoopsPersistableObjectHandler}
-     * @return object of handler
+     * @return object|null handler
      */
-    public static function loadHandler(\XoopsPersistableObjectHandler $ohandler, $name, $args = null)
+    public static function loadHandler($ohandler, $name, $args = null)
     {
         static $handlers;
         if (!isset($handlers[$name])) {
@@ -118,10 +120,10 @@ class XoopsModelAbstract
      * normally, this is called from child classes only
      *
      * @access protected
-     * @param mixed $args
-     * @param \XoopsPersistableObjectHandler|null $handler
+     * @param array|null                         $args
+     * @param \XoopsPersistableObjectHandler|null $handler     
      */
-    public function __construct($args = null, $handler = null)
+    public function __construct(array $args = null, $handler = null)
     {
         $this->setHandler($handler);
         $this->setVars($args);
@@ -130,7 +132,7 @@ class XoopsModelAbstract
     /**
      * XoopsModelAbstract::setHandler()
      *
-     * @param  mixed $handler
+     * @param mixed $handler
      * @return bool
      */
     public function setHandler($handler)
@@ -147,7 +149,7 @@ class XoopsModelAbstract
     /**
      * XoopsModelAbstract::setVars()
      *
-     * @param  mixed $args
+     * @param array|mixed $args
      * @return bool
      */
     public function setVars($args)

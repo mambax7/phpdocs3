@@ -1,4 +1,5 @@
 <?php
+
 namespace Geekwright\RegDom;
 
 /**
@@ -14,7 +15,13 @@ namespace Geekwright\RegDom;
  */
 class RegisteredDomain
 {
+    /**
+     * @var array|null
+     */
     protected $tree;
+    /**
+     * @var \Geekwright\RegDom\PublicSuffixList|null
+     */
     protected $psl;
 
     /**
@@ -40,8 +47,8 @@ class RegisteredDomain
      */
     protected function normalizeHost($url)
     {
-        $host = (false!==strpos($url, '/')) ? parse_url($url, PHP_URL_HOST) : $url;
-        $parts = explode('.', $host);
+        $host     = (false !== strpos($url, '/')) ? parse_url($url, PHP_URL_HOST) : $url;
+        $parts    = explode('.', $host);
         $utf8Host = '';
         foreach ($parts as $part) {
             $utf8Host = $utf8Host . (($utf8Host === '') ? '' : '.') . $this->convertPunycode($part);
@@ -59,7 +66,7 @@ class RegisteredDomain
      */
     protected function convertPunycode($part)
     {
-        if (strpos($part, 'xn--')===0) {
+        if (strpos($part, 'xn--') === 0) {
             if (function_exists('idn_to_utf8')) {
                 if (defined('INTL_IDNA_VARIANT_UTS46')) { // PHP 7.2
                     return idn_to_utf8($part, 0, INTL_IDNA_VARIANT_UTS46);
@@ -81,24 +88,24 @@ class RegisteredDomain
      */
     protected function decodePunycode($encoded)
     {
-        $prefix = 'xn--';
+        $prefix    = 'xn--';
         $safe_char = 0xFFFC;
-        $base = 36;
-        $tmin = 1;
-        $tmax = 26;
-        $skew = 38;
-        $damp = 700;
+        $base      = 36;
+        $tmin      = 1;
+        $tmax      = 26;
+        $skew      = 38;
+        $damp      = 700;
 
         if (strpos($encoded, $prefix) !== 0 || strlen(trim(str_replace($prefix, '', $encoded))) == 0) {
             return $encoded;
         }
 
         $is_first = true;
-        $bias = 72;
-        $idx = 0;
-        $char = 0x80;
-        $decoded = array();
-        $output = '';
+        $bias     = 72;
+        $idx      = 0;
+        $char     = 0x80;
+        $decoded  = array();
+        $output   = '';
 
         $delim_pos = strrpos($encoded, '-');
         if ($delim_pos > strlen($prefix)) {
@@ -111,25 +118,25 @@ class RegisteredDomain
 
         for ($enco_idx = $delim_pos ? ($delim_pos + 1) : 0; $enco_idx < $enco_len; ++$deco_len) {
             for ($old_idx = $idx, $w = 1, $k = $base; 1; $k += $base) {
-                $cp = ord($encoded[$enco_idx++]);
+                $cp    = ord($encoded[$enco_idx++]);
                 $digit = ($cp - 48 < 10) ? $cp - 22 : (($cp - 65 < 26) ? $cp - 65 : (($cp - 97 < 26) ? $cp - 97 : $base));
-                $idx += $digit * $w;
-                $t = ($k <= $bias) ? $tmin : (($k >= $bias + $tmax) ? $tmax : ($k - $bias));
+                $idx   += $digit * $w;
+                $t     = ($k <= $bias) ? $tmin : (($k >= $bias + $tmax) ? $tmax : ($k - $bias));
                 if ($digit < $t) {
                     break;
                 }
                 $w = (int)($w * ($base - $t));
             }
             $delta = $idx - $old_idx;
-            $delta = (int) ($is_first ? ($delta / $damp) : ($delta / 2));
-            $delta += (int) ($delta / ($deco_len + 1));
+            $delta = (int)($is_first ? ($delta / $damp) : ($delta / 2));
+            $delta += (int)($delta / ($deco_len + 1));
             for ($k = 0; $delta > (($base - $tmin) * $tmax) / 2; $k += $base) {
-                $delta = (int) ($delta / ($base - $tmin));
+                $delta = (int)($delta / ($base - $tmin));
             }
-            $bias = (int) ($k + ($base - $tmin + 1) * $delta / ($delta + $skew));
+            $bias     = (int)($k + ($base - $tmin + 1) * $delta / ($delta + $skew));
             $is_first = false;
-            $char += (int)($idx / ($deco_len + 1));
-            $idx %= ($deco_len + 1);
+            $char     += (int)($idx / ($deco_len + 1));
+            $idx      %= ($deco_len + 1);
             if ($deco_len > 0) {
                 for ($i = $deco_len; $i > $idx; $i--) {
                     $decoded[$i] = $decoded[($i - 1)];
@@ -169,7 +176,7 @@ class RegisteredDomain
     {
         $this->tree = $this->psl->getTree();
 
-        $signingDomain = $this->normalizeHost($host);
+        $signingDomain      = $this->normalizeHost($host);
         $signingDomainParts = explode('.', $signingDomain);
 
         $result = $this->findRegisteredDomain($signingDomainParts, $this->tree);
@@ -182,10 +189,10 @@ class RegisteredDomain
         // assure there is at least 1 TLD in the stripped signing domain
         if (!strpos($result, '.')) {
             $cnt = count($signingDomainParts);
-            if ($cnt == 1 || $signingDomainParts[$cnt-2] == '') {
+            if ($cnt == 1 || $signingDomainParts[$cnt - 2] == '') {
                 return null;
             }
-            return $signingDomainParts[$cnt-2] . '.' . $signingDomainParts[$cnt-1];
+            return $signingDomainParts[$cnt - 2] . '.' . $signingDomainParts[$cnt - 1];
         }
         return $result;
     }
@@ -196,7 +203,7 @@ class RegisteredDomain
      * @param string[] $remainingSigningDomainParts parts of domain being queried
      * @param string[] $treeNode                    subset of tree array by reference
      *
-     * @return null|string
+     * @return string|null
      */
     protected function findRegisteredDomain($remainingSigningDomainParts, &$treeNode)
     {
@@ -215,7 +222,7 @@ class RegisteredDomain
 
         if ($result === '') {
             return $sub;
-        } elseif (strlen($result)>0) {
+        } elseif (strlen($result) > 0) {
             return $result . '.' . $sub;
         }
         return null;

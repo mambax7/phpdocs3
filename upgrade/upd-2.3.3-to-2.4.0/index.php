@@ -60,6 +60,7 @@ class Upgrade_240 extends XoopsUpgrade
     /**
      * *#@+
      * Xoops Write Licence System Key
+     * @return string
      */
     public function xoops_putLicenseKey($system_key, $licensefile, $license_file_dist = 'license.dist.php')
     {
@@ -87,9 +88,12 @@ class Upgrade_240 extends XoopsUpgrade
     public function xoops_buildLicenceKey()
     {
         $xoops_serdat = array();
-        $checksums = array(1 => 'md5', 2 => 'sha1');
-        $type      = mt_rand(1, 2);
-        $func      = $checksums[$type];
+        $checksums    = array(
+            1 => 'md5',
+            2 => 'sha1',
+        );
+        $type         = mt_rand(1, 2);
+        $func         = $checksums[$type];
 
         error_reporting(0);
 
@@ -143,7 +147,7 @@ class Upgrade_240 extends XoopsUpgrade
                 ++$uu;
                 if ($uu == $strip) {
                     $ret .= substr($xoops_key, $i, 1) . '-';
-                    $uu = 0;
+                    $uu  = 0;
                 } else {
                     if (substr($xoops_key, $i, 1) != '-') {
                         $ret .= substr($xoops_key, $i, 1);
@@ -167,12 +171,20 @@ class Upgrade_240 extends XoopsUpgrade
     /**
      * Check if keys already exist
      *
+     * @return bool
      */
     public function check_keys()
     {
-        $tables['modules']       = array('isactive', 'weight', 'hascomments');
+        $tables['modules']       = array(
+            'isactive',
+            'weight',
+            'hascomments',
+        );
         $tables['users']         = array('level');
-        $tables['online']        = array('online_updated', 'online_uid');
+        $tables['online']        = array(
+            'online_updated',
+            'online_uid',
+        );
         $tables['config']        = array('conf_order');
         $tables['xoopscomments'] = array('com_status');
 
@@ -198,12 +210,20 @@ class Upgrade_240 extends XoopsUpgrade
     /**
      * Apply keys that are missing
      *
+     * @return bool
      */
     public function apply_keys()
     {
-        $tables['modules']       = array('isactive', 'weight', 'hascomments');
+        $tables['modules']       = array(
+            'isactive',
+            'weight',
+            'hascomments',
+        );
         $tables['users']         = array('level');
-        $tables['online']        = array('online_updated', 'online_uid');
+        $tables['online']        = array(
+            'online_updated',
+            'online_uid',
+        );
         $tables['config']        = array('conf_order');
         $tables['xoopscomments'] = array('com_status');
 
@@ -232,7 +252,10 @@ class Upgrade_240 extends XoopsUpgrade
     public function __construct()
     {
         parent::__construct(basename(__DIR__));
-        $this->tasks = array('keys', 'version');
+        $this->tasks = array(
+            'keys',
+            'version',
+        );
     }
 }
 

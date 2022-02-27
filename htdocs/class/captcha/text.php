@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CAPTCHA for text mode
  *
@@ -23,9 +24,9 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
  */
 class XoopsCaptchaText extends XoopsCaptchaMethod
 {
-
-    /** @var string  */
+    /** @var string */
     protected $outputText = '';
+
     /**
      * XoopsCaptchaMethod::__construct()
      *
@@ -40,7 +41,7 @@ class XoopsCaptchaText extends XoopsCaptchaMethod
     /**
      * XoopsCaptchaText::render()
      *
-     * @return string|void
+     * @return string
      */
     public function render()
     {

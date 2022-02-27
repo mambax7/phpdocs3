@@ -26,17 +26,21 @@ require_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpcapi.php';
 class XoopsApi extends XoopsXmlRpcApi
 {
     /**
-     * @param array $params
+     * @param array                $params
      * @param \XoopsXmlRpcResponse $response
-     * @param \XoopsModule $module
+     * @param \XoopsModule         $module
      */
     public function __construct(&$params, $response, $module)
     {
         parent::__construct($params, $response, $module);
     }
 
+    /**
+     * @return void
+     */
     public function newPost()
     {
+        $post = array();
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
             $this->response->add(new XoopsXmlRpcFault(104));
         } else {
@@ -123,8 +127,12 @@ class XoopsApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function editPost()
     {
+        $post = array();
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
             $this->response->add(new XoopsXmlRpcFault(104));
         } else {
@@ -186,6 +194,9 @@ class XoopsApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function deletePost()
     {
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
@@ -207,6 +218,7 @@ class XoopsApi extends XoopsXmlRpcApi
     }
 
     // currently returns the same struct as in metaWeblogApi
+
     /**
      * @param bool $respond
      *
@@ -214,6 +226,7 @@ class XoopsApi extends XoopsXmlRpcApi
      */
     public function &getPost($respond = true)
     {
+        $ret = array();
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
             $this->response->add(new XoopsXmlRpcFault(104));
         } else {
@@ -221,12 +234,12 @@ class XoopsApi extends XoopsXmlRpcApi
             include_once XOOPS_ROOT_PATH . '/modules/news/class/class.newsstory.php';
             $story = new NewsStory($this->params[0]);
             $ret   = array(
-                'uid'       => $story->uid(),
-                'published' => $story->published(),
-                'storyid'   => $story->storyid(),
-                'title'     => $story->title('Edit'),
-                'hometext'  => $story->hometext('Edit'),
-                'moretext'  => $story->bodytext('Edit')
+                           'uid'       => $story->uid(),
+                           'published' => $story->published(),
+                           'storyid'   => $story->storyid(),
+                           'title'     => $story->title('Edit'),
+                           'hometext'  => $story->hometext('Edit'),
+                           'moretext'  => $story->bodytext('Edit')
             );
             if (!$respond) {
                 return $ret;
@@ -263,17 +276,17 @@ class XoopsApi extends XoopsXmlRpcApi
             }
         }
 
-        return null;
+        return $ret;
     }
 
     /**
      * @param bool $respond
      *
-     * @return array|null
+     * @return array
      */
     public function &getRecentPosts($respond = true)
     {
-        $ret = null;
+        $ret = array();
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
             $this->response->add(new XoopsXmlRpcFault(104));
         } else {
@@ -287,12 +300,12 @@ class XoopsApi extends XoopsXmlRpcApi
             $ret    = array();
             for ($i = 0; $i < $scount; ++$i) {
                 $ret[] = array(
-                    'uid'       => $stories[$i]->uid(),
-                    'published' => $stories[$i]->published(),
-                    'storyid'   => $stories[$i]->storyId(),
-                    'title'     => $stories[$i]->title('Edit'),
-                    'hometext'  => $stories[$i]->hometext('Edit'),
-                    'moretext'  => $stories[$i]->bodytext('Edit')
+                               'uid'       => $stories[$i]->uid(),
+                               'published' => $stories[$i]->published(),
+                               'storyid'   => $stories[$i]->storyId(),
+                               'title'     => $stories[$i]->title('Edit'),
+                               'hometext'  => $stories[$i]->hometext('Edit'),
+                               'moretext'  => $stories[$i]->bodytext('Edit')
                 );
             }
             if (!$respond) {
@@ -342,10 +355,11 @@ class XoopsApi extends XoopsXmlRpcApi
     /**
      * @param bool $respond
      *
-     * @return array|null
+     * @return array
      */
     public function &getCategories($respond = true)
     {
+        $ret = array();
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
             $this->response->add(new XoopsXmlRpcFault(104));
         } else {
@@ -373,6 +387,6 @@ class XoopsApi extends XoopsXmlRpcApi
             }
         }
 
-        return null;
+        return $ret;
     }
 }

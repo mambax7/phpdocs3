@@ -8,6 +8,7 @@
  * @since               1.00
  * @package             xoopseditor
  */
+
 /*
  * Assocated with editor_registry.php
  */

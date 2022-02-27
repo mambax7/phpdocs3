@@ -25,12 +25,10 @@ namespace Xmf;
  */
 class StopWords
 {
-
     /**
      * mbstring encoding
      */
     const ENCODING = 'UTF-8';
-
     /** @var string[] */
     protected $stopwordList = array();
 
@@ -45,7 +43,7 @@ class StopWords
             Language::load('stopwords');
         }
         if (defined('_XMF_STOPWORDS')) {
-            $sw = explode(' ', _XMF_STOPWORDS);
+            $sw                 = explode(' ', _XMF_STOPWORDS);
             $this->stopwordList = array_fill_keys($sw, true);
         }
     }

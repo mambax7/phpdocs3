@@ -28,7 +28,6 @@ class XoopsGuiThadmin extends /* implements */
      * Reference to template object
      */
     public $template;
-
     /**
      * Holding navigation
      */

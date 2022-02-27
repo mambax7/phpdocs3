@@ -1,4 +1,5 @@
 <?php
+
 namespace Geekwright\RegDom;
 
 /**
@@ -13,12 +14,29 @@ namespace Geekwright\RegDom;
  */
 class PublicSuffixList
 {
+    /**
+     * @var string
+     */
     protected $sourceURL = 'https://publicsuffix.org/list/public_suffix_list.dat';
+    /**
+     * @var string
+     */
     protected $localPSL = 'public_suffix_list.dat';
+    /**
+     * @var string
+     */
     protected $cachedPrefix = 'cached_';
-
-    protected $tree;
-    protected $url;
+    /**
+     * @var array
+     */
+    protected $tree; //mb TODO - could be also null
+    /**
+     * @var string
+     */
+    protected $url;  //mb TODO - could be also null
+    /**
+     * @var string
+     */
     protected $dataDir = '/../data/'; // relative to __DIR__
 
     /**
@@ -39,7 +57,7 @@ class PublicSuffixList
      */
     public function setURL($url)
     {
-        $this->url = $url;
+        $this->url  = $url;
         $this->tree = null;
     }
 
@@ -74,9 +92,9 @@ class PublicSuffixList
         }
 
         $this->tree = array();
-        $list = $this->readPSL();
+        $list       = $this->readPSL();
 
-        if (false===$list) {
+        if (false === $list) {
             throw new \RuntimeException('Cannot read ' . $this->url);
         }
 
@@ -96,7 +114,7 @@ class PublicSuffixList
         $lines = explode("\n", $fileData);
 
         foreach ($lines as $line) {
-            if ($this->startsWith($line, "//") || $line == '') {
+            if ($this->startsWith($line, '//') || $line == '') {
                 continue;
             }
 
@@ -133,14 +151,14 @@ class PublicSuffixList
         $dom = trim(array_pop($tldParts));
 
         $isNotDomain = false;
-        if ($this->startsWith($dom, "!")) {
-            $dom = substr($dom, 1);
+        if ($this->startsWith($dom, '!')) {
+            $dom         = substr($dom, 1);
             $isNotDomain = true;
         }
 
         if (!array_key_exists($dom, $node)) {
             if ($isNotDomain) {
-                $node[$dom] = array("!" => "");
+                $node[$dom] = array('!' => '');
             } else {
                 $node[$dom] = array();
             }
@@ -159,7 +177,7 @@ class PublicSuffixList
      */
     public function getTree()
     {
-        if (null===$this->tree) {
+        if (null === $this->tree) {
             $this->loadTree();
         }
         return $this->tree;
@@ -173,7 +191,7 @@ class PublicSuffixList
      */
     protected function readPSL()
     {
-        $parts = parse_url($this->url);
+        $parts  = parse_url($this->url);
         $remote = isset($parts['scheme']) || isset($parts['host']);
         // try to read with file_get_contents
         $newPSL = file_get_contents(($remote ? '' : __DIR__) . $this->url);
@@ -185,7 +203,7 @@ class PublicSuffixList
         }
 
         // try again with curl if file_get_contents failed
-        if (function_exists('curl_init') && false !== ($curlHandle  = curl_init())) {
+        if (function_exists('curl_init') && false !== ($curlHandle = curl_init())) {
             curl_setopt($curlHandle, CURLOPT_URL, $this->url);
             curl_setopt($curlHandle, CURLOPT_FAILONERROR, true);
             curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
@@ -258,7 +276,7 @@ class PublicSuffixList
     /**
      * Set localPSL name based on URL
      *
-     * @param string|null  $url the URL for the PSL
+     * @param string|null $url the URL for the PSL
      *
      * @return void (sets $this->localPSL)
      */
@@ -267,8 +285,8 @@ class PublicSuffixList
         if (null === $url) {
             $url = $this->sourceURL;
         }
-        $parts = parse_url($url);
-        $fileName = basename($parts['path']);
+        $parts          = parse_url($url);
+        $fileName       = basename($parts['path']);
         $this->localPSL = $this->dataDir . $fileName;
     }
 

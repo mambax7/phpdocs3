@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Form Class Elements
  *

@@ -34,9 +34,9 @@ class SqlUtility
      *
      * Last revision: September 23, 2001 - gandon
      *
-     * @param  array  $ret the splitted sql commands
-     * @param  string $sql the sql commands
-     * @return boolean always true
+     * @param array  $ret the splitted sql commands
+     * @param string $sql the sql commands
+     * @return bool always true
      * @access   public
      */
     public static function splitMySqlFile(&$ret, $sql)
@@ -144,8 +144,8 @@ class SqlUtility
     /**
      * add a prefix.'_' to all tablenames in a query
      *
-     * @param  string $query  valid SQL query string
-     * @param  string $prefix prefix to add to all table names
+     * @param string $query  valid SQL query string
+     * @param string $prefix prefix to add to all table names
      * @return mixed  FALSE on failure
      */
     public static function prefixQuery($query, $prefix)

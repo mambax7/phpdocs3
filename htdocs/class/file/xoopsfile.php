@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File factory For XOOPS
  *
@@ -37,7 +38,7 @@ class XoopsFile
     /**
      * XoopsFile::getInstance()
      *
-     * @return
+     * @return XoopsFile
      */
     public function getInstance()
     {
@@ -91,11 +92,12 @@ class XoopsFile
     /**
      * XoopsFile::getHandler()
      *
-     * @param string $name
-     * @param mixed  $path
-     * @param mixed  $create
-     * @param mixed  $mode
-     * @return
+     * @param string      $name
+     * @param string|bool $path
+     * @param bool        $create
+     * @param int|null    $mode
+     *
+     * @return mixed|null
      */
     public static function getHandler($name = 'file', $path = false, $create = false, $mode = null)
     {
@@ -105,7 +107,7 @@ class XoopsFile
         if (class_exists($class)) {
             $handler = new $class($path, $create, $mode);
         } else {
-            trigger_error('Class ' . $class . ' not exist in File ' . __FILE__ . ' at Line ' . __LINE__, E_USER_WARNING);
+            trigger_error('Class ' . $class . ' does not exist in File ' . __FILE__ . ' at Line ' . __LINE__, E_USER_WARNING);
         }
 
         return $handler;

@@ -9,11 +9,12 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @copyright   Grégory Mage (Aka Mage)
+ * @copyright       Grégory Mage (Aka Mage)
  * @copyright   (c) 2000-2016 XOOPS Project (www.xoops.org)
- * @license     GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
- * @author      Grégory Mage (Aka Mage)
+ * @license         GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @author          Grégory Mage (Aka Mage)
  */
+
 // Info
 define('_AM_MODULEADMIN_CONFIG', 'Configuration Check');
 define('_AM_MODULEADMIN_CONFIG_CHMOD', "The folder '%s' must be with a chmod '%s' (it's now set on %s).");

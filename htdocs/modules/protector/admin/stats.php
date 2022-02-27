@@ -11,50 +11,60 @@
  */
 
 include __DIR__ . '/../../../mainfile.php';
-$mydirname = basename( dirname(__DIR__) ) ;
-$mydirpath = dirname(__DIR__) ;
-require $mydirpath.'/mytrustdirname.php' ; // set $mytrustdirname
+$mydirname = basename(dirname(__DIR__));
+$mydirpath = dirname(__DIR__);
+require $mydirpath . '/mytrustdirname.php'; // set $mytrustdirname
 
-require XOOPS_TRUST_PATH.'/modules/'.$mytrustdirname.'/admin/admin_header.php';
+require XOOPS_TRUST_PATH . '/modules/' . $mytrustdirname . '/admin/admin_header.php';
 
 xoops_cp_header();
 
+/**
+ * @param array       $array
+ * @param string|null $wrap
+ * @return string
+ */
 function dumpArray($array, $wrap = null)
 {
     $firstTime = true;
-    $string = '[';
+    $string    = '[';
     foreach ($array as $value) {
-        $string .= (!$firstTime) ? ', ' : '';
+        $string    .= (!$firstTime) ? ', ' : '';
         $firstTime = false;
-        $wrap = ($wrap === null) ? ((is_int($value)) ? '' : '\'') : $wrap;
-        $string .= $wrap . $value . $wrap;
+        $wrap      = ($wrap === null) ? ((is_int($value)) ? '' : '\'') : $wrap;
+        $string    .= $wrap . $value . $wrap;
     }
     $string .= ']';
     return $string;
 }
 
-$queryFormat = "SELECT `type`, '%s' as age, COUNT(*) as count FROM `" . $xoopsDB->prefix($mydirname . "_log")
-    . "` WHERE `timestamp` > NOW() - INTERVAL %d SECOND GROUP BY `type`, 2 ";
+$queryFormat = "SELECT `type`, '%s' as age, COUNT(*) as count FROM `" . $xoopsDB->prefix($mydirname . '_log')
+               . '` WHERE `timestamp` > NOW() - INTERVAL %d SECOND GROUP BY `type`, 2 ';
 
 $sql = '';
-$sql .= sprintf($queryFormat, 'month', 30*24*60*60);
+$sql .= sprintf($queryFormat, 'month', 30 * 24 * 60 * 60);
 $sql .= 'UNION ALL ';
-$sql .= sprintf($queryFormat, 'week', 7*24*60*60);
+$sql .= sprintf($queryFormat, 'week', 7 * 24 * 60 * 60);
 $sql .= 'UNION ALL ';
-$sql .= sprintf($queryFormat, 'day', 24*60*60);
+$sql .= sprintf($queryFormat, 'day', 24 * 60 * 60);
 $sql .= 'UNION ALL ';
-$sql .= sprintf($queryFormat, 'hour', 60*60);
+$sql .= sprintf($queryFormat, 'hour', 60 * 60);
 
-$rawStats = array();
+$rawStats              = array();
 $rawStats['']['month'] = 0;
-$rawStats['']['week'] = 0;
-$rawStats['']['day'] = 0;
-$rawStats['']['hour'] = 0;
-$result = $xoopsDB->query($sql);
+$rawStats['']['week']  = 0;
+$rawStats['']['day']   = 0;
+$rawStats['']['hour']  = 0;
+$result                = $xoopsDB->query($sql);
 while (false !== ($row = $xoopsDB->fetchArray($result))) {
     $rawStats[$row['type']][$row['age']] = $row['count'];
 }
-$ages = array('month', 'week', 'day', 'hour');
+$ages  = array(
+    'month',
+    'week',
+    'day',
+    'hour',
+);
 $stats = array();
 foreach ($rawStats as $type => $hits) {
     $stats[$type] = array();
@@ -73,14 +83,14 @@ $height = (count($keys) + 1) * 24;
 
 //
 // http://gionkunz.github.io/chartist-js/examples.html#example-bar-horizontal
-$script = "new Chartist.Bar('.ct-chart', {\n";
-$script .= '  labels: ' . dumpArray(array_keys($stats)) . ",\n";
-$script .= '  series: ';
+$script  = "new Chartist.Bar('.ct-chart', {\n";
+$script  .= '  labels: ' . dumpArray(array_keys($stats)) . ",\n";
+$script  .= '  series: ';
 $allSets = array();
-for ($i=0; $i<4; ++$i) {
+for ($i = 0; $i < 4; ++$i) {
     $newSet = array();
     foreach ($stats as $set) {
-        $newSet[] = $set[$i] - (($i<3) ? $set[$i+1] : 0);
+        $newSet[] = $set[$i] - (($i < 3) ? $set[$i + 1] : 0);
     }
     $allSets[] = dumpArray($newSet);
 }
@@ -110,7 +120,7 @@ EOS;
 $GLOBALS['xoTheme']->addStylesheet('modules/protector/assets/css/chartist.min.css');
 $GLOBALS['xoTheme']->addScript('modules/protector/assets/js/chartist.min.js');
 $GLOBALS['xoTheme']->addScript('', array(), $script);
-$styles =<<<EOSS
+$styles = <<<EOSS
 .ct-series-a .ct-bar { stroke: grey; }
 .ct-series-b .ct-bar { stroke: orange; }
 .ct-series-c .ct-bar { stroke: yellow; }
@@ -130,21 +140,20 @@ $styles =<<<EOSS
 EOSS;
 $GLOBALS['xoTheme']->addStylesheet('', array(), $styles);
 
-
 $moduleAdmin = \Xmf\Module\Admin::getInstance();
 
 $moduleAdmin->displayNavigation(basename(__FILE__));
 
 echo '<h3>' . _AM_ADMINSTATS_TITLE . '</h3>';
 echo '<div class="ct-chart xct-minor-seventh"></div>';
-echo '<script>'. $script .'</script>';
+echo '<script>' . $script . '</script>';
 
 echo '<div class="right">'
-    . '<div class="colorkeys color-series-a">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_MONTH . ' </span>'
-    . '<div class="colorkeys color-series-b">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_WEEK . ' </span>'
-    . '<div class="colorkeys color-series-c">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_DAY . ' </span>'
-    . '<div class="colorkeys color-series-d">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_HOUR . '</span>'
-    . '</div>';
+     . '<div class="colorkeys color-series-a">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_MONTH . ' </span>'
+     . '<div class="colorkeys color-series-b">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_WEEK . ' </span>'
+     . '<div class="colorkeys color-series-c">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_DAY . ' </span>'
+     . '<div class="colorkeys color-series-d">&nbsp;&nbsp;&nbsp;</div><span>' . _AM_ADMINSTATS_LAST_HOUR . '</span>'
+     . '</div>';
 
 /*
 

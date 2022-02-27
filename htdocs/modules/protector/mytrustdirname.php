@@ -1,4 +1,5 @@
 <?php
+
 // edit for xoops 2.4 core by phppp and trabis
 defined('XOOPS_TRUST_PATH') || exit('set XOOPS_TRUST_PATH in mainfile.php');
 

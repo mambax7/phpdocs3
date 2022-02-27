@@ -29,8 +29,17 @@ include_once XOOPS_ROOT_PATH . '/class/database/sqlutility.php';
  */
 class Db_manager
 {
+    /**
+     * @var array
+     */
     public $s_tables = array();
+    /**
+     * @var array
+     */
     public $f_tables = array();
+    /**
+     * @var object
+     */
     public $db;
 
     public function __construct()
@@ -76,6 +85,7 @@ class Db_manager
     public function queryFromFile($sql_file_path)
     {
         $tables = array();
+        $pieces = array();
 
         if (!file_exists($sql_file_path)) {
             return false;
@@ -141,23 +151,36 @@ class Db_manager
         return true;
     }
 
+    /**
+     * @var array
+     */
     public $successStrings = array(
         'create' => 'create',
         'insert' => 'insert',
         'alter'  => 'alter',
-        'drop'   => 'drop');
+        'drop'   => 'drop',
+    );
+    /**
+     * @var array
+     */
     public $failureStrings = array(
         'create' => 'fail',
         'insert' => 'fail',
         'alter'  => 'error',
-        'drop'   => 'error');
+        'drop'   => 'error',
+    );
 
     /**
      * @return string
      */
     public function report()
     {
-        $commands = array('create', 'insert', 'alter', 'drop');
+        $commands = array(
+            'create',
+            'insert',
+            'alter',
+            'drop',
+        );
         $content  = '<ul class="log">';
         foreach ($commands as $cmd) {
             if (!@empty($this->s_tables[$cmd])) {

@@ -25,10 +25,11 @@ class Protector_postcommon_post_need_multibyte extends ProtectorFilterAbstract
         }
 
         $lengths = array(
-            0          => 100, // default value
+            0          => 100,// default value
             'message'  => 2,
             'com_text' => 2,
-            'excerpt'  => 2);
+            'excerpt'  => 2,
+        );
 
         foreach ($_POST as $key => $data) {
             // dare to ignore arrays/objects

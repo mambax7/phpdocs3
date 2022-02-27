@@ -26,10 +26,22 @@ class SystemMenuHandler
      *
      * @var string
      */
-    public $_menutop  = array();
+    public $_menutop = array();
+    /**
+     * @var array
+     */
     public $_menutabs = array();
+    /**
+     * @var \XoopsModule
+     */
     public $_obj;
+    /**
+     * @var string
+     */
     public $_header;
+    /**
+     * @var string
+     */
     public $_subheader;
 
     /**
@@ -42,7 +54,7 @@ class SystemMenuHandler
     }
 
     /**
-     * @param $addon
+     * @param $addon //mb TODO XoopsModule??? , but it's not used anywhere
      */
     public function getAddon($addon)
     {
@@ -63,8 +75,8 @@ class SystemMenuHandler
     }
 
     /**
-     * @param      $options
-     * @param bool $multi
+     * @param array $options //mb TODO - should it be also null?
+     * @param bool  $multi
      */
     public function addMenuTopArray($options, $multi = true)
     {
@@ -82,7 +94,7 @@ class SystemMenuHandler
     }
 
     /**
-     * @param        $value
+     * @param string $value
      * @param string $name
      */
     public function addMenuTabs($value, $name = '')
@@ -95,8 +107,8 @@ class SystemMenuHandler
     }
 
     /**
-     * @param      $options
-     * @param bool $multi
+     * @param array $options
+     * @param bool  $multi
      */
     public function addMenuTabsArray($options, $multi = true)
     {
@@ -114,7 +126,7 @@ class SystemMenuHandler
     }
 
     /**
-     * @param $value
+     * @param string $value
      */
     public function addHeader($value)
     {
@@ -122,7 +134,7 @@ class SystemMenuHandler
     }
 
     /**
-     * @param $value
+     * @param string $value
      */
     public function addSubHeader($value)
     {
@@ -147,10 +159,10 @@ class SystemMenuHandler
         if ($num > 1) {
             foreach ($arr as $val) {
                 $return_str .= ' &gt; <a href="' . $site . $val . '/">' . $bc_label[$val] . '</a>';
-                $site .= $val . '/';
+                $site       .= $val . '/';
             }
         } elseif ($num == 1) {
-            $arr = $str;
+            $arr        = $str;
             $return_str .= ' &gt; <a href="' . $bc_site . $arr . '/">' . $bc_label[$arr] . '</a>';
         }
 
@@ -161,7 +173,7 @@ class SystemMenuHandler
      * @param int  $currentoption
      * @param bool $display
      *
-     * @return string
+     * @return string|null
      */
     public function render($currentoption = 1, $display = true)
     {
@@ -178,8 +190,8 @@ class SystemMenuHandler
         $breadcrumb                = $menuItems[$currentoption];
         $menuItems[$currentoption] = 'current';
         $menu                      = "<div id='buttontop_mod'>";
-        $menu .= "<table style='width: 100%; padding: 0;' cellspacing='0'>\n<tr>";
-        $menu .= "<td style='font-size: 10px; text-align: left; color: #2F5376; padding: 0 6px; line-height: 18px;'>";
+        $menu                      .= "<table style='width: 100%; padding: 0;' cellspacing='0'>\n<tr>";
+        $menu                      .= "<td style='font-size: 10px; text-align: left; color: #2F5376; padding: 0 6px; line-height: 18px;'>";
         foreach ($this->_menutop as $k => $v) {
             $menu .= " <a href=\"$k\">$v</a> |";
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cache engine For XOOPS
  *
@@ -58,7 +59,6 @@ class XoopsCacheMemcache extends XoopsCacheEngine
      * @access private
      */
     private $memcache;
-
     /**
      * settings
      *          servers = string or array of memcache servers, default => 127.0.0.1
@@ -77,7 +77,7 @@ class XoopsCacheMemcache extends XoopsCacheEngine
      *
      * @param array $settings array of setting for the engine
      *
-     * @return boolean True if the engine has been successfully initialized, false if not
+     * @return bool True if the engine has been successfully initialized, false if not
      * @access   public
      */
     public function init($settings = array())
@@ -87,9 +87,9 @@ class XoopsCacheMemcache extends XoopsCacheEngine
         }
         parent::init($settings);
         $defaults       = array(
-            'servers'  => array(
-                '127.0.0.1'),
-            'compress' => false);
+            'servers'  => array('127.0.0.1'),
+            'compress' => false,
+        );
         $this->settings = array_merge($defaults, $this->settings);
 
         if (!$this->settings['compress']) {
@@ -98,7 +98,7 @@ class XoopsCacheMemcache extends XoopsCacheEngine
         if (!is_array($this->settings['servers'])) {
             $this->settings['servers'] = array($this->settings['servers']);
         }
-        $this->memcache = null;
+//        $this->memcache = null;
         $this->memcache = new Memcache();
         foreach ($this->settings['servers'] as $server) {
             $parts = explode(':', $server);
@@ -118,10 +118,10 @@ class XoopsCacheMemcache extends XoopsCacheEngine
     /**
      * Write data for key into cache
      *
-     * @param  string  $key      Identifier for the data
-     * @param  mixed   $value    Data to be cached
-     * @param  integer $duration How long to cache the data, in seconds
-     * @return boolean True if the data was successfully cached, false on failure
+     * @param string $key      Identifier for the data
+     * @param mixed  $value    Data to be cached
+     * @param int    $duration How long to cache the data, in seconds
+     * @return bool True if the data was successfully cached, false on failure
      * @access public
      */
     public function write($key, $value, $duration = null)
@@ -132,7 +132,7 @@ class XoopsCacheMemcache extends XoopsCacheEngine
     /**
      * Read a key from the cache
      *
-     * @param  string $key Identifier for the data
+     * @param string $key Identifier for the data
      * @return mixed  The cached data, or false if the data doesn't exist, has expired, or if there was an error fetching it
      * @access public
      */
@@ -144,8 +144,8 @@ class XoopsCacheMemcache extends XoopsCacheEngine
     /**
      * Delete a key from the cache
      *
-     * @param  string $key Identifier for the data
-     * @return boolean True if the value was successfully deleted, false if it didn't exist or couldn't be removed
+     * @param string $key Identifier for the data
+     * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
      * @access public
      */
     public function delete($key)
@@ -156,7 +156,8 @@ class XoopsCacheMemcache extends XoopsCacheEngine
     /**
      * Delete all keys from the cache
      *
-     * @return boolean True if the cache was successfully cleared, false otherwise
+     * @param bool|null $check
+     * @return bool True if the cache was successfully cleared, false otherwise
      * @access public
      */
     public function clear($check = null)
@@ -167,9 +168,9 @@ class XoopsCacheMemcache extends XoopsCacheEngine
     /**
      * Connects to a server in connection pool
      *
-     * @param  string  $host host ip address or name
-     * @param  integer $port Server port
-     * @return boolean True if memcache server was connected
+     * @param string $host host ip address or name
+     * @param int    $port Server port
+     * @return bool True if memcache server was connected
      * @access public
      */
     public function connect($host, $port = 11211)

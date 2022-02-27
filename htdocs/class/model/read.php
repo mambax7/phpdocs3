@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Object render handler class.
  *
@@ -30,10 +31,10 @@ class XoopsModelRead extends XoopsModelAbstract
     /**
      * get all objects matching a condition
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} to match
-     * @param  array           $fields    variables to fetch
-     * @param  bool            $asObject  flag indicating as object, otherwise as array
-     * @param  bool            $id_as_key use the ID as key for the array
+     * @param \CriteriaElement|CriteriaCompo|null $criteria  {@link CriteriaElement} to match
+     * @param array|null            $fields    variables to fetch
+     * @param bool                  $asObject  flag indicating as object, otherwise as array
+     * @param bool                  $id_as_key use the ID as key for the array
      * @return array           of objects/array {@link XoopsObject}
      */
     public function &getAll(CriteriaElement $criteria = null, $fields = null, $asObject = true, $id_as_key = true)
@@ -95,9 +96,9 @@ class XoopsModelRead extends XoopsModelAbstract
      *
      * For performance consideration, getAll() is recommended
      *
-     * @param  CriteriaElement $criteria  {@link CriteriaElement} conditions to be met
-     * @param  bool            $id_as_key use the ID as key for the array
-     * @param  bool            $as_object return an array of objects?
+     * @param \CriteriaElement|null $criteria  {@link CriteriaElement} conditions to be met
+     * @param bool                  $id_as_key use the ID as key for the array
+     * @param bool                  $as_object return an array of objects?
      * @return array
      */
     public function &getObjects(CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
@@ -110,9 +111,9 @@ class XoopsModelRead extends XoopsModelAbstract
     /**
      * Retrieve a list of objects data
      *
-     * @param  CriteriaElement $criteria {@link CriteriaElement} conditions to be met
-     * @param  int             $limit    Max number of objects to fetch
-     * @param  int             $start    Which record to start at
+     * @param \CriteriaElement|null $criteria {@link CriteriaElement} conditions to be met
+     * @param int                   $limit    Max number of objects to fetch
+     * @param int                   $start    Which record to start at
      * @return array
      */
     public function getList(CriteriaElement $criteria = null, $limit = 0, $start = 0)
@@ -152,7 +153,7 @@ class XoopsModelRead extends XoopsModelAbstract
     /**
      * get IDs of objects matching a condition
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} to match
+     * @param  \CriteriaElement|CriteriaCompo|null $criteria {@link CriteriaElement} to match
      * @return array           of object IDs
      */
     public function &getIds(CriteriaElement $criteria = null)
@@ -161,7 +162,7 @@ class XoopsModelRead extends XoopsModelAbstract
         $sql   = "SELECT `{$this->handler->keyName}` FROM `{$this->handler->table}`";
         $limit = $start = null;
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -180,11 +181,11 @@ class XoopsModelRead extends XoopsModelAbstract
      *
      * {@link CriteriaCompo}
      *
-     * @param  int             $limit    Max number of objects to fetch
-     * @param  int             $start    Which record to start at
-     * @param  CriteriaElement $criteria {@link CriteriaElement} to match
-     * @param  array           $fields   variables to fetch
-     * @param  bool            $asObject flag indicating as object, otherwise as array
+     * @param int                   $limit    Max number of objects to fetch
+     * @param int                   $start    Which record to start at
+     * @param \CriteriaElement|null $criteria {@link CriteriaElement} to match
+     * @param array|null            $fields   variables to fetch
+     * @param bool                  $asObject flag indicating as object, otherwise as array
      * @return array           of objects    {@link XoopsObject}
      */
     public function &getByLimit($limit = 0, $start = 0, CriteriaElement $criteria = null, $fields = null, $asObject = true)
@@ -206,9 +207,9 @@ class XoopsModelRead extends XoopsModelAbstract
     /**
      * Convert a database resultset to a returnable array
      *
-     * @param  object $result    database resultset
-     * @param  bool   $id_as_key - should NOT be used with joint keys
-     * @param  bool   $as_object
+     * @param object $result    database resultset
+     * @param bool   $id_as_key - should NOT be used with joint keys
+     * @param bool   $as_object
      * @return array
      */
     public function convertResultSet($result, $id_as_key = false, $as_object = true)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -26,12 +27,12 @@ class XoopsModule extends XoopsObject
 {
     /**
      *
-     * @var string
+     * @var array
      */
     public $modinfo;
     /**
      *
-     * @var string
+     * @var array
      */
     public $adminmenu;
     /**
@@ -66,7 +67,7 @@ class XoopsModule extends XoopsObject
      * Load module info
      *
      * @param string  $dirname Directory Name
-     * @param boolean $verbose
+     * @param bool $verbose
      */
     public function loadInfoAsVar($dirname, $verbose = true)
     {
@@ -75,7 +76,7 @@ class XoopsModule extends XoopsObject
             $this->loadInfo($dirname, $verbose);
         }
         $this->setVar('name', $this->modinfo['name'], true);
-        $this->setVar('version', (int)(100 * ((float) $this->modinfo['version'] + 0.001)), true);
+        $this->setVar('version', (int)(100 * ((float)$this->modinfo['version'] + 0.001)), true);
         $this->setVar('dirname', $this->modinfo['dirname'], true);
         $hasmain     = (isset($this->modinfo['hasMain']) && $this->modinfo['hasMain'] == 1) ? 1 : 0;
         $hasadmin    = (isset($this->modinfo['hasAdmin']) && $this->modinfo['hasAdmin'] == 1) ? 1 : 0;
@@ -98,6 +99,7 @@ class XoopsModule extends XoopsObject
      *
      * @param string $str message to add
      * @access public
+     * @return void
      */
     public function setMessage($str)
     {
@@ -108,7 +110,6 @@ class XoopsModule extends XoopsObject
      * return the messages for this object as an array
      *
      * @return array an array of messages
-     * @access public
      */
     public function getMessages()
     {
@@ -118,8 +119,8 @@ class XoopsModule extends XoopsObject
     /**
      * Set module info
      *
-     * @param  string $name
-     * @param  mixed  $value
+     * @param string $name
+     * @param mixed  $value
      * @return bool
      **/
     public function setInfo($name, $value)
@@ -136,8 +137,8 @@ class XoopsModule extends XoopsObject
     /**
      * Get module info
      *
-     * @param  string|null $name
-     * @return array|string|false    Array of module information.
+     * @param string|null $name
+     * @return array|false    Array of module information.
      *                     If {@link $name} is set, returns a single module information item as string.
      */
     public function &getInfo($name = null)
@@ -176,7 +177,7 @@ class XoopsModule extends XoopsObject
     /**
      * Get links to the subpages
      *
-     * @return string|array
+     * @return array
      */
     public function subLink()
     {
@@ -185,7 +186,8 @@ class XoopsModule extends XoopsObject
             foreach ($this->getInfo('sub') as $submenu) {
                 $ret[] = array(
                     'name' => $submenu['name'],
-                    'url'  => $submenu['url']);
+                    'url'  => $submenu['url'],
+                );
             }
         }
 
@@ -207,7 +209,7 @@ class XoopsModule extends XoopsObject
     /**
      * Get the admin menu for the module
      *
-     * @return string
+     * @return array
      */
     public function &getAdminMenu()
     {
@@ -259,12 +261,12 @@ class XoopsModule extends XoopsObject
     /**
      * Search contents within a module
      *
-     * @param  string  $term
-     * @param  string  $andor 'AND' or 'OR'
-     * @param  integer $limit
-     * @param  integer $offset
-     * @param  integer $userid
-     * @return mixed   Search result.
+     * @param string  $term
+     * @param string  $andor 'AND' or 'OR'
+     * @param int $limit
+     * @param int $offset
+     * @param int $userid
+     * @return false|mixed Search result.
      */
     public function search($term = '', $andor = 'AND', $limit = 0, $offset = 0, $userid = 0)
     {
@@ -291,7 +293,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable mid
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -301,7 +303,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable mid
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function mid($format = '')
@@ -311,7 +313,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable name
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function name($format = '')
@@ -321,7 +323,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable version
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function version($format = '')
@@ -331,7 +333,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable last_update
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function last_update($format = '')
@@ -341,7 +343,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable weight
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function weight($format = '')
@@ -351,7 +353,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable isactive
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function isactive($format = '')
@@ -361,7 +363,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable dirname
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function dirname($format = '')
@@ -371,7 +373,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable hasmain
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function hasmain($format = '')
@@ -381,7 +383,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable hasadmin
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function hasadmin($format = '')
@@ -391,7 +393,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable hassearch
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function hassearch($format = '')
@@ -401,7 +403,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable hasconfig
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function hasconfig($format = '')
@@ -411,7 +413,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable hascomments
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function hascomments($format = '')
@@ -421,7 +423,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * Returns Class Base Variable hasnotification
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function hasnotification($format = '')
@@ -432,7 +434,7 @@ class XoopsModule extends XoopsObject
     /**
      * @param string $dirname
      *
-     * @return mixed
+     * @return false|\XoopsModule
      */
     public static function getByDirname($dirname)
     {
@@ -444,9 +446,11 @@ class XoopsModule extends XoopsObject
     }
 
     ##################### Deprecated Methods ######################
-
     /**#@+
      * @deprecated
+     */
+    /**
+     * @return bool
      */
     public function checkAccess()
     {
@@ -542,7 +546,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * @param string $template
-     * @param bool   $block
+     * @param bool $block
      *
      * @return bool
      */
@@ -595,7 +599,7 @@ class XoopsModule extends XoopsObject
 
     /**
      * @param string $type
-     * @param int    $state
+     * @param int $state
      *
      * @return bool
      */
@@ -631,7 +635,7 @@ class XoopsModule extends XoopsObject
  * @author        Kazumi Ono <onokazu@xoops.org>
  * @copyright (c) 2000-2016 XOOPS Project - www.xoops.org
  *
- * @todo Why is this not a XoopsPersistableObjectHandler?
+ * @todo          Why is this not a XoopsPersistableObjectHandler?
  */
 class XoopsModuleHandler extends XoopsObjectHandler
 {
@@ -642,7 +646,6 @@ class XoopsModuleHandler extends XoopsObjectHandler
      * @access private
      */
     public $_cachedModule_mid = array();
-
     /**
      * holds an array of cached module references, indexed by module dirname
      *
@@ -654,8 +657,8 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * Create a new {@link XoopsModule} object
      *
-     * @param  boolean $isNew Flag the new object as "new"
-     * @return XoopsModule
+     * @param bool $isNew Flag the new object as "new"
+     * @return \XoopsObject
      */
     public function create($isNew = true)
     {
@@ -670,14 +673,14 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * Load a module from the database
      *
-     * @param  int $id ID of the module
-     * @return object FALSE on fail
+     * @param int $id ID of the module
+     * @return false|object FALSE on fail
      */
     public function get($id)
     {
         static $_cachedModule_dirname;
         static $_cachedModule_mid;
-        $id     = (int)$id;
+        $id = (int)$id;
         $module = false;
         if ($id > 0) {
             if (!empty($_cachedModule_mid[$id])) {
@@ -692,7 +695,7 @@ class XoopsModuleHandler extends XoopsObjectHandler
                     $module = new XoopsModule();
                     $myrow  = $this->db->fetchArray($result);
                     $module->assignVars($myrow);
-                    $_cachedModule_mid[$id]                            = &$module;
+                    $_cachedModule_mid[$id]                        = &$module;
                     $_cachedModule_dirname[$module->getVar('dirname')] = &$module;
 
                     return $module;
@@ -706,8 +709,8 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * Load a module by its dirname
      *
-     * @param  string $dirname
-     * @return XoopsModule|FALSE on fail
+     * @param string $dirname
+     * @return false|\XoopsModule on fail
      */
     public function getByDirname($dirname)
     {
@@ -742,7 +745,7 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * Write a module to the database
      *
-     * @param  XoopsObject|XoopsModule $module a XoopsModule object
+     * @param XoopsObject|XoopsModule $module a XoopsModule object
      *
      * @return bool true on success, otherwise false
      */
@@ -787,7 +790,7 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * Delete a module from the database
      *
-     * @param  XoopsObject|XoopsModule $module a XoopsModule object
+     * @param XoopsObject|XoopsModule $module a XoopsModule object
      *
      * @return bool true on success, otherwise false
      */
@@ -848,8 +851,8 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * Load some modules
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param  boolean         $id_as_key Use the ID as key into the array
+     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
+     * @param bool                       $id_as_key Use the ID as key into the array
      * @return array
      */
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -858,8 +861,8 @@ class XoopsModuleHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('modules');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
-            $sql .= ' ORDER BY weight ' . $criteria->getOrder() . ', mid ASC';
+            $sql   .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ORDER BY weight ' . $criteria->getOrder() . ', mid ASC';
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -884,7 +887,7 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * Count some modules
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
+     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
      * @return int
      */
     public function getCount(CriteriaElement $criteria = null)
@@ -904,8 +907,8 @@ class XoopsModuleHandler extends XoopsObjectHandler
     /**
      * returns an array of module names
      *
-     * @param  CriteriaElement $criteria
-     * @param  boolean         $dirname_as_key if true, array keys will be module directory names
+     * @param \CriteriaElement|null $criteria
+     * @param bool         $dirname_as_key  if true, array keys will be module directory names
      *                                         if false, array keys will be module id
      * @return array
      */

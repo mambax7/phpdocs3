@@ -60,7 +60,6 @@ class XoopsMultiMailer extends PHPMailer
      * @access private
      */
     public $From = '';
-
     /**
      * 'from' name
      *
@@ -68,7 +67,6 @@ class XoopsMultiMailer extends PHPMailer
      * @access private
      */
     public $FromName = '';
-
     // can be 'smtp', 'sendmail', or 'mail'
     /**
      * Method to be used when sending the mail.
@@ -85,7 +83,6 @@ class XoopsMultiMailer extends PHPMailer
      * @access private
      */
     public $Mailer = 'mail';
-
     /**
      * set if $Mailer is 'sendmail'
      *
@@ -96,7 +93,6 @@ class XoopsMultiMailer extends PHPMailer
      * @access private
      */
     public $Sendmail = '/usr/sbin/sendmail';
-
     /**
      * SMTP Host.
      *
@@ -106,15 +102,13 @@ class XoopsMultiMailer extends PHPMailer
      * @access private
      */
     public $Host = '';
-
     /**
      * Does your SMTP host require SMTPAuth authentication?
      *
-     * @var boolean
+     * @var bool
      * @access private
      */
     public $SMTPAuth = false;
-
     /**
      * Username for authentication with your SMTP host.
      *
@@ -124,7 +118,6 @@ class XoopsMultiMailer extends PHPMailer
      * @access private
      */
     public $Username = '';
-
     /**
      * Password for SMTPAuth.
      *
@@ -174,6 +167,4 @@ class XoopsMultiMailer extends PHPMailer
         }
         //$this->pluginDir = XOOPS_ROOT_PATH . '/class/mail/phpmailer/';
     }
-
-
 }

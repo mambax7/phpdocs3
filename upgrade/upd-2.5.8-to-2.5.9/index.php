@@ -22,11 +22,15 @@ class Upgrade_259 extends XoopsUpgrade
     public function __construct()
     {
         parent::__construct(basename(__DIR__));
-        $this->tasks = array('sess_id', 'mainfile', 'zaplegacy');
+        $this->tasks     = array(
+            'sess_id',
+            'mainfile',
+            'zaplegacy',
+        );
         $this->usedFiles = array(
             'mainfile.php',
             XOOPS_VAR_PATH . '/data/secure.php',
-            'modules/system/themes/legacy/legacy.php'
+            'modules/system/themes/legacy/legacy.php',
         );
     }
 
@@ -44,7 +48,7 @@ class Upgrade_259 extends XoopsUpgrade
         $db = XoopsDatabaseFactory::getDatabaseConnection();
 
         $dbname = constant('XOOPS_DB_NAME');
-        $table = $db->prefix($table);
+        $table  = $db->prefix($table);
 
         $sql = sprintf(
             'SELECT `CHARACTER_MAXIMUM_LENGTH` FROM `information_schema`.`COLUMNS` '
@@ -60,7 +64,7 @@ class Upgrade_259 extends XoopsUpgrade
             $row = $db->fetchRow($result);
             if ($row) {
                 $columnLength = $row[0];
-                return (int) $columnLength;
+                return (int)$columnLength;
             }
         }
         return 0;
@@ -73,7 +77,7 @@ class Upgrade_259 extends XoopsUpgrade
      */
     public function check_sess_id()
     {
-        return (bool) ($this->getColumnLength('session', 'sess_id') >= 256);
+        return (bool)($this->getColumnLength('session', 'sess_id') >= 256);
     }
 
     /**
@@ -114,7 +118,7 @@ class Upgrade_259 extends XoopsUpgrade
                 if (is_int($val) && preg_match("/(define\()([\"'])({$key})\\2,\s*(\d+)\s*\)/", $content)) {
                     $content = preg_replace("/(define\()([\"'])({$key})\\2,\s*(\d+)\s*\)/", "define('{$key}', {$val})", $content);
                 } elseif (preg_match("/(define\()([\"'])({$key})\\2,\s*([\"'])(.*?)\\4\s*\)/", $content)) {
-                    $val = str_replace('$', '\$', addslashes($val));
+                    $val     = str_replace('$', '\$', addslashes($val));
                     $content = preg_replace("/(define\()([\"'])({$key})\\2,\s*([\"'])(.*?)\\4\s*\)/", "define('{$key}', '{$val}')", $content);
                 }
             }
@@ -179,6 +183,7 @@ class Upgrade_259 extends XoopsUpgrade
     }
 
     //modules/system/themes/legacy/legacy.php
+
     /**
      * Do we need to rewrite mainfile and secure?
      *
@@ -197,7 +202,7 @@ class Upgrade_259 extends XoopsUpgrade
     public function apply_zaplegacy()
     {
         $fileName = 'modules/system/themes/legacy/legacy.php';
-        $result = rename('../' . $fileName, '../' . $fileName . '.bak');
+        $result   = rename('../' . $fileName, '../' . $fileName . '.bak');
         if (false === $result) {
             return sprintf(_FILE_ACCESS_ERROR, $fileName);
         }

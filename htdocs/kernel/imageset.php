@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -44,7 +45,7 @@ class XoopsImageSet extends XoopsObject
 
     /**
      * Returns Class Base Variable imgset_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -54,7 +55,7 @@ class XoopsImageSet extends XoopsObject
 
     /**
      * Returns Class Base Variable imgset_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgset_id($format = '')
@@ -64,7 +65,7 @@ class XoopsImageSet extends XoopsObject
 
     /**
      * Returns Class Base Variable imgset_name
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgset_name($format = '')
@@ -74,7 +75,7 @@ class XoopsImageSet extends XoopsObject
 
     /**
      * Returns Class Base Variable imgset_refid
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgset_refid($format = '')
@@ -96,7 +97,7 @@ class XoopsImageSetHandler extends XoopsObjectHandler
     /**
      * Create a new {@link XoopsImageSet}
      *
-     * @param  boolean $isNew Flag the object as "new"
+     * @param bool $isNew Flag the object as "new"
      * @return XoopsImageSet
      **/
     public function create($isNew = true)
@@ -114,12 +115,12 @@ class XoopsImageSetHandler extends XoopsObjectHandler
      *
      * @param int $id ID
      *
+     * @return false|\XoopsImageSet {@link XoopsImageSet}, FALSE on fail
      * @internal param bool $getbinary
-     * @return XoopsImageSet|false {@link XoopsImageSet}, FALSE on fail
      */
     public function get($id)
     {
-        $id     = (int)$id;
+        $id = (int)$id;
         $imgset = false;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('imgset') . ' WHERE imgset_id=' . $id;
@@ -128,7 +129,7 @@ class XoopsImageSetHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $imgset = new XoopsImageSet();
+                $imgset = new \XoopsImageSet();
                 $imgset->assignVars($this->db->fetchArray($result));
             }
         }
@@ -139,7 +140,7 @@ class XoopsImageSetHandler extends XoopsObjectHandler
     /**
      * Write a {@link XoopsImageSet} object to the database
      *
-     * @param  XoopsObject|XoopsImageSet $imgset a XoopsImageSet object
+     * @param XoopsObject|XoopsImageSet $imgset a XoopsImageSet object
      *
      * @return bool true on success, otherwise false
      */
@@ -179,7 +180,7 @@ class XoopsImageSetHandler extends XoopsObjectHandler
     /**
      * Delete an XoopsImageSet from the database
      *
-     * @param  XoopsObject|XoopsImageSet $imgset a XoopsImageSet object
+     * @param XoopsObject|XoopsImageSet $imgset a XoopsImageSet object
      *
      * @return bool true on success, otherwise false
      */
@@ -203,7 +204,7 @@ class XoopsImageSetHandler extends XoopsObjectHandler
      * Load {@link XoopsImageSet}s from the database
      *
      * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param boolean         $id_as_key Use the ID as key into the array
+     * @param bool                          $id_as_key Use the ID as key into the array
      * @internal param bool $getbinary
      * @return array Array of {@link XoopsImageSet} objects
      */
@@ -213,7 +214,7 @@ class XoopsImageSetHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT DISTINCT i.* FROM ' . $this->db->prefix('imgset') . ' i LEFT JOIN ' . $this->db->prefix('imgset_tplset_link') . ' l ON l.imgset_id=i.imgset_id';
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -238,8 +239,8 @@ class XoopsImageSetHandler extends XoopsObjectHandler
     /**
      * Load {@link XoopsImage ThemeSet}s into a Database
      *
-     * @param  int    $imgset_id
-     * @param  string $tplset_name
+     * @param int    $imgset_id
+     * @param string $tplset_name
      * @return bool
      */
     public function linkThemeset($imgset_id, $tplset_name)
@@ -264,8 +265,8 @@ class XoopsImageSetHandler extends XoopsObjectHandler
     /**
      * Load {@link XoopsImage ThemeSet}s into a Database
      *
-     * @param  int    $imgset_id
-     * @param  string $tplset_name
+     * @param int    $imgset_id
+     * @param string $tplset_name
      * @return bool
      */
     public function unlinkThemeset($imgset_id, $tplset_name)
@@ -291,13 +292,13 @@ class XoopsImageSetHandler extends XoopsObjectHandler
      * @param string|null $tplset
      * @internal param int $imgcat_id
      * @internal param bool $image_display
-     * @return array Array of {@link XoopsImage} objects
+     * @return array Array of {@link XoopsImage} objects     
      */
     public function getList($refid = null, $tplset = null)
     {
         $criteria = new CriteriaCompo();
         if (isset($refid)) {
-            $criteria->add(new Criteria('imgset_refid', (string)$refid));
+            $criteria->add(new Criteria('imgset_refid', (string)$refid)); 
         }
         if (isset($tplset)) {
             $criteria->add(new Criteria('tplset_name', $tplset));

@@ -62,7 +62,7 @@ if (!isset($_POST['submit'])) {
         $GLOBALS['xoopsUser']->setVar('pass', password_hash($password, PASSWORD_DEFAULT));
         /* @var XoopsMemberHandler $member_handler */
         $member_handler = xoops_getHandler('member');
-        $msg = _PROFILE_MA_ERRORDURINGSAVE;
+        $msg            = _PROFILE_MA_ERRORDURINGSAVE;
         if ($member_handler->insertUser($GLOBALS['xoopsUser'])) {
             $msg = _PROFILE_MA_PASSWORDCHANGED;
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -161,6 +162,7 @@ class XoopsComment extends XoopsObject
     }
 
     // Start Add by voltan
+
     /**
      * Returns Class Base Variable com_user
      * @param string $format
@@ -326,7 +328,7 @@ class XoopsComment extends XoopsObject
  * @author              Kazumi Ono    <onokazu@xoops.org>
  * @copyright       (c) 2000-2016 XOOPS Project (www.xoops.org)
  *
- * @todo Why is this not a XoopsPersistableObjectHandler?
+ * @todo                Why is this not a XoopsPersistableObjectHandler?
  */
 class XoopsCommentHandler extends XoopsObjectHandler
 {
@@ -357,7 +359,7 @@ class XoopsCommentHandler extends XoopsObjectHandler
     public function get($id)
     {
         $comment = false;
-        $id      = (int)$id;
+        $id  = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('xoopscomments') . ' WHERE com_id=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -365,7 +367,7 @@ class XoopsCommentHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $comment = new XoopsComment();
+                $comment = new \XoopsComment();
                 $comment->assignVars($this->db->fetchArray($result));
             }
         }
@@ -439,7 +441,7 @@ class XoopsCommentHandler extends XoopsObjectHandler
      * Get some {@link XoopsComment}s
      *
      * @param CriteriaElement|CriteriaCompo $criteria
-     * @param bool   $id_as_key Use IDs as keys into the array?
+     * @param bool                          $id_as_key Use IDs as keys into the array?
      *
      * @return array Array of {@link XoopsComment} objects
      **/
@@ -449,9 +451,9 @@ class XoopsCommentHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('xoopscomments');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
-            $sort = ($criteria->getSort() != '') ? $criteria->getSort() : 'com_id';
-            $sql .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
+            $sql   .= ' ' . $criteria->renderWhere();
+            $sort  = ($criteria->getSort() != '') ? $criteria->getSort() : 'com_id';
+            $sql   .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -535,12 +537,12 @@ class XoopsCommentHandler extends XoopsObjectHandler
     /**
      * Retrieves comments for an item
      *
-     * @param int    $module_id Module ID
-     * @param int    $item_id   Item ID
-     * @param string $order     Sort order
-     * @param int    $status    Status of the comment
-     * @param int    $limit     Max num of comments to retrieve
-     * @param int    $start     Start offset
+     * @param int         $module_id Module ID
+     * @param int         $item_id   Item ID
+     * @param string|null $order     Sort order
+     * @param int|null    $status    Status of the comment
+     * @param int|null    $limit     Max num of comments to retrieve
+     * @param int         $start     Start offset
      *
      * @return array Array of {@link XoopsComment} objects
      **/
@@ -585,10 +587,10 @@ class XoopsCommentHandler extends XoopsObjectHandler
     /**
      * Get the top {@link XoopsComment}s
      *
-     * @param int    $module_id
-     * @param int    $item_id
-     * @param string $order
-     * @param int    $status
+     * @param int      $module_id
+     * @param int      $item_id
+     * @param string   $order
+     * @param int|null $status
      *
      * @return array Array of {@link XoopsComment} objects
      **/
@@ -608,9 +610,9 @@ class XoopsCommentHandler extends XoopsObjectHandler
     /**
      * Retrieve a whole thread
      *
-     * @param int $comment_rootid
-     * @param int $comment_id
-     * @param int $status
+     * @param int      $comment_rootid
+     * @param int      $comment_id
+     * @param int|null $status
      *
      * @return array Array of {@link XoopsComment} objects
      **/
@@ -628,9 +630,9 @@ class XoopsCommentHandler extends XoopsObjectHandler
     /**
      * Update
      *
-     * @param XoopsComment $comment    {@link XoopsComment} object
-     * @param string $field_name  Name of the field
-     * @param mixed  $field_value Value to write
+     * @param XoopsComment $comment     {@link XoopsComment} object
+     * @param string       $field_name  Name of the field
+     * @param mixed        $field_value Value to write
      *
      * @return bool
      **/
@@ -645,7 +647,7 @@ class XoopsCommentHandler extends XoopsObjectHandler
     /**
      * Delete all comments for one whole module
      *
-     * @param  int $module_id ID of the module
+     * @param int $module_id ID of the module
      * @return bool
      **/
     public function deleteByModule($module_id)

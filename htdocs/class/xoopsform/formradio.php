@@ -29,7 +29,6 @@ class XoopsFormRadio extends XoopsFormElement
      * @access private
      */
     public $_options = array();
-
     /**
      * Pre-selected value
      *
@@ -37,7 +36,6 @@ class XoopsFormRadio extends XoopsFormElement
      * @access private
      */
     public $_value;
-
     /**
      * Columns per line for rendering
      * Leave unset (null) to put all options in one line
@@ -48,7 +46,6 @@ class XoopsFormRadio extends XoopsFormElement
      * @access public
      */
     public $columns;
-
     /**
      * HTML to seperate the elements
      *
@@ -78,7 +75,7 @@ class XoopsFormRadio extends XoopsFormElement
     /**
      * Get the "value" attribute
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string
      */
     public function getValue($encode = false)
@@ -148,7 +145,7 @@ class XoopsFormRadio extends XoopsFormElement
     /**
      * Get the delimiter of this group
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string The delimiter
      */
     public function getDelimeter($encode = false)
@@ -163,6 +160,8 @@ class XoopsFormRadio extends XoopsFormElement
      */
     public function render()
     {
-        return XoopsFormRenderer::getInstance()->get()->renderFormRadio($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormRadio($this);
     }
 }

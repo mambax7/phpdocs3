@@ -1,4 +1,5 @@
 <?php
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -49,7 +50,7 @@ class XoopsCaptchaRecaptcha2 extends XoopsCaptchaMethod
     {
         $form = '<script src="https://www.google.com/recaptcha/api.js"></script>';
         $form .= '<div class="form-group"><div class="g-recaptcha" data-sitekey="'
-            . $this->config['website_key'] . '"></div></div>';
+                 . $this->config['website_key'] . '"></div></div>';
         return $form;
     }
 
@@ -62,12 +63,13 @@ class XoopsCaptchaRecaptcha2 extends XoopsCaptchaMethod
      */
     public function verify($sessionName = null)
     {
-        $isValid = false;
-        $recaptchaResponse = Request::getString('g-recaptcha-response', '');
+        $isValid            = false;
+        $recaptchaResponse  = Request::getString('g-recaptcha-response', '');
         $recaptchaVerifyURL = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $this->config['secret_key']
-            . '&response=' .  $recaptchaResponse . '&remoteip=' . IPAddress::fromRequest()->asReadable();
-        $usedCurl = false;
-        if (function_exists('curl_init') && false !== ($curlHandle  = curl_init())) {
+                              . '&response=' . $recaptchaResponse . '&remoteip=' . IPAddress::fromRequest()
+                                                                                            ->asReadable();
+        $usedCurl           = false;
+        if (function_exists('curl_init') && false !== ($curlHandle = curl_init())) {
             curl_setopt($curlHandle, CURLOPT_URL, $recaptchaVerifyURL);
             curl_setopt($curlHandle, CURLOPT_FAILONERROR, true);
             curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
@@ -76,7 +78,7 @@ class XoopsCaptchaRecaptcha2 extends XoopsCaptchaMethod
             if (false === $curlReturn) {
                 trigger_error(curl_error($curlHandle));
             } else {
-                $usedCurl = true;
+                $usedCurl       = true;
                 $recaptchaCheck = json_decode($curlReturn, true);
             }
             curl_close($curlHandle);

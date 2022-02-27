@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -41,7 +42,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -51,7 +52,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function confcat_id($format = '')
@@ -61,7 +62,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_name
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function confcat_name($format = '')
@@ -71,7 +72,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_order
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function confcat_order($format = '')
@@ -116,12 +117,12 @@ class XoopsConfigCategoryHandler extends XoopsObjectHandler
      *
      * @param int $id ID
      *
-     * @return XoopsConfigCategory|false {@link XoopsConfigCategory}, FALSE on fail
+     * @return false|\XoopsConfigCategory {@link XoopsConfigCategory}, FALSE on fail
      */
     public function get($id)
     {
         $confcat = false;
-        $id      = (int)$id;
+        $id  = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('configcategory') . ' WHERE confcat_id=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -129,7 +130,7 @@ class XoopsConfigCategoryHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $confcat = new XoopsConfigCategory();
+                $confcat = new \XoopsConfigCategory();
                 $confcat->assignVars($this->db->fetchArray($result));
             }
         }
@@ -202,7 +203,7 @@ class XoopsConfigCategoryHandler extends XoopsObjectHandler
      * Get some {@link XoopsConfigCategory}s
      *
      * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param bool            $id_as_key Use the IDs as keys to the array?
+     * @param bool                          $id_as_key Use the IDs as keys to the array?
      *
      * @return array Array of {@link XoopsConfigCategory}s
      */
@@ -212,12 +213,12 @@ class XoopsConfigCategoryHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('configcategory');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
-            $sort = !in_array($criteria->getSort(), array(
+            $sql   .= ' ' . $criteria->renderWhere();
+            $sort  = !in_array($criteria->getSort(), array(
                 'confcat_id',
                 'confcat_name',
                 'confcat_order')) ? 'confcat_order' : $criteria->getSort();
-            $sql .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
+            $sql   .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -240,7 +241,11 @@ class XoopsConfigCategoryHandler extends XoopsObjectHandler
     }
 
     /**#@+
+     * @param int $modid
+     * @return bool
      * @deprecated
+     */
+    /**
      * @param int $modid
      * @return bool
      */

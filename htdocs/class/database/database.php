@@ -44,7 +44,6 @@ abstract class XoopsDatabase
      * @var string
      */
     public $prefix = '';
-
     /**
      * reference to a {@link XoopsLogger} object
      *
@@ -52,11 +51,10 @@ abstract class XoopsDatabase
      * @var object XoopsLogger
      */
     public $logger;
-
     /**
      * If statements that modify the database are selected
      *
-     * @var boolean
+     * @var bool
      */
     public $allowWebChanges = false;
 
@@ -95,7 +93,7 @@ abstract class XoopsDatabase
      *
      * if tablename is empty, only prefix will be returned
      *
-     * @param  string $tablename tablename
+     * @param string $tablename tablename
      * @return string prefixed tablename, just prefix if tablename is empty
      */
     public function prefix($tablename = '')

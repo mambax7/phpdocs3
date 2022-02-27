@@ -41,7 +41,7 @@ function langDropdown()
             $content .= '<option value="">{#xoopsmlcontent_dlg.sellang}</option>';
             if (is_array($lang_list) && count($lang_list) > 0) {
                 foreach (array_keys($lang_list) as $lang_name) {
-                    $lang =& $lang_list[$lang_name];
+                    $lang    =& $lang_list[$lang_name];
                     $content .= '<option value="' . $lang['base']->getVar('lang_code') . '">' . $lang['base']->getVar('lang_name') . '</option>';
                 }
             }

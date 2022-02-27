@@ -1,4 +1,5 @@
 <?php
+
 // start hack by Trabis
 if (!class_exists('ProtectorRegistry')) {
     exit('Registry not found');
@@ -16,8 +17,8 @@ $mytrustdirpath = __DIR__;
 // environment
 require_once XOOPS_ROOT_PATH . '/class/template.php';
 /* @var XoopsModuleHandler $module_handler */
-$module_handler    = xoops_getHandler('module');
-$xoopsModule       = $module_handler->getByDirname($mydirname);
+$module_handler = xoops_getHandler('module');
+$xoopsModule    = $module_handler->getByDirname($mydirname);
 /* @var XoopsConfigHandler $config_handler */
 $config_handler    = xoops_getHandler('config');
 $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));

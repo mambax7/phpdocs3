@@ -38,17 +38,41 @@
 
 abstract class SystemFineUploadHandler
 {
-
+    /**
+     * @var array
+     */
     public $allowedExtensions = array();
+    /**
+     * @var array
+     */
     public $allowedMimeTypes = array('(none)'); // must specify!
-    public $sizeLimit = null;
+    /**
+     * @var int
+     */
+    public $sizeLimit; //mb TODO - it is int, but we check for null
+    /**
+     * @var string
+     */
     public $inputName = 'qqfile';
+    /**
+     * @var string
+     */
     public $chunksFolder = 'chunks';
-
+    /**
+     * @var float
+     */
     public $chunksCleanupProbability = 0.001; // Once in 1000 requests on avg
+    /**
+     * @var int
+     */
     public $chunksExpireIn = 604800; // One week
-
+    /**
+     * @var string
+     */
     protected $uploadName;
+    /**
+     * @var \stdClass
+     */
     public $claims;
 
     /**
@@ -96,10 +120,14 @@ abstract class SystemFineUploadHandler
         if ($name === null) {
             $name = $this->getName();
         }
-        $targetFolder = $this->chunksFolder.DIRECTORY_SEPARATOR.$uuid;
-        $totalParts = isset($_REQUEST['qqtotalparts']) ? (int)$_REQUEST['qqtotalparts'] : 1;
+        $targetFolder = $this->chunksFolder . DIRECTORY_SEPARATOR . $uuid;
+        $totalParts   = isset($_REQUEST['qqtotalparts']) ? (int)$_REQUEST['qqtotalparts'] : 1;
 
-        $targetPath = join(DIRECTORY_SEPARATOR, array($uploadDirectory, $uuid, $name));
+        $targetPath       = join(DIRECTORY_SEPARATOR, array(
+            $uploadDirectory,
+            $uuid,
+            $name,
+        ));
         $this->uploadName = $name;
 
         if (!file_exists($targetPath)) {
@@ -107,8 +135,8 @@ abstract class SystemFineUploadHandler
         }
         $target = fopen($targetPath, 'wb');
 
-        for ($i=0; $i<$totalParts; $i++) {
-            $chunk = fopen($targetFolder.DIRECTORY_SEPARATOR.$i, "rb");
+        for ($i = 0; $i < $totalParts; $i++) {
+            $chunk = fopen($targetFolder . DIRECTORY_SEPARATOR . $i, "rb");
             stream_copy_to_stream($chunk, $target);
             fclose($chunk);
         }
@@ -116,8 +144,8 @@ abstract class SystemFineUploadHandler
         // Success
         fclose($target);
 
-        for ($i=0; $i<$totalParts; $i++) {
-            unlink($targetFolder.DIRECTORY_SEPARATOR.$i);
+        for ($i = 0; $i < $totalParts; $i++) {
+            unlink($targetFolder . DIRECTORY_SEPARATOR . $i);
         }
 
         rmdir($targetFolder);
@@ -126,30 +154,37 @@ abstract class SystemFineUploadHandler
             unlink($targetPath);
             //http_response_code(413);
             header("HTTP/1.0 413 Request Entity Too Large");
-            return array("success" => false, "uuid" => $uuid, "preventRetry" => true);
+            return array(
+                "success"      => false,
+                "uuid"         => $uuid,
+                "preventRetry" => true,
+            );
         }
 
-        return array("success" => true, "uuid" => $uuid);
+        return array(
+            "success" => true,
+            "uuid"    => $uuid,
+        );
     }
 
     /**
      * Process the upload.
-     * @param string $uploadDirectory Target directory.
-     * @param string $name Overwrites the name of the file.
+     * @param string      $uploadDirectory Target directory.
+     * @param string|null $name            Overwrites the name of the file.
      * @return array response to be json encoded and returned to client
      */
     public function handleUpload($uploadDirectory, $name = null)
     {
-        if (is_writable($this->chunksFolder) &&
-            1 == mt_rand(1, 1/$this->chunksCleanupProbability)) {
+        if (is_writable($this->chunksFolder)
+            && 1 == mt_rand(1, 1 / $this->chunksCleanupProbability)) {
             // Run garbage collection
             $this->cleanupChunks();
         }
 
         // Check that the max upload size specified in class configuration does not
         // exceed size allowed by server config
-        if ($this->toBytes(ini_get('post_max_size')) < $this->sizeLimit ||
-            $this->toBytes(ini_get('upload_max_filesize')) < $this->sizeLimit) {
+        if ($this->toBytes(ini_get('post_max_size')) < $this->sizeLimit
+            || $this->toBytes(ini_get('upload_max_filesize')) < $this->sizeLimit) {
             $neededRequestSize = max(1, $this->sizeLimit / 1024 / 1024) . 'M';
             return array(
                 'error'=>"Server error. Increase post_max_size and upload_max_filesize to ".$neededRequestSize
@@ -186,7 +221,7 @@ abstract class SystemFineUploadHandler
 
         // check file error
         if ($file['error']) {
-            return array('error' => 'Upload Error #'.$file['error']);
+            return array('error' => 'Upload Error #' . $file['error']);
         }
 
         // Validate name
@@ -200,19 +235,22 @@ abstract class SystemFineUploadHandler
         }
 
         if (!is_null($this->sizeLimit) && $size > $this->sizeLimit) {
-            return array('error' => 'File is too large.', 'preventRetry' => true);
+            return array(
+                'error'        => 'File is too large.',
+                'preventRetry' => true,
+            );
         }
 
         // Validate file extension
         $pathinfo = pathinfo($name);
-        $ext = isset($pathinfo['extension']) ? strtolower($pathinfo['extension']) : '';
+        $ext      = isset($pathinfo['extension']) ? strtolower($pathinfo['extension']) : '';
 
         if ($this->allowedExtensions
             && !in_array(strtolower($ext), array_map("strtolower", $this->allowedExtensions))) {
             $these = implode(', ', $this->allowedExtensions);
             return array(
-                'error' => 'File has an invalid extension, it should be one of '. $these . '.',
-                'preventRetry' => true
+                'error'        => 'File has an invalid extension, it should be one of ' . $these . '.',
+                'preventRetry' => true,
             );
         }
 
@@ -220,7 +258,10 @@ abstract class SystemFineUploadHandler
         if (!empty($this->allowedMimeTypes)) {
             $mimeType = mime_content_type($_FILES[$this->inputName]['tmp_name']);
             if (!in_array($mimeType, $this->allowedMimeTypes)) {
-                return array('error' => 'File is of an invalid type.', 'preventRetry' => true);
+                return array(
+                    'error'        => 'File is of an invalid type.',
+                    'preventRetry' => true,
+                );
             }
         }
 
@@ -232,19 +273,19 @@ abstract class SystemFineUploadHandler
             # chunked upload
 
             $chunksFolder = $this->chunksFolder;
-            $partIndex = (int)$_REQUEST['qqpartindex'];
+            $partIndex    = (int)$_REQUEST['qqpartindex'];
 
             if (!is_writable($chunksFolder) && !is_executable($uploadDirectory)) {
                 return array('error' => "Server error. Chunks directory isn't writable or executable.");
             }
 
-            $targetFolder = $this->chunksFolder.DIRECTORY_SEPARATOR.$uuid;
+            $targetFolder = $this->chunksFolder . DIRECTORY_SEPARATOR . $uuid;
 
             if (!file_exists($targetFolder)) {
                 mkdir($targetFolder, 0775, true);
             }
 
-            $target = $targetFolder.'/'.$partIndex;
+            $target = $targetFolder . '/' . $partIndex;
 
             $storeResult = $this->storeUploadedFile($target, $mimeType, $uuid);
             if (false !== $storeResult) {
@@ -253,7 +294,11 @@ abstract class SystemFineUploadHandler
         } else {
             # non-chunked upload
 
-            $target = join(DIRECTORY_SEPARATOR, array($uploadDirectory, $uuid, $name));
+            $target = join(DIRECTORY_SEPARATOR, array(
+                $uploadDirectory,
+                $uuid,
+                $name,
+            ));
 
             if ($target) {
                 $this->uploadName = basename($target);
@@ -264,8 +309,10 @@ abstract class SystemFineUploadHandler
                 }
             }
 
-            return array('error'=> 'Could not save uploaded file.' .
-                'The upload was cancelled, or server error encountered');
+            return array(
+                'error' => 'Could not save uploaded file.' .
+                           'The upload was cancelled, or server error encountered',
+            );
         }
     }
 
@@ -275,7 +322,10 @@ abstract class SystemFineUploadHandler
             mkdir(dirname($target), 0775, true);
         }
         if (move_uploaded_file($_FILES[$this->inputName]['tmp_name'], $target)) {
-            return array('success'=> true, "uuid" => $uuid);
+            return array(
+                'success' => true,
+                "uuid"    => $uuid,
+            );
         }
         return false;
     }
@@ -291,34 +341,42 @@ abstract class SystemFineUploadHandler
         if ($this->isInaccessible($uploadDirectory)) {
             return array(
                 'error' => "Server error. Uploads directory isn't writable"
-                            . ((!$this->isWindows()) ? " or executable." : ".")
+                           . ((!$this->isWindows()) ? " or executable." : "."),
             );
         }
 
         $targetFolder = $uploadDirectory;
-        $uuid = false;
-        $method = $_SERVER["REQUEST_METHOD"];
+        $uuid         = false;
+        $method       = $_SERVER["REQUEST_METHOD"];
         if ($method == "DELETE") {
-            $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $url    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
             $tokens = explode('/', $url);
-            $uuid = $tokens[sizeof($tokens)-1];
+            $uuid   = $tokens[sizeof($tokens) - 1];
         } elseif ($method == "POST") {
             $uuid = $_REQUEST['qquuid'];
         } else {
-            return array("success" => false,
-                "error" => "Invalid request method! ".$method
+            return array(
+                "success" => false,
+                "error"   => "Invalid request method! " . $method,
             );
         }
 
-        $target = join(DIRECTORY_SEPARATOR, array($targetFolder, $uuid));
+        $target = join(DIRECTORY_SEPARATOR, array(
+            $targetFolder,
+            $uuid,
+        ));
 
         if (is_dir($target)) {
             $this->removeDir($target);
-            return array("success" => true, "uuid" => $uuid);
+            return array(
+                "success" => true,
+                "uuid"    => $uuid,
+            );
         } else {
-            return array("success" => false,
-                "error" => "File not found! Unable to delete.".$url,
-                "path" => $uuid
+            return array(
+                "success" => false,
+                "error"   => "File not found! Unable to delete." . $url,
+                "path"    => $uuid,
             );
         }
     }
@@ -327,7 +385,7 @@ abstract class SystemFineUploadHandler
      * Returns a path to use with this upload. Check that the name does not exist,
      * and appends a suffix otherwise.
      * @param string $uploadDirectory Target directory
-     * @param string $filename The name of the file to use.
+     * @param string $filename        The name of the file to use.
      *
      * @return string|false path or false if path could not be determined
      */
@@ -343,9 +401,9 @@ abstract class SystemFineUploadHandler
         }
 
         $pathinfo = pathinfo($filename);
-        $base = $pathinfo['filename'];
-        $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
-        $ext = $ext == '' ? $ext : '.' . $ext;
+        $base     = $pathinfo['filename'];
+        $ext      = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
+        $ext      = $ext == '' ? $ext : '.' . $ext;
 
         $unique = $base;
         $suffix = 0;
@@ -354,10 +412,10 @@ abstract class SystemFineUploadHandler
 
         while (file_exists($uploadDirectory . DIRECTORY_SEPARATOR . $unique . $ext)) {
             $suffix += rand(1, 999);
-            $unique = $base.'-'.$suffix;
+            $unique = $base . '-' . $suffix;
         }
 
-        $result =  $uploadDirectory . DIRECTORY_SEPARATOR . $unique . $ext;
+        $result = $uploadDirectory . DIRECTORY_SEPARATOR . $unique . $ext;
 
         // Create an empty target file
         if (!touch($result)) {
@@ -385,7 +443,7 @@ abstract class SystemFineUploadHandler
                 continue;
             }
 
-            $path = $this->chunksFolder.DIRECTORY_SEPARATOR.$item;
+            $path = $this->chunksFolder . DIRECTORY_SEPARATOR . $item;
 
             if (!is_dir($path)) {
                 continue;
@@ -412,7 +470,12 @@ abstract class SystemFineUploadHandler
             if (is_dir($item)) {
                 $this->removeDir($item);
             } else {
-                unlink(join(DIRECTORY_SEPARATOR, array($dir, $item)));
+                unlink(
+                    join(DIRECTORY_SEPARATOR, array(
+                        $dir,
+                        $item,
+                    ))
+                );
             }
         }
         rmdir($dir);
@@ -425,12 +488,12 @@ abstract class SystemFineUploadHandler
      */
     protected function toBytes($str)
     {
-        $str = trim($str);
-        $last = strtolower($str[strlen($str)-1]);
-        if(is_numeric($last)) {
-            $val = (int) $str;
+        $str  = trim($str);
+        $last = strtolower($str[strlen($str) - 1]);
+        if (is_numeric($last)) {
+            $val = (int)$str;
         } else {
-            $val = (int) substr($str, 0, -1);
+            $val = (int)substr($str, 0, -1);
         }
         switch ($last) {
             case 'g':
@@ -457,7 +520,7 @@ abstract class SystemFineUploadHandler
      */
     protected function isInaccessible($directory)
     {
-        $isWin = $this->isWindows();
+        $isWin              = $this->isWindows();
         $folderInaccessible =
             ($isWin) ? !is_writable($directory) : (!is_writable($directory) && !is_executable($directory));
         return $folderInaccessible;
@@ -466,7 +529,7 @@ abstract class SystemFineUploadHandler
     /**
      * Determines is the OS is Windows or not
      *
-     * @return boolean
+     * @return bool
      */
 
     protected function isWindows()

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  header.php code for pre-2.0 themes
  *
@@ -42,14 +43,14 @@ if ($xoopsConfig['debug_mode'] == 3) {
 if ($xoopsUser != '') {
     $xoopsTpl->assign(array(
                           'xoops_isuser'  => true,
-                          'xoops_userid'  => $xoopsUser->getVar('uid'),
-                          'xoops_uname'   => $xoopsUser->getVar('uname'),
+                            'xoops_userid'  => $xoopsUser->getVar('uid'),
+                            'xoops_uname'   => $xoopsUser->getVar('uname'),
                           'xoops_isadmin' => $xoopsUserIsAdmin));
 }
 $xoopsTpl->assign('xoops_requesturi', htmlspecialchars($GLOBALS['xoopsRequestUri'], ENT_QUOTES));
 include XOOPS_ROOT_PATH . '/include/old_functions.php';
 
-if ($xoopsOption['show_cblock'] || (!empty($xoopsModule) && preg_match("/index\.php$/i", xoops_getenv('PHP_SELF')) && $xoopsConfig['startpage'] == $xoopsModule->getVar('dirname'))) {
+if ($xoopsOption['show_cblock'] || (!empty($xoopsModule) && preg_match('/index\.php$/i', xoops_getenv('PHP_SELF')) && $xoopsConfig['startpage'] == $xoopsModule->getVar('dirname'))) {
     $xoopsOption['show_rblock'] = $xoopsOption['show_cblock'] = 1;
 }
 themeheader($xoopsOption['show_rblock']);

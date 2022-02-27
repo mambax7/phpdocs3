@@ -27,7 +27,7 @@ if ($email == '') {
     redirect_header('user.php', 2, _US_SORRYNOTFOUND, false);
 }
 
-$myts           = MyTextSanitizer::getInstance();
+$myts = MyTextSanitizer::getInstance();
 /* @var XoopsMemberHandler $member_handler */
 $member_handler = xoops_getHandler('member');
 list($user) = $member_handler->getUsers(new Criteria('email', $myts->addSlashes($email)));
@@ -70,7 +70,6 @@ if (empty($user)) {
             exit();
         }
         redirect_header('user.php', 3, sprintf(_US_PWDMAILED, $user->getVar('uname')), false);
-
         // If no Code, send it
     } else {
         $xoopsMailer = xoops_getMailer();

@@ -42,7 +42,7 @@ class TokenFactory
      */
     public static function build($key, $payload, $expirationOffset = 0)
     {
-        $key = ($key instanceof KeyAbstract) ? $key : KeyFactory::build($key);
+        $key   = ($key instanceof KeyAbstract) ? $key : KeyFactory::build($key);
         $token = new JsonWebToken($key);
         return $token->create($payload, $expirationOffset);
     }

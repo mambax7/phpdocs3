@@ -1,11 +1,15 @@
 <?php
 
 // Abstract of each filter classes
+
 /**
  * Class ProtectorFilterAbstract
  */
 class ProtectorFilterAbstract
 {
+    /**
+     * @var \Protector
+     */
     public $protector;
 
     /**
@@ -42,12 +46,19 @@ class ProtectorFilterAbstract
 }
 
 // Filter Handler class (singleton)
+
 /**
  * Class ProtectorFilterHandler
  */
 class ProtectorFilterHandler
 {
+    /**
+     * @var \Protector
+     */
     public $protector;
+    /**
+     * @var string
+     */
     public $filters_base = '';
 
     /**
@@ -73,8 +84,9 @@ class ProtectorFilterHandler
     }
 
     // return: false : execute default action
+
     /**
-     * @param $type
+     * @param string $type
      *
      * @return int|mixed
      */
@@ -93,7 +105,7 @@ class ProtectorFilterHandler
                 } elseif (class_exists($plugin_name)) {
                     // newer way
                     $plugin_obj = new $plugin_name(); //old code is -> $plugin_obj =& new $plugin_name() ; //hack by Trabis
-                    $ret |= $plugin_obj->execute();
+                    $ret        |= $plugin_obj->execute();
                 }
             }
         }

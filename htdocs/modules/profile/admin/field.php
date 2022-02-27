@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Extended User Profile
  *
@@ -34,11 +35,11 @@ switch ($op) {
     case 'list':
         $fields = $profilefield_handler->getObjects(null, true, false);
 
-    /* @var XoopsModuleHandler $module_handler */
+        /* @var XoopsModuleHandler $module_handler */
         $module_handler = xoops_getHandler('module');
         $modules        = $module_handler->getObjects(null, true);
 
-    /* @var XoopsModuleHandler $cat_handler */
+        /* @var XoopsModuleHandler $cat_handler */
         $cat_handler = xoops_getModuleHandler('category');
         $criteria    = new CriteriaCompo();
         $criteria->setSort('cat_weight');
@@ -61,7 +62,8 @@ switch ($op) {
             XOBJ_DTYPE_TXTBOX  => _PROFILE_AM_TXTBOX,
             XOBJ_DTYPE_URL     => _PROFILE_AM_URL,
             XOBJ_DTYPE_OTHER   => _PROFILE_AM_OTHER,
-            XOBJ_DTYPE_MTIME   => _PROFILE_AM_DATE);
+            XOBJ_DTYPE_MTIME   => _PROFILE_AM_DATE,
+        );
 
         $fieldtypes = array(
             'checkbox'     => _PROFILE_AM_CHECKBOX,
@@ -81,7 +83,8 @@ switch ($op) {
             'longdate'     => _PROFILE_AM_LONGDATE,
             'theme'        => _PROFILE_AM_THEME,
             'autotext'     => _PROFILE_AM_AUTOTEXT,
-            'rank'         => _PROFILE_AM_RANK);
+            'rank'         => _PROFILE_AM_RANK,
+        );
 
         foreach (array_keys($fields) as $i) {
             $fields[$i]['canEdit']               = $fields[$i]['field_config'] || $fields[$i]['field_show'] || $fields[$i]['field_edit'];
@@ -103,12 +106,14 @@ switch ($op) {
 
     case 'new':
         include_once dirname(__DIR__) . '/include/forms.php';
+        /** @var ProfileField $obj */
         $obj  = $profilefield_handler->create();
         $form = profile_getFieldForm($obj);
         $form->display();
         break;
 
     case 'edit':
+        /** @var ProfileField $obj */
         $obj = $profilefield_handler->get($_REQUEST['id']);
         if (!$obj->getVar('field_config') && !$obj->getVar('field_show') && !$obj->getVar('field_edit')) { //If no configs exist
             redirect_header('field.php', 2, _PROFILE_AM_FIELDNOTCONFIGURABLE);
@@ -119,7 +124,8 @@ switch ($op) {
         break;
 
     case 'edit-option-strings':
-        $obj = $profilefield_handler->get($_REQUEST['id']);
+        /** @var ProfileField $obj */
+        $obj          = $profilefield_handler->get($_REQUEST['id']);
         $fieldOptions = $obj->getVar('field_options');
         if (empty($fieldOptions)) { //If no option strings exist
             redirect_header('field.php', 2, _PROFILE_AM_FIELDNOTCONFIGURABLE);
@@ -169,6 +175,7 @@ switch ($op) {
         break;
 
     case 'save':
+        /** @var ProfileField $obj */
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header('field.php', 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
@@ -306,7 +313,7 @@ switch ($op) {
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header('field.php', 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        $obj = $profilefield_handler->get($_REQUEST['id']);
+        $obj          = $profilefield_handler->get($_REQUEST['id']);
         $fieldOptions = \Xmf\Request::getArray('field_options');
         if (empty($fieldOptions)) { //If no option strings exist
             redirect_header('field.php', 2, _PROFILE_AM_FIELDNOTCONFIGURABLE);
@@ -336,7 +343,8 @@ switch ($op) {
             xoops_confirm(array(
                               'ok' => 1,
                               'id' => $_REQUEST['id'],
-                              'op' => 'delete'), $_SERVER['REQUEST_URI'], sprintf(_PROFILE_AM_RUSUREDEL, $obj->getVar('field_title')));
+                              'op' => 'delete',
+                          ), $_SERVER['REQUEST_URI'], sprintf(_PROFILE_AM_RUSUREDEL, $obj->getVar('field_title')));
         }
         break;
 
@@ -363,7 +371,8 @@ function profile_visible_toggle($field_id, $field_required)
 {
     $field_required = ($field_required == 1) ? 0 : 1;
     $this_handler   = xoops_getModuleHandler('field', 'profile');
-    $obj            = $this_handler->get($field_id);
+    /** @var ProfileField $obj */
+    $obj = $this_handler->get($field_id);
     $obj->setVar('field_required', $field_required);
     if ($this_handler->insert($obj, true)) {
         redirect_header('field.php', 1, _PROFILE_AM_REQUIRED_TOGGLE_SUCCESS);

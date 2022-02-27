@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Xoops Autoload class
  *
@@ -46,7 +47,8 @@ class XoopsLoad
                 'file'        => 'xoopsfile',
                 'model'       => 'xoopsmodelfactory',
                 'calendar'    => 'xoopscalendar',
-                'userutility' => 'xoopsuserutility');
+                'userutility' => 'xoopsuserutility',
+            );
         }
         $name = strtolower($name);
         if (in_array($type, array('core', 'class')) && array_key_exists($name, $deprecated)) {
@@ -126,7 +128,7 @@ class XoopsLoad
      *
      * @access private
      * @param $name
-     * @return bool|string
+     * @return bool|string|null
      */
     public static function loadFramework($name)
     {
@@ -147,8 +149,8 @@ class XoopsLoad
      * Load module class
      *
      * @access private
-     * @param  string      $name    class file name
-     * @param  string|null $dirname module directory name
+     * @param string      $name    class file name
+     * @param string|null $dirname module directory name
      * @return bool
      */
     public static function loadModule($name, $dirname = null)
@@ -174,67 +176,67 @@ class XoopsLoad
     public static function loadCoreConfig()
     {
         return $configs = array(
-            'xoopsuserutility'           => XOOPS_ROOT_PATH . '/class/userutility.php',
-            'xoopsmediauploader'         => XOOPS_ROOT_PATH . '/class/uploader.php',
-            'xoopsutility'               => XOOPS_ROOT_PATH . '/class/utility/xoopsutility.php',
-            'xoopscaptcha'               => XOOPS_ROOT_PATH . '/class/captcha/xoopscaptcha.php',
-            'xoopscache'                 => XOOPS_ROOT_PATH . '/class/cache/xoopscache.php',
-            'xoopsfile'                  => XOOPS_ROOT_PATH . '/class/file/xoopsfile.php',
-            'xoopsmodelfactory'          => XOOPS_ROOT_PATH . '/class/model/xoopsmodel.php',
-            'xoopscalendar'              => XOOPS_ROOT_PATH . '/class/calendar/xoopscalendar.php',
-            'xoopskernel'                => XOOPS_ROOT_PATH . '/class/xoopskernel.php',
-            'xoopssecurity'              => XOOPS_ROOT_PATH . '/class/xoopssecurity.php',
-            'xoopslogger'                => XOOPS_ROOT_PATH . '/class/logger/xoopslogger.php',
-            'xoopspagenav'               => XOOPS_ROOT_PATH . '/class/pagenav.php',
-            'xoopslists'                 => XOOPS_ROOT_PATH . '/class/xoopslists.php',
-            'xoopslocal'                 => XOOPS_ROOT_PATH . '/include/xoopslocal.php',
-            'xoopslocalabstract'         => XOOPS_ROOT_PATH . '/class/xoopslocal.php',
-            'xoopseditor'                => XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.php',
-            'xoopseditorhandler'         => XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.php',
-            'xoopsformloader'            => XOOPS_ROOT_PATH . '/class/xoopsformloader.php',
-            'xoopsformelement'           => XOOPS_ROOT_PATH . '/class/xoopsform/formelement.php',
-            'xoopsform'                  => XOOPS_ROOT_PATH . '/class/xoopsform/form.php',
-            'xoopsformlabel'             => XOOPS_ROOT_PATH . '/class/xoopsform/formlabel.php',
-            'xoopsformselect'            => XOOPS_ROOT_PATH . '/class/xoopsform/formselect.php',
-            'xoopsformpassword'          => XOOPS_ROOT_PATH . '/class/xoopsform/formpassword.php',
-            'xoopsformbutton'            => XOOPS_ROOT_PATH . '/class/xoopsform/formbutton.php',
-            'xoopsformbuttontray'        => XOOPS_ROOT_PATH . '/class/xoopsform/formbuttontray.php',
-            'xoopsformcheckbox'          => XOOPS_ROOT_PATH . '/class/xoopsform/formcheckbox.php',
-            'xoopsformselectcheckgroup'  => XOOPS_ROOT_PATH . '/class/xoopsform/formselectcheckgroup.php',
-            'xoopsformhidden'            => XOOPS_ROOT_PATH . '/class/xoopsform/formhidden.php',
-            'xoopsformfile'              => XOOPS_ROOT_PATH . '/class/xoopsform/formfile.php',
-            'xoopsformradio'             => XOOPS_ROOT_PATH . '/class/xoopsform/formradio.php',
-            'xoopsformradioyn'           => XOOPS_ROOT_PATH . '/class/xoopsform/formradioyn.php',
-            'xoopsformselectcountry'     => XOOPS_ROOT_PATH . '/class/xoopsform/formselectcountry.php',
-            'xoopsformselecttimezone'    => XOOPS_ROOT_PATH . '/class/xoopsform/formselecttimezone.php',
-            'xoopsformselectlang'        => XOOPS_ROOT_PATH . '/class/xoopsform/formselectlang.php',
-            'xoopsformselectgroup'       => XOOPS_ROOT_PATH . '/class/xoopsform/formselectgroup.php',
-            'xoopsformselectuser'        => XOOPS_ROOT_PATH . '/class/xoopsform/formselectuser.php',
-            'xoopsformselecttheme'       => XOOPS_ROOT_PATH . '/class/xoopsform/formselecttheme.php',
-            'xoopsformselectmatchoption' => XOOPS_ROOT_PATH . '/class/xoopsform/formselectmatchoption.php',
-            'xoopsformtext'              => XOOPS_ROOT_PATH . '/class/xoopsform/formtext.php',
-            'xoopsformtextarea'          => XOOPS_ROOT_PATH . '/class/xoopsform/formtextarea.php',
-            'xoopsformdhtmltextarea'     => XOOPS_ROOT_PATH . '/class/xoopsform/formdhtmltextarea.php',
-            'xoopsformelementtray'       => XOOPS_ROOT_PATH . '/class/xoopsform/formelementtray.php',
-            'xoopsthemeform'             => XOOPS_ROOT_PATH . '/class/xoopsform/themeform.php',
-            'xoopssimpleform'            => XOOPS_ROOT_PATH . '/class/xoopsform/simpleform.php',
-            'xoopsformtextdateselect'    => XOOPS_ROOT_PATH . '/class/xoopsform/formtextdateselect.php',
-            'xoopsformdatetime'          => XOOPS_ROOT_PATH . '/class/xoopsform/formdatetime.php',
-            'xoopsformhiddentoken'       => XOOPS_ROOT_PATH . '/class/xoopsform/formhiddentoken.php',
-            'xoopsformcolorpicker'       => XOOPS_ROOT_PATH . '/class/xoopsform/formcolorpicker.php',
-            'xoopsformcaptcha'           => XOOPS_ROOT_PATH . '/class/xoopsform/formcaptcha.php',
-            'xoopsformeditor'            => XOOPS_ROOT_PATH . '/class/xoopsform/formeditor.php',
-            'xoopsformselecteditor'      => XOOPS_ROOT_PATH . '/class/xoopsform/formselecteditor.php',
-            'xoopsformcalendar'          => XOOPS_ROOT_PATH . '/class/xoopsform/formcalendar.php',
-            'xoopsformrenderer'          => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRenderer.php',
-            'xoopsformrendererinterface' => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererInterface.php',
-            'xoopsformrendererlegacy'    => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererLegacy.php',
-            'xoopsformrendererbootstrap3'=> XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererBootstrap3.php',
-            'xoopsformrendererbootstrap4'=> XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererBootstrap4.php',
-            'xoopsformrendererbootstrap5'=> XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererBootstrap5.php',
-            'xoopsfilterinput'           => XOOPS_ROOT_PATH . '/class/xoopsfilterinput.php',
-            'xoopsrequest'               => XOOPS_ROOT_PATH . '/class/xoopsrequest.php',
-            'xoopshttpget'               => XOOPS_ROOT_PATH . '/class/xoopshttpget.php',
+            'xoopsuserutility'            => XOOPS_ROOT_PATH . '/class/userutility.php',
+            'xoopsmediauploader'          => XOOPS_ROOT_PATH . '/class/uploader.php',
+            'xoopsutility'                => XOOPS_ROOT_PATH . '/class/utility/xoopsutility.php',
+            'xoopscaptcha'                => XOOPS_ROOT_PATH . '/class/captcha/xoopscaptcha.php',
+            'xoopscache'                  => XOOPS_ROOT_PATH . '/class/cache/xoopscache.php',
+            'xoopsfile'                   => XOOPS_ROOT_PATH . '/class/file/xoopsfile.php',
+            'xoopsmodelfactory'           => XOOPS_ROOT_PATH . '/class/model/xoopsmodel.php',
+            'xoopscalendar'               => XOOPS_ROOT_PATH . '/class/calendar/xoopscalendar.php',
+            'xoopskernel'                 => XOOPS_ROOT_PATH . '/class/xoopskernel.php',
+            'xoopssecurity'               => XOOPS_ROOT_PATH . '/class/xoopssecurity.php',
+            'xoopslogger'                 => XOOPS_ROOT_PATH . '/class/logger/xoopslogger.php',
+            'xoopspagenav'                => XOOPS_ROOT_PATH . '/class/pagenav.php',
+            'xoopslists'                  => XOOPS_ROOT_PATH . '/class/xoopslists.php',
+            'xoopslocal'                  => XOOPS_ROOT_PATH . '/include/xoopslocal.php',
+            'xoopslocalabstract'          => XOOPS_ROOT_PATH . '/class/xoopslocal.php',
+            'xoopseditor'                 => XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.php',
+            'xoopseditorhandler'          => XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.php',
+            'xoopsformloader'             => XOOPS_ROOT_PATH . '/class/xoopsformloader.php',
+            'xoopsformelement'            => XOOPS_ROOT_PATH . '/class/xoopsform/formelement.php',
+            'xoopsform'                   => XOOPS_ROOT_PATH . '/class/xoopsform/form.php',
+            'xoopsformlabel'              => XOOPS_ROOT_PATH . '/class/xoopsform/formlabel.php',
+            'xoopsformselect'             => XOOPS_ROOT_PATH . '/class/xoopsform/formselect.php',
+            'xoopsformpassword'           => XOOPS_ROOT_PATH . '/class/xoopsform/formpassword.php',
+            'xoopsformbutton'             => XOOPS_ROOT_PATH . '/class/xoopsform/formbutton.php',
+            'xoopsformbuttontray'         => XOOPS_ROOT_PATH . '/class/xoopsform/formbuttontray.php',
+            'xoopsformcheckbox'           => XOOPS_ROOT_PATH . '/class/xoopsform/formcheckbox.php',
+            'xoopsformselectcheckgroup'   => XOOPS_ROOT_PATH . '/class/xoopsform/formselectcheckgroup.php',
+            'xoopsformhidden'             => XOOPS_ROOT_PATH . '/class/xoopsform/formhidden.php',
+            'xoopsformfile'               => XOOPS_ROOT_PATH . '/class/xoopsform/formfile.php',
+            'xoopsformradio'              => XOOPS_ROOT_PATH . '/class/xoopsform/formradio.php',
+            'xoopsformradioyn'            => XOOPS_ROOT_PATH . '/class/xoopsform/formradioyn.php',
+            'xoopsformselectcountry'      => XOOPS_ROOT_PATH . '/class/xoopsform/formselectcountry.php',
+            'xoopsformselecttimezone'     => XOOPS_ROOT_PATH . '/class/xoopsform/formselecttimezone.php',
+            'xoopsformselectlang'         => XOOPS_ROOT_PATH . '/class/xoopsform/formselectlang.php',
+            'xoopsformselectgroup'        => XOOPS_ROOT_PATH . '/class/xoopsform/formselectgroup.php',
+            'xoopsformselectuser'         => XOOPS_ROOT_PATH . '/class/xoopsform/formselectuser.php',
+            'xoopsformselecttheme'        => XOOPS_ROOT_PATH . '/class/xoopsform/formselecttheme.php',
+            'xoopsformselectmatchoption'  => XOOPS_ROOT_PATH . '/class/xoopsform/formselectmatchoption.php',
+            'xoopsformtext'               => XOOPS_ROOT_PATH . '/class/xoopsform/formtext.php',
+            'xoopsformtextarea'           => XOOPS_ROOT_PATH . '/class/xoopsform/formtextarea.php',
+            'xoopsformdhtmltextarea'      => XOOPS_ROOT_PATH . '/class/xoopsform/formdhtmltextarea.php',
+            'xoopsformelementtray'        => XOOPS_ROOT_PATH . '/class/xoopsform/formelementtray.php',
+            'xoopsthemeform'              => XOOPS_ROOT_PATH . '/class/xoopsform/themeform.php',
+            'xoopssimpleform'             => XOOPS_ROOT_PATH . '/class/xoopsform/simpleform.php',
+            'xoopsformtextdateselect'     => XOOPS_ROOT_PATH . '/class/xoopsform/formtextdateselect.php',
+            'xoopsformdatetime'           => XOOPS_ROOT_PATH . '/class/xoopsform/formdatetime.php',
+            'xoopsformhiddentoken'        => XOOPS_ROOT_PATH . '/class/xoopsform/formhiddentoken.php',
+            'xoopsformcolorpicker'        => XOOPS_ROOT_PATH . '/class/xoopsform/formcolorpicker.php',
+            'xoopsformcaptcha'            => XOOPS_ROOT_PATH . '/class/xoopsform/formcaptcha.php',
+            'xoopsformeditor'             => XOOPS_ROOT_PATH . '/class/xoopsform/formeditor.php',
+            'xoopsformselecteditor'       => XOOPS_ROOT_PATH . '/class/xoopsform/formselecteditor.php',
+            'xoopsformcalendar'           => XOOPS_ROOT_PATH . '/class/xoopsform/formcalendar.php',
+            'xoopsformrenderer'           => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRenderer.php',
+            'xoopsformrendererinterface'  => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererInterface.php',
+            'xoopsformrendererlegacy'     => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererLegacy.php',
+            'xoopsformrendererbootstrap3' => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererBootstrap3.php',
+            'xoopsformrendererbootstrap4' => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererBootstrap4.php',
+            'xoopsformrendererbootstrap5' => XOOPS_ROOT_PATH . '/class/xoopsform/renderer/XoopsFormRendererBootstrap5.php',
+            'xoopsfilterinput'            => XOOPS_ROOT_PATH . '/class/xoopsfilterinput.php',
+            'xoopsrequest'                => XOOPS_ROOT_PATH . '/class/xoopsrequest.php',
+            'xoopshttpget'                => XOOPS_ROOT_PATH . '/class/xoopshttpget.php',
         );
     }
 
@@ -267,6 +269,7 @@ class XoopsLoad
         return $configs = array_merge(XoopsLoad::loadCoreConfig(), $configs);
     }
 }
+
 // To be enabled in XOOPS 3.0
 // spl_autoload_register(array('XoopsLoad', 'load'));
 

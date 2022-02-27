@@ -32,11 +32,11 @@ if ('system' === $xoopsModule->getVar('dirname')) {
     $comment         = $comment_handler->get($com_id);
     $module_handler  = xoops_getHandler('module');
     /** @var \XoopsModule $module */
-    $module          = $module_handler->get($comment->getVar('com_modid'));
-    $comment_config  = $module->getInfo('comments');
-    $com_modid       = $module->getVar('mid');
-    $redirect_page   = XOOPS_URL . '/modules/system/admin.php?fct=comments&com_modid=' . $com_modid . '&com_itemid';
-    $moddir          = $module->getVar('dirname');
+    $module         = $module_handler->get($comment->getVar('com_modid'));
+    $comment_config = $module->getInfo('comments');
+    $com_modid      = $module->getVar('mid');
+    $redirect_page  = XOOPS_URL . '/modules/system/admin.php?fct=comments&com_modid=' . $com_modid . '&com_itemid';
+    $moddir         = $module->getVar('dirname');
     unset($comment);
 } else {
     $com_id = isset($_POST['com_id']) ? (int)$_POST['com_id'] : 0;
@@ -54,8 +54,8 @@ if ('system' === $xoopsModule->getVar('dirname')) {
         $redirect_page .= $extra_params;
     }
     $redirect_page .= $comment_config['itemName'];
-    $comment_url = $redirect_page;
-    $moddir      = $xoopsModule->getVar('dirname');
+    $comment_url   = $redirect_page;
+    $moddir        = $xoopsModule->getVar('dirname');
 }
 
 $op            = '';
@@ -324,6 +324,7 @@ switch ($op) {
                 redirect_header($redirect_page . '=' . $com_itemid . '&amp;com_id=' . $com_id . '&amp;com_mode=' . $com_mode . '&amp;com_order=' . $com_order, 1, _NOPERM);
             }
         } else {
+            /** @var XoopsComment $comment */
             $comment = $comment_handler->create();
             $comment->setVar('com_created', time());
             $comment->setVar('com_pid', $com_pid);
@@ -419,7 +420,7 @@ switch ($op) {
                 if (!$comment_handler->updateByField($comment, 'com_rootid', $com_rootid)) {
                     $comment_handler->delete($comment);
                     include $GLOBALS['xoops']->path('header.php');
-                    xoops_error();
+                    xoops_error('');
                     include $GLOBALS['xoops']->path('footer.php');
                 }
             }
@@ -518,8 +519,8 @@ switch ($op) {
                 }
                 $comment_tags['X_COMMENT_URL'] = XOOPS_URL . '/modules/' . $not_module->getVar('dirname') . '/' . $comment_url . '=' . $com_itemid . '&amp;com_id=' . $newcid . '&amp;com_rootid=' . $com_rootid . '&amp;com_mode=' . $com_mode . '&amp;com_order=' . $com_order . '#comment' . $newcid;
                 /* @var  XoopsNotificationHandler $notification_handler */
-                $notification_handler          = xoops_getHandler('notification');
-                $notification_handler->triggerEvent($not_category, $not_itemid, $not_event, $comment_tags, false, $not_modid);
+                $notification_handler = xoops_getHandler('notification');
+                $notification_handler->triggerEvent($not_category, $not_itemid, $not_event, $comment_tags, array(), $not_modid);
             }
             if (!isset($comment_post_results)) {
                 // if the comment is active, redirect to posted comment

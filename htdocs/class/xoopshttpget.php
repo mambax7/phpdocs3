@@ -20,8 +20,17 @@
  */
 class XoopsHttpGet
 {
+    /**
+     * @var bool
+     */
     protected $useCurl = true;
+    /**
+     * @var string
+     */
     protected $url;
+    /**
+     * @var string|null
+     */
     protected $error;
 
     /**
@@ -36,9 +45,9 @@ class XoopsHttpGet
         $this->url = $url;
         if (!function_exists('curl_init')) {
             $this->useCurl = false;
-            $urlFopen = (int) ini_get('allow_url_fopen');
+            $urlFopen      = (int)ini_get('allow_url_fopen');
             if ($urlFopen === 0) {
-                throw new \RuntimeException("CURL extension or allow_url_fopen ini setting is required.");
+                throw new \RuntimeException('CURL extension or allow_url_fopen ini setting is required.');
             }
         }
     }
@@ -81,7 +90,7 @@ class XoopsHttpGet
             $httpcode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
             if (200 != $httpcode) {
                 $this->error = $response;
-                $response = false;
+                $response    = false;
             }
         }
         curl_close($curlHandle);

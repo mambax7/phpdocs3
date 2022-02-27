@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Extension to mimetype lookup table
  *
@@ -12,7 +13,7 @@
  * @license             GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
  * @author              Skalpa Keo <skalpa@xoops.org>
  * @since               2.0.9.3
- * 
+ *
  * @deprecated
  */
 defined('XOOPS_ROOT_PATH') || exit('Restricted access');

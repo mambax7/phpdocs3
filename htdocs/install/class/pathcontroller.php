@@ -16,15 +16,24 @@
  **/
 class PathStuffController
 {
+    /**
+     * @var array
+     */
     public $xoopsPath = array(
         'root' => '',
         'lib'  => '',
-        'data' => '');
-
+        'data' => '',
+    );
+    /**
+     * @var array
+     */
     public $xoopsPathDefault = array(
         'lib'  => 'xoops_lib',
-        'data' => 'xoops_data');
-
+        'data' => 'xoops_data',
+    );
+    /**
+     * @var array
+     */
     public $dataPath = array(
         'caches'    => array(
             'xoops_cache',
@@ -38,25 +47,35 @@ class PathStuffController
         'data'      => null,
         'protector' => null,
     );
-
-    public $path_lookup = array(
+    /**
+     * @var array
+     */
+    public $path_lookup       = array(
         'root' => 'ROOT_PATH',
         'data' => 'VAR_PATH',
-        'lib'  => 'PATH');
-
-    public $xoopsUrl = '';
+        'lib'  => 'PATH',
+    );
+    public $xoopsUrl          = '';
     public $xoopsCookieDomain = '';
-
+    /**
+     * @var array
+     */
     public $validPath = array(
         'root' => 0,
         'data' => 0,
-        'lib'  => 0);
-
+        'lib'  => 0,
+    );
+    /**
+     * @var bool
+     */
     public $validUrl = false;
-
+    /**
+     * @var array
+     */
     public $permErrors = array(
         'root' => null,
-        'data' => null);
+        'data' => null,
+    );
 
     /**
      * @param $xoopsPathDefault
@@ -113,7 +132,7 @@ class PathStuffController
             foreach ($this->path_lookup as $req => $sess) {
                 $_SESSION['settings'][$sess] = $this->xoopsPath[$req];
             }
-            $_SESSION['settings']['URL'] = $this->xoopsUrl;
+            $_SESSION['settings']['URL']           = $this->xoopsUrl;
             $_SESSION['settings']['COOKIE_DOMAIN'] = $this->xoopsCookieDomain;
             if ($valid) {
                 $GLOBALS['wizard']->redirectToPage('+1');
@@ -145,12 +164,12 @@ class PathStuffController
             }
             if (isset($request['COOKIE_DOMAIN'])) {
                 $tempCookieDomain = trim($request['COOKIE_DOMAIN']);
-                $tempParts = parse_url($tempCookieDomain);
+                $tempParts        = parse_url($tempCookieDomain);
                 if (!empty($tempParts['host'])) {
                     $tempCookieDomain = $tempParts['host'];
                 }
                 $request['COOKIE_DOMAIN'] = $tempCookieDomain;
-                $this->xoopsCookieDomain = $tempCookieDomain;
+                $this->xoopsCookieDomain  = $tempCookieDomain;
             }
         }
     }
@@ -256,11 +275,16 @@ class PathStuffController
     public function checkPermissions($path)
     {
         $paths  = array(
-            'root' => array('mainfile.php', 'uploads', /*'templates_c', 'cache'*/),
-            'data' => $this->dataPath);
+            'root' => array(
+                'mainfile.php',
+                'uploads',
+            ),
+            'data' => $this->dataPath,
+        );
         $errors = array(
             'root' => null,
-            'data' => null);
+            'data' => null,
+        );
 
         if (!isset($this->xoopsPath[$path])) {
             return false;

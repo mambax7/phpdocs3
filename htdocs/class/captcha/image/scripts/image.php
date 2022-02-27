@@ -17,7 +17,7 @@
  * @subpackage          CAPTCHA
  */
 
-include __DIR__  . '/../../../../mainfile.php';
+include __DIR__ . '/../../../../mainfile.php';
 
 error_reporting(0);
 $xoopsLogger->activated = false;
@@ -27,17 +27,45 @@ $xoopsLogger->activated = false;
  */
 class XoopsCaptchaImageHandler
 {
-    public $config  = array();
+    /**
+     * @var array
+     */
+    public $config = array();
+    /**
+     * @var mixed
+     */
     public $code;
-    public $mode    = 'gd';
+    /**
+     * @var string
+     */
+    public $mode = 'gd';
+    /**
+     * @var bool
+     */
     public $invalid = false;
-
-    public $oImage;
+    /**
+     * @var mixed
+     */
+    public $oImage; //mb TODO resource|GdImage|false ??
+    /**
+     * @var string
+     */
     public $font;
+    /**
+     * @var int
+     */
     public $spacing;
+    /**
+     * @var int
+     */
     public $width;
+    /**
+     * @var int
+     */
     public $height;
-
+    /**
+     * @var \XoopsCaptcha
+     */
     public $captchaHandler;
 
     /**
@@ -47,7 +75,7 @@ class XoopsCaptchaImageHandler
     {
         xoops_load('XoopsCaptcha');
         $this->captchaHandler = XoopsCaptcha::getInstance();
-        $this->config          = $this->captchaHandler->loadConfig('image');
+        $this->config         = $this->captchaHandler->loadConfig('image');
     }
 
     public function loadImage()
@@ -58,6 +86,7 @@ class XoopsCaptchaImageHandler
 
     /**
      * Create Code
+     * @return bool
      */
     public function generateCode()
     {
@@ -382,13 +411,12 @@ class XoopsCaptchaImageHandler
         }
     }
     /**#@-*/
-
     /**
      *  Create CAPTCHA image with BMP
      *
      *  TODO
-     * @param  string $file
-     * @return string
+     * @param string $file
+     * @return string|null
      */
     public function createImageBmp($file = '')
     {

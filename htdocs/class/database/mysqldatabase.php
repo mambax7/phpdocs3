@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MySQL access using MySQLi extension
  *
@@ -119,7 +120,6 @@ abstract class XoopsMySQLDatabase extends XoopsDatabase
     {
         $row = @mysqli_fetch_assoc($result);
         return (null === $row) ? false : $row;
-
     }
 
     /**
@@ -254,7 +254,7 @@ abstract class XoopsMySQLDatabase extends XoopsDatabase
      */
     public function escape($string)
     {
-        return mysqli_real_escape_string($this->conn, (string) $string);
+        return mysqli_real_escape_string($this->conn, (string)$string);
     }
 
     /**
@@ -315,6 +315,7 @@ abstract class XoopsMySQLDatabase extends XoopsDatabase
         if (false !== ($fp = fopen($file, 'r'))) {
             include_once XOOPS_ROOT_PATH . '/class/database/sqlutility.php';
             $sql_queries = trim(fread($fp, filesize($file)));
+            $pieces      = array();
             SqlUtility::splitMySqlFile($pieces, $sql_queries);
             foreach ($pieces as $query) {
                 // [0] contains the prefixed query

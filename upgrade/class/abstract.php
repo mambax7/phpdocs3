@@ -23,10 +23,22 @@
  */
 class XoopsUpgrade
 {
-    public $usedFiles      = array();
-    public $tasks          = array();
-    public $languageFolder = null;
-    public $logs           = array();
+    /**
+     * @var array
+     */
+    public $usedFiles = array();
+    /**
+     * @var array
+     */
+    public $tasks = array();
+    /**
+     * @var string
+     */
+    public $languageFolder; //mb TODO it's not used anywhere, was set to null:  = null
+    /**
+     * @var array
+     */
+    public $logs = array();
 
     /**
      * @param string|null $dirname
@@ -72,8 +84,8 @@ class XoopsUpgrade
      */
     public function apply()
     {
-        $patchStatus  = $this->isApplied();
-        $tasks = $patchStatus->tasks;
+        $patchStatus = $this->isApplied();
+        $tasks       = $patchStatus->tasks;
         foreach ($tasks as $task) {
             $res = $this->{"apply_{$task}"}();
             if (!$res) {
@@ -106,9 +118,9 @@ class XoopsUpgrade
      * Relocated here from upgrade/index.php
      *
      * @param XoopsDatabase $db
-     * @param        $table
-     * @param        $field
-     * @param string $condition
+     * @param               $table
+     * @param               $field
+     * @param string        $condition
      *
      * @return bool
      */

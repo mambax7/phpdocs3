@@ -1,4 +1,5 @@
 <?php
+
 defined('XOOPS_ROOT_PATH') or exit();
 
 if (empty($_POST['uname']) || empty($_POST['pass'])) {

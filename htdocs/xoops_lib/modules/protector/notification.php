@@ -1,4 +1,5 @@
 <?php
+
 // start hack by Trabis
 if (!class_exists('ProtectorRegistry')) {
     exit('Registry not found');
@@ -18,13 +19,12 @@ function ' . $mydirname . '_notify_iteminfo( $category, $item_id )
 ');
 
 if (!function_exists('protector_notify_base')) {
-
     /**
-     * @param $mydirname
-     * @param $category
+     * @param string $mydirname
+     * @param string $category
      * @param $item_id
      *
-     * @return mixed
+     * @return array|null
      */
     function protector_notify_base($mydirname, $category, $item_id)
     {

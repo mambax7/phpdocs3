@@ -1,10 +1,11 @@
 <?php
 /**
  * @copyright       (c) 2000-2016 XOOPS Project (www.xoops.org)
- * @license         GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @license             GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * _LANGCODE    en
  * _CHARSET     UTF-8
  */
+
 // don't change
 define('_AM_DBUPDATED', _AM_SYSTEM_DBUPDATED);
 //Nav
@@ -123,7 +124,7 @@ define('_MD_AM_BADUNAMESDSC', 'Separate each with a <strong>|</strong>, case ins
 define('_MD_AM_DOBADIPS', 'Enable IP bans?');
 define('_MD_AM_DOBADIPSDSC', 'Users from specified IP addresses will not be able to view your site');
 define('_MD_AM_BADIPS', "Enter IP addresses that should be banned from the site.<br>Separate each with a <strong>|</strong>, case insensitive, regex enabled (so dot - '.' means 'any char' and '\.' means '.').");
-define('_MD_AM_BADIPSDSC', "^aaa\.bbb\.ccc will disallow visitors with an IP that starts with aaa.bbb.ccc<br>aaa\.bbb\.ccc$ will disallow visitors with an IP that ends with aaa.bbb.ccc<br>aaa\.bbb\.ccc will disallow visitors with an IP that contains aaa.bbb.ccc");
+define('_MD_AM_BADIPSDSC', '^aaa\.bbb\.ccc will disallow visitors with an IP that starts with aaa.bbb.ccc<br>aaa\.bbb\.ccc$ will disallow visitors with an IP that ends with aaa.bbb.ccc<br>aaa\.bbb\.ccc will disallow visitors with an IP that contains aaa.bbb.ccc');
 define('_MD_AM_PREFMAIN', 'Preferences Main');
 define('_MD_AM_METAKEY', 'Meta Keywords');
 define('_MD_AM_METAKEYDSC', 'The keywords meta tag is a series of keywords that represents the content of your site. Type in keywords with each separated by a comma or a space in between. (Ex. XOOPS, PHP, mySQL, portal system)');

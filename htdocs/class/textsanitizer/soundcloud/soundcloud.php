@@ -6,7 +6,7 @@
 class MytsSoundcloud extends MyTextSanitizerExtension
 {
     /**
-     * @param $textarea_id
+     * @param string $textarea_id
      *
      * @return array
      */
@@ -14,10 +14,10 @@ class MytsSoundcloud extends MyTextSanitizerExtension
     {
         $config = parent::loadConfig(__DIR__);
 
-        $code = "<button type='button' class='btn btn-default btn-sm' onclick='xoopsCodeSoundCloud(\"{$textarea_id}\",\""
-            . htmlspecialchars(_XOOPS_FORM_ENTER_SOUNDCLOUD_URL, ENT_QUOTES)
-            . "\");' onmouseover='style.cursor=\"hand\"' title='" . _XOOPS_FORM_ALT_SOUNDCLOUD
-            . "'><span class='fa fa-fw fa-soundcloud' aria-hidden='true'></span></button>";
+        $code       = "<button type='button' class='btn btn-default btn-sm' onclick='xoopsCodeSoundCloud(\"{$textarea_id}\",\""
+                      . htmlspecialchars(_XOOPS_FORM_ENTER_SOUNDCLOUD_URL, ENT_QUOTES)
+                      . "\");' onmouseover='style.cursor=\"hand\"' title='" . _XOOPS_FORM_ALT_SOUNDCLOUD
+                      . "'><span class='fa fa-fw fa-soundcloud' aria-hidden='true'></span></button>";
         $javascript = <<<EOH
             function xoopsCodeSoundCloud(id, enterSoundCloud)
             {
@@ -36,11 +36,14 @@ class MytsSoundcloud extends MyTextSanitizerExtension
             }
 EOH;
 
-        return array($code, $javascript);
+        return array(
+            $code,
+            $javascript,
+        );
     }
 
     /**
-     * @param $ts
+     * @param MyTextSanitizer $ts
      */
     public function load($ts)
     {
@@ -57,7 +60,7 @@ EOH;
     {
         $url    = $match[1] . $match[2];
         $config = parent::loadConfig(__DIR__);
-        if (!preg_match("/^http[s]?:\/\/(www\.)?soundcloud\.com\/(.*)/i", $url, $matches)) {
+        if (!preg_match('/^http[s]?:\/\/(www\.)?soundcloud\.com\/(.*)/i', $url, $matches)) {
             trigger_error("Not matched: {$url}", E_USER_WARNING);
 
             return '';

@@ -29,8 +29,8 @@ class Random
      * Generates a low strength random number of size $bytes and hash with the
      * algorithm specified in $hash.
      *
-     * @param string  $hash  hash function to use
-     * @param integer $bytes the number of random bit to generate
+     * @param string $hash  hash function to use
+     * @param int    $bytes the number of random bit to generate
      *
      * @return string hashed token
      * @throws \Exception on insufficient entropy
@@ -47,8 +47,8 @@ class Random
      * Generates a medium strength random number of size $bytes and hash with the
      * algorithm specified in $hash.
      *
-     * @param string  $hash  hash function to use
-     * @param integer $bytes the number of random bytes to generate
+     * @param string $hash  hash function to use
+     * @param int    $bytes the number of random bytes to generate
      *
      * @return string hashed token
      * @throws \Exception on insufficient entropy

@@ -27,7 +27,7 @@ class Protector_postcommon_post_deny_by_httpbl extends ProtectorFilterAbstract
             $host = sprintf($rbl_fmt, $rev_ip);
             if (gethostbyname($host) != $host) {
                 $this->protector->message .= "DENY by $rbl_name\n";
-                $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
+                $uid                      = is_object($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
                 $this->protector->output_log('RBL SPAM', $uid, false, 128);
                 die(_MD_PROTECTOR_DENYBYRBL);
             }

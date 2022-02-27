@@ -29,12 +29,10 @@ abstract class AbstractHelper
      * @var string module directory name
      */
     protected $dirname;
-
     /**
      * @var XoopsModule
      */
     protected $module;
-
     /**
      * @var bool true if debug is enabled
      */
@@ -106,7 +104,7 @@ abstract class AbstractHelper
      */
     public function setDebug($bool = true)
     {
-        $this->debug = (bool) $bool;
+        $this->debug = (bool)$bool;
     }
 
     /**
@@ -121,7 +119,9 @@ abstract class AbstractHelper
         if ($this->debug) {
             $message = $this->serializeForHelperLog($log);
             if (class_exists('Xoops', false)) {
-                \Xoops::getInstance()->logger()->debug($message, array('channel'=>'Extra'));
+                \Xoops::getInstance()
+                      ->logger()
+                      ->debug($message, array('channel' => 'Extra'));
             } elseif (is_object($GLOBALS['xoopsLogger'])) {
                 $GLOBALS['xoopsLogger']->addExtra(get_called_class(), $message);
             }
@@ -143,6 +143,6 @@ abstract class AbstractHelper
         if (!is_string($value)) {
             $value = json_encode($value);
         }
-        return (string) $value;
+        return (string)$value;
     }
 }

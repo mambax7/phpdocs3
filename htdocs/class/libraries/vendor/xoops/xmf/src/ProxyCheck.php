@@ -23,12 +23,9 @@ namespace Xmf;
 class ProxyCheck
 {
     const PROXY_ENVIRONMENT_VARIABLE = 'proxy_env';
-
-    const FORWARDED = 'HTTP_FORWARDED';
-
+    const FORWARDED                  = 'HTTP_FORWARDED';
     /** @var string|false header name determines how to process */
     protected $proxyHeaderName = false;
-
     /** @var string|false header data to process */
     protected $proxyHeader = false;
 
@@ -39,7 +36,7 @@ class ProxyCheck
     {
         /* must declare expected proxy in $xoopsConfig['proxy_env'] */
         $this->proxyHeaderName = $this->getProxyEnvConfig();
-        $this->proxyHeader = $this->getProxyHeader();
+        $this->proxyHeader     = $this->getProxyHeader();
     }
 
     /**
@@ -52,13 +49,13 @@ class ProxyCheck
      */
     public function get()
     {
-        if (false===$this->proxyHeaderName || false===$this->proxyHeader) {
+        if (false === $this->proxyHeaderName || false === $this->proxyHeader) {
             return false;
         }
         $proxyVars = $this->splitOnComma($this->proxyHeader);
         // only consider the first (left most) value
         $header = reset($proxyVars);
-        $ip = false;
+        $ip     = false;
         switch ($this->proxyHeaderName) {
             case static::FORWARDED:
                 $ip = $this->getFor($header);
@@ -127,7 +124,7 @@ class ProxyCheck
         if ($start === false) {
             return false;
         }
-        $ip = substr($header, $start+4);
+        $ip  = substr($header, $start + 4);
         $end = strpos($ip, ';');
         if ($end !== false) {
             $ip = substr($ip, 0, $end);

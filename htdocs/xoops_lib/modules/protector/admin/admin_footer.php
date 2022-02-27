@@ -10,10 +10,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @copyright (c) 2000-2016 XOOPS Project (www.xoops.org)
- * @license   GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
- * @package   Xoops Partner
- * @since     2.5.0
- * @author    XOOPS Development Team
+ * @license       GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @package       Xoops Partner
+ * @since         2.5.0
+ * @author        XOOPS Development Team
  **/
 
 global $moduleInfo;

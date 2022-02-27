@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Factory Class for XOOPS Database
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -41,7 +42,7 @@ class XoopsConfigOption extends XoopsObject
 
     /**
      * Returns Class Base Variable confop_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -51,7 +52,7 @@ class XoopsConfigOption extends XoopsObject
 
     /**
      * Returns Class Base Variable confop_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function confop_id($format = '')
@@ -61,7 +62,7 @@ class XoopsConfigOption extends XoopsObject
 
     /**
      * Returns Class Base Variable confop_name
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function confop_name($format = '')
@@ -71,7 +72,7 @@ class XoopsConfigOption extends XoopsObject
 
     /**
      * Returns Class Base Variable confop_value
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function confop_value($format = '')
@@ -81,7 +82,7 @@ class XoopsConfigOption extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function conf_id($format = '')
@@ -125,12 +126,12 @@ class XoopsConfigOptionHandler extends XoopsObjectHandler
      *
      * @param int $id ID of the option
      *
-     * @return XoopsConfigOption|false reference to the {@link XoopsConfigOption}, FALSE on fail
+     * @return false|\XoopsConfigOption reference to the {@link XoopsConfigOption}, FALSE on fail
      */
     public function get($id)
     {
         $confoption = false;
-        $id         = (int)$id;
+        $id     = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('configoption') . ' WHERE confop_id=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -138,7 +139,7 @@ class XoopsConfigOptionHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $confoption = new XoopsConfigOption();
+                $confoption = new \XoopsConfigOption();
                 $confoption->assignVars($this->db->fetchArray($result));
             }
         }
@@ -166,10 +167,10 @@ class XoopsConfigOptionHandler extends XoopsObjectHandler
             return false;
         }
 
-        $confop_id = $confoption->getVar('confop_id');
-        $confop_name = $confoption->getVar('confop_name');
+        $confop_id    = $confoption->getVar('confop_id');
+        $confop_name  = $confoption->getVar('confop_name');
         $confop_value = $confoption->getVar('confop_value');
-        $conf_id = $confoption->getVar('conf_id');
+        $conf_id      = $confoption->getVar('conf_id');
 
         if ($confoption->isNew()) {
             $confop_id = $this->db->genId('configoption_confop_id_seq');
@@ -226,7 +227,7 @@ class XoopsConfigOptionHandler extends XoopsObjectHandler
      * Get some {@link XoopsConfigOption}s
      *
      * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param bool            $id_as_key Use the IDs as array-keys?
+     * @param bool                          $id_as_key Use the IDs as array-keys?
      *
      * @return array Array of {@link XoopsConfigOption}s
      */
@@ -236,7 +237,7 @@ class XoopsConfigOptionHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('configoption');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere() . ' ORDER BY confop_id ' . $criteria->getOrder();
+            $sql   .= ' ' . $criteria->renderWhere() . ' ORDER BY confop_id ' . $criteria->getOrder();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }

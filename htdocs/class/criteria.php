@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Criteria parser for database query
  *
@@ -35,27 +36,23 @@ class CriteriaElement
      * @var string
      */
     public $order = 'ASC';
-
     /**
      *
      * @var string
      */
     public $sort = '';
-
     /**
      * Number of records to retrieve
      *
      * @var int
      */
     public $limit = 0;
-
     /**
      * Offset of first record
      *
      * @var int
      */
     public $start = 0;
-
     /**
      *
      * @var string
@@ -185,7 +182,6 @@ class CriteriaCompo extends CriteriaElement
      * @var array Array of {@link CriteriaElement} objects
      */
     public $criteriaElements = array();
-
     /**
      * Conditions
      *
@@ -197,7 +193,7 @@ class CriteriaCompo extends CriteriaElement
      * Constructor
      *
      * @param CriteriaElement|null $ele
-     * @param string $condition
+     * @param string               $condition
      */
     public function __construct(CriteriaElement $ele = null, $condition = 'AND')
     {
@@ -209,9 +205,10 @@ class CriteriaCompo extends CriteriaElement
     /**
      * Add an element
      *
-     * @param CriteriaElement|object $criteriaElement
-     * @param string                 $condition
-     * @return object reference to this collection
+     * @param \CriteriaElement $criteriaElement
+     * @param string           $condition
+     *
+     * @return CriteriaCompo reference to this collection
      */
     public function &add(CriteriaElement $criteriaElement, $condition = 'AND')
     {
@@ -289,13 +286,24 @@ class CriteriaCompo extends CriteriaElement
 class Criteria extends CriteriaElement
 {
     /**
-     *
      * @var string
      */
     public $prefix;
+    /**
+     * @var string
+     */
     public $function;
+    /**
+     * @var string
+     */
     public $column;
+    /**
+     * @var string
+     */
     public $operator;
+    /**
+     * @var string
+     */
     public $value;
 
     /**
@@ -324,7 +332,7 @@ class Criteria extends CriteriaElement
          *
          * The following is a temporary workaround for the old technique
          */
-        if ((int) $column === 1 && (int) $value === 1 && $operator === '=') {
+        if ((int)$column === 1 && (int)$value === 1 && $operator === '=') {
             $this->column = '';
             $this->value  = '';
         }
@@ -339,17 +347,23 @@ class Criteria extends CriteriaElement
     {
         $backtick = (false === strpos($this->column, '.')) ? '`' : '';
         $backtick = (false !== strpos($this->column, '(')) ? '' : $backtick;
-        $clause = (!empty($this->prefix) ? "{$this->prefix}." : '') . $backtick . $this->column . $backtick;
+        $clause   = (!empty($this->prefix) ? "{$this->prefix}." : '') . $backtick . $this->column . $backtick;
         if (!empty($this->function)) {
             $clause = sprintf($this->function, $clause);
         }
-        if (in_array(strtoupper($this->operator), array('IS NULL', 'IS NOT NULL'))) {
+        if (in_array(strtoupper($this->operator), array(
+            'IS NULL',
+            'IS NOT NULL',
+        ))) {
             $clause .= ' ' . $this->operator;
         } else {
             if ('' === ($value = trim($this->value))) {
                 return '';
             }
-            if (!in_array(strtoupper($this->operator), array('IN', 'NOT IN'))) {
+            if (!in_array(strtoupper($this->operator), array(
+                'IN',
+                'NOT IN',
+            ))) {
                 if ((substr($value, 0, 1) !== '`') && (substr($value, -1) !== '`')) {
                     $value = "'{$value}'";
                 } elseif (!preg_match('/^[a-zA-Z0-9_\.\-`]*$/', $value)) {
@@ -384,7 +398,7 @@ class Criteria extends CriteriaElement
             if ($this->operator === 'IN') {
                 $newvalue = str_replace(array('(', ')'), '', $this->value);
                 $tab      = explode(',', $newvalue);
-                $clause = '';
+                $clause   = '';
                 foreach ($tab as $uid) {
                     $clause .= "({$this->column}={$uid})";
                 }

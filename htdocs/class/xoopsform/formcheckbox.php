@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS form checkbox compo
  *
@@ -33,7 +34,6 @@ class XoopsFormCheckBox extends XoopsFormElement
      * @access private
      */
     public $_options = array();
-
     /**
      * pre-selected values in array
      *
@@ -41,7 +41,6 @@ class XoopsFormCheckBox extends XoopsFormElement
      * @access private
      */
     public $_value = array();
-
     /**
      * HTML to seperate the elements
      *
@@ -49,7 +48,6 @@ class XoopsFormCheckBox extends XoopsFormElement
      * @access private
      */
     public $_delimeter;
-
     /**
      * Columns per line for rendering
      * Leave unset (null) to put all options in one line
@@ -83,7 +81,7 @@ class XoopsFormCheckBox extends XoopsFormElement
     /**
      * Get the "value"
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return array
      */
     public function getValue($encode = false)
@@ -149,7 +147,7 @@ class XoopsFormCheckBox extends XoopsFormElement
     /**
      * Get an array with all the options
      *
-     * @param  bool|int $encode To sanitizer the text? potential values: 0 - skip; 1 - only for value; 2 - for both value and name
+     * @param bool|int $encode To sanitizer the text? potential values: 0 - skip; 1 - only for value; 2 - for both value and name
      * @return array    Associative array of value->name pairs
      */
     public function getOptions($encode = false)
@@ -168,7 +166,7 @@ class XoopsFormCheckBox extends XoopsFormElement
     /**
      * Get the delimiter of this group
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string The delimiter
      */
     public function getDelimeter($encode = false)
@@ -183,7 +181,9 @@ class XoopsFormCheckBox extends XoopsFormElement
      */
     public function render()
     {
-        return XoopsFormRenderer::getInstance()->get()->renderFormCheckBox($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormCheckBox($this);
     }
 
     /**

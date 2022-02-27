@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Preview of dhtml editor content
  *

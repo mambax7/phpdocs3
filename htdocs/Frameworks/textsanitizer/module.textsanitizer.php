@@ -1,5 +1,6 @@
 <?php
 // For backward compatibility
+
 /**
  * Class MyTextSanitizerExtended
  */

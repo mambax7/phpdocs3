@@ -68,7 +68,6 @@ class XoopsCacheModel extends XoopsCacheEngine
      * @access public
      */
     public $settings = array();
-
     /**
      * Model instance.
      *
@@ -76,7 +75,6 @@ class XoopsCacheModel extends XoopsCacheEngine
      * @access private
      */
     public $model;
-
     /**
      * Model instance.
      *
@@ -91,8 +89,8 @@ class XoopsCacheModel extends XoopsCacheEngine
      * Called automatically by the cache frontend
      * To reinitialize the settings call Cache::engine('EngineName', [optional] settings = array());
      *
-     * @param  array $settings array of setting for the engine
-     * @return boolean True if the engine has been successfully initialized, false if not
+     * @param array $settings array of setting for the engine
+     * @return bool True if the engine has been successfully initialized, false if not
      * @access   public
      */
     public function init($settings = array())
@@ -100,7 +98,12 @@ class XoopsCacheModel extends XoopsCacheEngine
         $xoopsDB = XoopsDatabaseFactory::getDatabaseConnection();
 
         parent::init($settings);
-        $defaults       = array('fields' => array('data', 'expires'));
+        $defaults       = array(
+            'fields' => array(
+                'data',
+                'expires',
+            ),
+        );
         $this->settings = array_merge($defaults, $this->settings);
         $this->fields   = $this->settings['fields'];
         $this->model    = new XoopsCacheModelHandler($xoopsDB);
@@ -121,10 +124,10 @@ class XoopsCacheModel extends XoopsCacheEngine
     /**
      * Write data for key into cache
      *
-     * @param  string  $key      Identifier for the data
-     * @param  mixed   $value     Data to be cached
-     * @param  integer $duration How long to cache the data, in seconds
-     * @return boolean True if the data was successfully cached, false on failure
+     * @param string  $key      Identifier for the data
+     * @param mixed   $value    Data to be cached
+     * @param int $duration How long to cache the data, in seconds
+     * @return bool True if the data was successfully cached, false on failure
      * @access public
      */
     public function write($key, $value, $duration = null)
@@ -146,7 +149,7 @@ class XoopsCacheModel extends XoopsCacheEngine
     /**
      * Read a key from the cache
      *
-     * @param  string $key Identifier for the data
+     * @param string $key Identifier for the data
      * @return mixed  The cached data, or false if the data doesn't exist, has expired, or if there was an error fetching it
      * @access public
      */
@@ -166,8 +169,8 @@ class XoopsCacheModel extends XoopsCacheEngine
     /**
      * Delete a key from the cache
      *
-     * @param  string $key Identifier for the data
-     * @return boolean True if the value was successfully deleted, false if it didn't exist or couldn't be removed
+     * @param string $key Identifier for the data
+     * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
      * @access public
      */
     public function delete($key)
@@ -178,7 +181,8 @@ class XoopsCacheModel extends XoopsCacheEngine
     /**
      * Delete all keys from the cache
      *
-     * @return boolean True if the cache was successfully cleared, false otherwise
+     * @param bool|null $check
+     * @return bool True if the cache was successfully cleared, false otherwise
      * @access public
      */
     public function clear($check = null)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Notifications
  *
@@ -19,15 +20,13 @@
 defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 // RMV-NOTIFY
-
 // FIXME: Do some caching, so we don't retrieve the same category / event
 // info many times.
-
 /**
  * Determine if notification is enabled for the selected module.
  *
- * @param  string $style     Subscription style: 'block' or 'inline'
- * @param  int    $module_id ID of the module  (default current module)
+ * @param string $style     Subscription style: 'block' or 'inline'
+ * @param int    $module_id ID of the module  (default current module)
  * @return bool
  */
 function notificationEnabled($style, $module_id = null)
@@ -64,7 +63,7 @@ function notificationEnabled($style, $module_id = null)
  * return an array of info for all categories.
  *
  * @param string $category_name
- * @param  int   $module_id ID of the module (default current module)
+ * @param int    $module_id ID of the module (default current module)
  *
  * @internal param string $name Category name (default all categories)
  * @return mixed
@@ -98,11 +97,11 @@ function &notificationCategoryInfo($category_name = '', $module_id = null)
  * Get associative array of info for the category to which comment events
  * belong.
  *
- * @todo This could be more efficient... maybe specify in
- *        $modversion['comments'] the notification category.
- *       This would also serve as a way to enable notification
- *        of comments, and also remove the restriction that
- *        all notification categories must have unique item_name. (TODO)
+ * @todo  This could be more efficient... maybe specify in
+ *                       $modversion['comments'] the notification category.
+ *                       This would also serve as a way to enable notification
+ *                       of comments, and also remove the restriction that
+ *                       all notification categories must have unique item_name. (TODO)
  *
  * @param  int $module_id ID of the module (default current module)
  * @return mixed            Associative array of category info
@@ -130,15 +129,14 @@ function &notificationCommentCategoryInfo($module_id = null)
 }
 
 // TODO: some way to include or exclude admin-only events...
-
 /**
  * Get an array of info for all events (each event has associative array)
  * in the selected category of the selected module.
  *
- * @param  string $category_name Category name
- * @param  bool   $enabled_only  If true, return only enabled events
- * @param  int    $module_id     ID of the module (default current module)
- * @return mixed
+ * @param string $category_name Category name
+ * @param bool   $enabled_only  If true, return only enabled events
+ * @param int    $module_id     ID of the module (default current module)
+ * @return array
  */
 function &notificationEvents($category_name, $enabled_only, $module_id = null)
 {
@@ -151,7 +149,7 @@ function &notificationEvents($category_name, $enabled_only, $module_id = null)
         $module_handler = xoops_getHandler('module');
         $module         = $module_handler->get($module_id);
     }
-    $not_config     = $module->getInfo('notification');
+    $not_config = $module->getInfo('notification');
     /* @var XoopsConfigHandler $config_handler */
     $config_handler = xoops_getHandler('config');
     $mod_config     = $config_handler->getConfigsByCat(0, $module_id);
@@ -238,7 +236,8 @@ function &notificationEvents($category_name, $enabled_only, $module_id = null)
                     'description'       => _NOT_COMMENT_NOTIFYDSC,
                     'mail_template_dir' => $mail_template_dir,
                     'mail_template'     => 'comment_notify',
-                    'mail_subject'      => _NOT_COMMENT_NOTIFYSBJ);
+                    'mail_subject'      => _NOT_COMMENT_NOTIFYSBJ,
+                );
                 if (!$enabled_only || notificationEventEnabled($category, $event, $module)) {
                     $event_array[] = $event;
                 }
@@ -253,7 +252,8 @@ function &notificationEvents($category_name, $enabled_only, $module_id = null)
                     'mail_template_dir' => $mail_template_dir,
                     'mail_template'     => 'commentsubmit_notify',
                     'mail_subject'      => _NOT_COMMENTSUBMIT_NOTIFYSBJ,
-                    'admin_only'        => 1);
+                    'admin_only'        => 1,
+                );
                 if (!$enabled_only || notificationEventEnabled($category, $event, $module)) {
                     $event_array[] = $event;
                 }
@@ -270,7 +270,8 @@ function &notificationEvents($category_name, $enabled_only, $module_id = null)
                 'category'    => $category['name'],
                 'title'       => _NOT_BOOKMARK_NOTIFY,
                 'caption'     => _NOT_BOOKMARK_NOTIFYCAP,
-                'description' => _NOT_BOOKMARK_NOTIFYDSC);
+                'description' => _NOT_BOOKMARK_NOTIFYDSC,
+            );
             if (!$enabled_only || notificationEventEnabled($category, $event, $module)) {
                 $event_array[] = $event;
             }
@@ -287,9 +288,9 @@ function &notificationEvents($category_name, $enabled_only, $module_id = null)
  * @todo  Check that this works correctly for comment and other
  *   events which depend on additional config options...
  *
- * @param  array  $category Category info array
- * @param  array  $event    Event info array
- * @param  object $module   Module
+ * @param array  $category Category info array
+ * @param array  $event    Event info array
+ * @param object $module   Module
  * @return bool
  **/
 function notificationEventEnabled(&$category, &$event, &$module)
@@ -313,14 +314,14 @@ function notificationEventEnabled(&$category, &$event, &$module)
  * Get associative array of info for the selected event in the selected
  * category (for the selected module).
  *
- * @param  string $category_name Notification category
- * @param  string $event_name    Notification event
- * @param  int    $module_id     ID of the module (default current module)
+ * @param string $category_name Notification category
+ * @param string $event_name    Notification event
+ * @param int    $module_id     ID of the module (default current module)
  * @return mixed
  */
 function &notificationEventInfo($category_name, $event_name, $module_id = null)
 {
-    $all_events =& notificationEvents($category_name, false, $module_id);
+    $all_events    =& notificationEvents($category_name, false, $module_id);
     foreach ($all_events as $event) {
         if ($event['name'] == $event_name) {
             return $event;
@@ -335,8 +336,8 @@ function &notificationEventInfo($category_name, $event_name, $module_id = null)
  * Get an array of associative info arrays for subscribable categories
  * for the selected module.
  *
- * @param  int $module_id ID of the module
- * @return mixed
+ * @param int $module_id ID of the module
+ * @return array
  */
 
 function &notificationSubscribableCategoryInfo($module_id = null)
@@ -349,37 +350,37 @@ function &notificationSubscribableCategoryInfo($module_id = null)
 
     $sub_categories = array();
     if (null != $all_categories) {
-    foreach ($all_categories as $category) {
-        // Check the script name
-        $subscribe_from = $category['subscribe_from'];
-        if (!is_array($subscribe_from)) {
-            if ($subscribe_from === '*') {
+        foreach ($all_categories as $category) {
+            // Check the script name
+            $subscribe_from = $category['subscribe_from'];
+            if (!is_array($subscribe_from)) {
+                if ($subscribe_from === '*') {
                 $subscribe_from = array(
                     $script_name);
-                // FIXME: this is just a hack: force a match
-            } else {
+                    // FIXME: this is just a hack: force a match
+                } else {
                 $subscribe_from = array(
                     $subscribe_from);
+                }
+            }
+            if (!in_array($script_name, $subscribe_from)) {
+                continue;
+            }
+            // If 'item_name' is missing, automatic match.  Otherwise
+            // check if that argument exists...
+            if (empty($category['item_name'])) {
+                $category['item_name'] = '';
+                $category['item_id']   = 0;
+                $sub_categories[]      = $category;
+            } else {
+                $item_name = $category['item_name'];
+                $id        = ($item_name != '' && isset($_GET[$item_name])) ? (int)$_GET[$item_name] : 0;
+                if ($id > 0) {
+                    $category['item_id'] = $id;
+                    $sub_categories[]    = $category;
+                }
             }
         }
-        if (!in_array($script_name, $subscribe_from)) {
-            continue;
-        }
-        // If 'item_name' is missing, automatic match.  Otherwise
-        // check if that argument exists...
-        if (empty($category['item_name'])) {
-            $category['item_name'] = '';
-            $category['item_id']   = 0;
-            $sub_categories[]      = $category;
-        } else {
-            $item_name = $category['item_name'];
-            $id        = ($item_name != '' && isset($_GET[$item_name])) ? (int)$_GET[$item_name] : 0;
-            if ($id > 0) {
-                $category['item_id'] = $id;
-                $sub_categories[]    = $category;
-            }
-        }
-    }
     }
     return $sub_categories;
 }
@@ -391,9 +392,9 @@ function &notificationSubscribableCategoryInfo($module_id = null)
  * and event titles.  These are pieced together in this function in
  * case we wish to alter the syntax.
  *
- * @param  array  $category Array of category info
- * @param  array  $event    Array of event info
- * @param  string $type     The particular name to generate
+ * @param array  $category  Array of category info
+ * @param array  $event     Array of event info
+ * @param string $type      The particular name to generate
  *                          return string
  *                          *
  *

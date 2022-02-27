@@ -67,6 +67,7 @@ class Upgrade_241 extends XoopsUpgrade
     /**
      * *#@+
      * Xoops Write Licence System Key
+     * @return string
      */
     public function xoops_upgradeLicenseKey($public_key, $licensefile, $license_file_dist = 'license.dist.php')
     {
@@ -91,6 +92,7 @@ class Upgrade_241 extends XoopsUpgrade
     /**
      * *#@+
      * Xoops Write Licence System Key
+     * @return string
      */
     public function xoops_putLicenseKey($system_key, $licensefile, $license_file_dist = 'license.dist.php')
     {
@@ -119,10 +121,16 @@ class Upgrade_241 extends XoopsUpgrade
     {
         $xoops_key    = '';
         $xoops_serdat = array();
-        $checksums    = array(1 => 'md5', 2 => 'sha1');
+        $checksums    = array(
+            1 => 'md5',
+            2 => 'sha1',
+        );
 
         // Remember to upgrade versions string with each release there after.
-        $versions = array('XOOPS 2.4.0', 'XOOPS 2.4.1');
+        $versions = array(
+            'XOOPS 2.4.0',
+            'XOOPS 2.4.1',
+        );
 
         error_reporting(E_ALL);
         foreach ($checksums as $funcid => $func) {
@@ -159,10 +167,13 @@ class Upgrade_241 extends XoopsUpgrade
     public function xoops_buildLicenceKey()
     {
         $xoops_serdat = array();
-        $checksums = array(1 => 'md5', 2 => 'sha1');
-        $type      = mt_rand(1, 2);
-        $func      = $checksums[$type];
-        $xoops_key = '';
+        $checksums    = array(
+            1 => 'md5',
+            2 => 'sha1',
+        );
+        $type         = mt_rand(1, 2);
+        $func         = $checksums[$type];
+        $xoops_key    = '';
 
         error_reporting(E_ALL);
 
@@ -214,7 +225,7 @@ class Upgrade_241 extends XoopsUpgrade
                 ++$uu;
                 if ($uu == $strip) {
                     $ret .= substr($xoops_key, $i, 1) . '-';
-                    $uu = 0;
+                    $uu  = 0;
                 } else {
                     if (substr($xoops_key, $i, 1) != '-') {
                         $ret .= substr($xoops_key, $i, 1);

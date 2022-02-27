@@ -4,24 +4,18 @@ class UpgradeControl
 {
     /** @var PatchStatus[] */
     public $upgradeQueue = array();
-
     /** @var string[] */
     public $needWriteFiles = array();
-
-    /** @var bool  */
+    /** @var bool */
     public $needUpgrade = false;
-
     /**
      * @var array support sites pulled from language files -- support.php
      */
     public $supportSites = array();
-
     /** @var bool */
     public $needMainfileRewrite = false;
-
-    /** @var string[]  */
+    /** @var string[] */
     public $mainfileKeys = array();
-
     /**
      * @var string language being used in the upgrade process
      */
@@ -32,7 +26,7 @@ class UpgradeControl
      *
      * @param string $dirname directory to search
      *
-     * @return string[]
+     * @return array
      */
     public function getDirList($dirname)
     {
@@ -54,14 +48,13 @@ class UpgradeControl
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public function availableLanguages()
     {
         $languages = $this->getDirList('./language/');
         return $languages;
     }
-
 
     public function loadLanguage($domain, $language = null)
     {
@@ -120,8 +113,8 @@ class UpgradeControl
         $dirs = $this->getDirList('.');
 
         /** @var PatchStatus[] $results */
-        $results     = array();
-        $files       = array();
+        $results           = array();
+        $files             = array();
         $this->needUpgrade = false;
 
         foreach ($dirs as $dir) {
@@ -148,7 +141,7 @@ class UpgradeControl
             }
         }
 
-        $this->upgradeQueue = $results;
+        $this->upgradeQueue   = $results;
         $this->needWriteFiles = $files;
 
         return $this->needUpgrade;
@@ -183,7 +176,7 @@ class UpgradeControl
 
         foreach ($this->upgradeQueue as $directory => $patch) {
             if (!$patch->applied) {
-                $next =  $directory;
+                $next = $directory;
                 break;
             }
         }
@@ -198,9 +191,9 @@ class UpgradeControl
      *
      * @return string
      */
-    public function oneButtonContinueForm($action = 'index.php', $parameters = array('action' =>'next'))
+    public function oneButtonContinueForm($action = 'index.php', $parameters = array('action' => 'next'))
     {
-        $form  = '<form action="' . $action . '" method="post">';
+        $form = '<form action="' . $action . '" method="post">';
         $form .= '<button class="btn btn-lg btn-success" type="submit">' . _CONTINUE;
         $form .= '  <span class="fa fa-caret-right"></span></button>';
         foreach ($parameters as $name => $value) {
@@ -219,5 +212,4 @@ class UpgradeControl
             $this->mainfileKeys = $mainfileKeys;
         }
     }
-
 }

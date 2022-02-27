@@ -15,14 +15,20 @@
  * @author              Andricq Nicolas (AKA MusS)
  * @package             system
  *
- * @deprecated since 2.5.9 - will be removed in future versions
+ * @deprecated          since 2.5.9 - will be removed in future versions
  */
 class Cookie
 {
     // Reserved session keys
-    private static $_reserved = array('XOLOGGERVIEW', 'xoops_user');
-
+    /**
+     * @var array
+     */
+    private static $_reserved = array(
+        'XOLOGGERVIEW',
+        'xoops_user',
+    );
     // Static class cannot be initialized
+
     /**
      *
      */
@@ -31,6 +37,7 @@ class Cookie
     }
 
     // Alias for delete() function
+
     /**
      * @param $key
      */
@@ -40,6 +47,7 @@ class Cookie
     }
 
     // Delete a cookie
+
     /**
      * @param $key
      */
@@ -87,6 +95,7 @@ class Cookie
     }
 
     // See if a cookie key exists
+
     /**
      * @param $key
      *
@@ -116,6 +125,7 @@ class Cookie
     }
 
     // Get cookie information
+
     /**
      * @param $key
      *
@@ -147,27 +157,36 @@ class Cookie
     }
 
     // Return the cookie array
+
+    /**
+     * @return array
+     */
     public static function contents()
     {
         return $_COOKIE;
     }
 
     // Set cookie information
+
     /**
-     * @param        $key
-     * @param        $value
+     * @param mixed  $key
+     * @param string $value
      * @param int    $expire
      * @param string $path
      * @param string $domain
      * @param bool   $secure
      * @param bool   $httponly
      */
-    public static function set($key, $value, $expire = 0,            /* Default expire time (session, 1 week = 604800) */
-                               $path = '',             /* Default path */
-                               $domain = '',           /* Default domain */
-                               $secure = false,        /* Does this cookie need a secure HTTPS connection? */
-                               $httponly = true        /* Can non-HTTP services access this cookie (IE: javascript)? */
-    ) {
+    public static function set(
+        $key, 
+        $value, 
+        $expire = 0,            /* Default expire time (session, 1 week = 604800) */
+        $path = '',             /* Default path */
+        $domain = '',           /* Default domain */
+        $secure = false,        /* Does this cookie need a secure HTTPS connection? */
+        $httponly = true        /* Can non-HTTP services access this cookie (IE: javascript)? */
+    )
+    {
         // Make sure they aren't trying to set a reserved word
         if (!in_array($key, self::$_reserved)) {
             // If $key is in array format, change it to string representation

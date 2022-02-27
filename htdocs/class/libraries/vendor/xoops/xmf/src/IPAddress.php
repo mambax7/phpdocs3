@@ -23,7 +23,6 @@ namespace Xmf;
  */
 class IPAddress
 {
-
     /** @var false|string presentation form of ip address, or false if invalid */
     protected $ip;
 
@@ -33,7 +32,8 @@ class IPAddress
      */
     public function __construct($ip)
     {
-        if (!filter_var((string) $ip, FILTER_VALIDATE_IP)) {
+        $ip = (string)$ip;
+        if (!filter_var((string)$ip, FILTER_VALIDATE_IP)) {
             $this->ip = false;
         } else {
             $this->ip = $this->normalize($ip);
@@ -47,11 +47,11 @@ class IPAddress
      */
     public static function fromRequest()
     {
-        $ip = (array_key_exists('REMOTE_ADDR', $_SERVER)) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
-        $class = get_called_class();
+        $ip         = (array_key_exists('REMOTE_ADDR', $_SERVER)) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
+        $class      = get_called_class();
         $proxyCheck = new ProxyCheck();
-        $proxyIP = $proxyCheck->get();
-        $ip = (false === $proxyIP) ? $ip : $proxyIP;
+        $proxyIP    = $proxyCheck->get();
+        $ip         = (false === $proxyIP) ? $ip : $proxyIP;
         return new $class($ip);
     }
 
@@ -129,7 +129,7 @@ class IPAddress
                     $mask = (-1) << (32 - $netMask4);
                     return ((ip2long($this->ip) & $mask) === (ip2long($match->asReadable()) & $mask));
                 case 6:
-                    $ipBits = $this->asBinaryString($this);
+                    $ipBits    = $this->asBinaryString($this);
                     $matchBits = $this->asBinaryString($match);
                     return (0 === strncmp($ipBits, $matchBits, $netMask6));
                 default:
@@ -148,12 +148,12 @@ class IPAddress
      */
     protected function asBinaryString(IPAddress $ip)
     {
-        $length = (4 === $ip->ipVersion()) ? 4 : 16;
+        $length   = (4 === $ip->ipVersion()) ? 4 : 16;
         $binaryIp = $ip->asBinary();
-        $bits = '';
+        $bits     = '';
         for ($i = 0; $i < $length; ++$i) {
             $byte = decbin(ord($binaryIp[$i]));
-            $bits .= substr("00000000" . $byte, -8);
+            $bits .= substr('00000000' . $byte, -8);
         }
         return $bits;
     }

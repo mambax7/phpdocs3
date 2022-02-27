@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Notifications
  *
@@ -47,9 +48,9 @@ if ($xoops_notification['show']) {
                 $subscribed                        = in_array($event['name'], $subscribed_events) ? 1 : 0;
                 $section['events'][$event['name']] = array(
                     'name'        => $event['name'],
-                    'title'       => $event['title'],
-                    'caption'     => $event['caption'],
-                    'description' => $event['description'],
+                                                           'title'       => $event['title'],
+                                                           'caption'     => $event['caption'],
+                                                           'description' => $event['description'],
                     'subscribed'  => $subscribed);
                 ++$event_count;
             }

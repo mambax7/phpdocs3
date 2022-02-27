@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -32,6 +33,9 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
  */
 class XoopsImagecategory extends XoopsObject
 {
+    /**
+     * @var int
+     */
     public $_imageCount;
 
     /**
@@ -53,7 +57,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -63,7 +67,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_id($format = '')
@@ -73,7 +77,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_name
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_name($format = '')
@@ -83,7 +87,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_display
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_display($format = '')
@@ -93,7 +97,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_weight
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_weight($format = '')
@@ -103,7 +107,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_maxsize
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_maxsize($format = '')
@@ -113,7 +117,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_maxwidth
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_maxwidth($format = '')
@@ -123,7 +127,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_maxheight
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_maxheight($format = '')
@@ -133,7 +137,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_type
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_type($format = '')
@@ -143,7 +147,7 @@ class XoopsImagecategory extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_storetype
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgcat_storetype($format = '')
@@ -185,7 +189,7 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
     /**
      * Create a new {@link XoopsImageCategory}
      *
-     * @param  boolean $isNew Flag the object as "new"
+     * @param bool $isNew Flag the object as "new"
      * @return XoopsImagecategory
      **/
     public function create($isNew = true)
@@ -203,12 +207,12 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
      *
      * @param int $id ID
      *
+     * @return false|\XoopsImageCategory {@link XoopsImageCategory}, FALSE on fail
      * @internal param bool $getbinary
-     * @return XoopsImageCategory|false {@link XoopsImageCategory}, FALSE on fail
      */
     public function get($id)
     {
-        $id     = (int)$id;
+        $id = (int)$id;
         $imgcat = false;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('imagecategory') . ' WHERE imgcat_id=' . $id;
@@ -217,7 +221,7 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $imgcat = new XoopsImagecategory();
+                $imgcat = new \XoopsImagecategory();
                 $imgcat->assignVars($this->db->fetchArray($result));
             }
         }
@@ -228,7 +232,7 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
     /**
      * Write a {@link XoopsImageCategory} object to the database
      *
-     * @param  XoopsObject|XoopsImageCategory $imgcat a XoopsImageCategory object
+     * @param XoopsObject|XoopsImageCategory $imgcat a XoopsImageCategory object
      *
      * @return bool true on success, otherwise false
      **/
@@ -268,7 +272,7 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
     /**
      * Delete an image from the database
      *
-     * @param  XoopsObject|XoopsImageCategory $imgcat a XoopsImageCategory object
+     * @param XoopsObject|XoopsImageCategory $imgcat a XoopsImageCategory object
      *
      * @return bool true on success, otherwise false
      **/
@@ -290,8 +294,8 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
     /**
      * Enter description here...
      *
-     * @param  CriteriaElement $criteria
-     * @param  bool            $id_as_key if true, use id as array key
+     * @param \CriteriaElement|null $criteria
+     * @param bool            $id_as_key if true, use id as array key
      * @return array of XoopsImagecategory objects
      */
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -301,11 +305,11 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
         $sql   = 'SELECT DISTINCT c.* FROM ' . $this->db->prefix('imagecategory') . ' c LEFT JOIN ' . $this->db->prefix('group_permission') . " l ON l.gperm_itemid=c.imgcat_id WHERE (l.gperm_name = 'imgcat_read' OR l.gperm_name = 'imgcat_write')";
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
             $where = $criteria->render();
-            $sql .= ($where != '') ? ' AND ' . $where : '';
+            $sql   .= ($where != '') ? ' AND ' . $where : '';
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
-        $sql .= ' ORDER BY imgcat_weight, imgcat_id ASC';
+        $sql    .= ' ORDER BY imgcat_weight, imgcat_id ASC';
         $result = $this->db->query($sql, $limit, $start);
         if (!$result) {
             return $ret;
@@ -327,7 +331,7 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
     /**
      * Count some images
      *
-     * @param  CriteriaElement $criteria {@link CriteriaElement}
+     * @param \CriteriaElement|null $criteria {@link CriteriaElement}
      * @return int
      **/
     public function getCount(CriteriaElement $criteria = null)
@@ -335,7 +339,7 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('imagecategory') . ' i LEFT JOIN ' . $this->db->prefix('group_permission') . " l ON l.gperm_itemid=i.imgcat_id WHERE (l.gperm_name = 'imgcat_read' OR l.gperm_name = 'imgcat_write')";
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
             $where = $criteria->render();
-            $sql .= ($where != '') ? ' AND ' . $where : '';
+            $sql   .= ($where != '') ? ' AND ' . $where : '';
         }
         if (!$result = $this->db->query($sql)) {
             return 0;
@@ -348,8 +352,8 @@ class XoopsImagecategoryHandler extends XoopsObjectHandler
     /**
      * Get a list of image categories
      *
-     * @param array    $groups
-     * @param string   $perm
+     * @param array  $groups
+     * @param string $perm
      * @param int|null $display
      * @param int|null $storetype
      * @return array Array of {@link XoopsImage} objects

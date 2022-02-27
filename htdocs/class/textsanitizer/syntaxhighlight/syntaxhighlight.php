@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TextSanitizer extension
  *
@@ -24,11 +25,11 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 class MytsSyntaxhighlight extends MyTextSanitizerExtension
 {
     /**
-     * @param $ts
-     * @param $source
-     * @param $language
+     * @param MyTextSanitizer $ts
+     * @param string $source
+     * @param string $language
      *
-     * @return bool|mixed|string
+     * @return string
      */
     public function load($ts, $source, $language)
     {
@@ -44,9 +45,9 @@ class MytsSyntaxhighlight extends MyTextSanitizerExtension
     }
 
     /**
-     * @param $text
+     * @param string $text
      *
-     * @return mixed|string
+     * @return string
      */
     public function php($text)
     {
@@ -58,7 +59,7 @@ class MytsSyntaxhighlight extends MyTextSanitizerExtension
         }
         $addedtag_close = 0;
         if (!strpos($text, '?>')) {
-            $text .= '?>';
+            $text           .= '?>';
             $addedtag_close = 1;
         }
         $oldlevel = error_reporting(0);

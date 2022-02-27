@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  * See the enclosed file license.txt for licensing information.
  * If you did not receive this file, get it at https://www.gnu.org/licenses/gpl-2.0.html
@@ -85,12 +86,12 @@ $pages = array(
     ),
     'moduleinstaller' => array(
         'name'  => MODULES,
-        'title' => MODULES_TITLE,
+                               'title' => MODULES_TITLE,
         'icon'  => 'fa fa-fw fa-cubes'
     ),
     'end'             => array(
         'name'  => WELCOME,
-        'title' => WELCOME_TITLE,
+                               'title' => WELCOME_TITLE,
         'icon'  => 'fa fa-fw fa-thumbs-o-up'
     )
 );

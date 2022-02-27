@@ -31,7 +31,6 @@ class Cache extends AbstractHelper
      * @var string
      */
     protected $prefix;
-
     /**
      * @var XoopsCache
      */
@@ -46,7 +45,7 @@ class Cache extends AbstractHelper
     {
         \XoopsLoad::load('xoopscache');
         $this->prefix = $this->module->getVar('dirname') . '_';
-        $this->cache = \XoopsCache::getInstance();
+        $this->cache  = \XoopsCache::getInstance();
     }
 
     /**
@@ -106,11 +105,11 @@ class Cache extends AbstractHelper
      *
      * If the cache read for $key is a miss, call the $regenFunction to update it.
      *
-     * @param string   $key           Identifier for the cache item
-     * @param callable $regenFunction function to generate cached content
-     * @param int|null $ttl           time to live, number of seconds as integer
+     * @param string   $key            Identifier for the cache item
+     * @param callable $regenFunction  function to generate cached content
+     * @param int|null $ttl            time to live, number of seconds as integer
      *                                 or null for default
-     * @param mixed    $args          variable argument list for $regenFunction
+     * @param mixed    $args           variable argument list for $regenFunction
      *
      * @return mixed
      */

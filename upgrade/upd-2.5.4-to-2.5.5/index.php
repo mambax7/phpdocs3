@@ -77,14 +77,14 @@ class Upgrade_255 extends XoopsUpgrade
     /**
      * Check imptotal
      *
-     * @return bool
+     * @return bool|null
      */
     public function check_imptotal()
     {
         $sql = 'SELECT `imptotal` FROM `' . $GLOBALS['xoopsDB']->prefix('banner') . '` WHERE `bid` = 1';
         if ($result = $GLOBALS['xoopsDB']->queryF($sql)) {
             $fieldInfo = mysqli_fetch_field_direct($result, 0);
-            $length = $fieldInfo->length;
+            $length    = $fieldInfo->length;
 
             return ($length != 8);
         }
@@ -109,7 +109,10 @@ class Upgrade_255 extends XoopsUpgrade
     public function __construct()
     {
         parent::__construct(basename(__DIR__));
-        $this->tasks = array('keys', 'imptotal');
+        $this->tasks = array(
+            'keys',
+            'imptotal',
+        );
     }
 }
 

@@ -9,10 +9,10 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @copyright   Grégory Mage (Aka Mage)
+ * @copyright       Grégory Mage (Aka Mage)
  * @copyright   (c) 2000-2016 XOOPS Project (www.xoops.org)
- * @license     GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
- * @author      Grégory Mage (Aka Mage)
+ * @license         GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @author          Grégory Mage (Aka Mage)
  */
 
 define('XOOPS_FRAMEWORKS_MODULEADMIN_VERSION', '1.2');

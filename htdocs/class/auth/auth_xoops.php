@@ -42,7 +42,7 @@ class XoopsAuthXoops extends XoopsAuth
     /**
      * Authenticate user
      *
-     * @param  string $uname
+     * @param string $uname
      * @param  string $pwd
      * @return bool
      */

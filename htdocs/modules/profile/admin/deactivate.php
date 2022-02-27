@@ -1,4 +1,5 @@
 <?php
+
 include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
@@ -21,7 +22,7 @@ if (in_array(XOOPS_GROUP_ADMIN, $user->getGroups())) {
     redirect_header('index.php', 2, _PROFILE_AM_CANNOTDEACTIVATEWEBMASTERS);
 }
 $level = Xmf\Request::getInt('level', 0);
-if ($level===0) {
+if ($level === 0) {
     $user->setVar('level', 0);
     // reset the activation key so it cannot be reused
     // this now gets done at activation, but we do it here also to fix accounts created before the change.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS common initialization file
  *
@@ -23,9 +24,15 @@ global $xoops, $xoopsPreload, $xoopsLogger, $xoopsErrorHandler, $xoopsSecurity, 
  * Please remove these functions from your code
  */
 if (!function_exists('get_magic_quotes_gpc')) {
+    /**
+     * @return bool
+     */
     function get_magic_quotes_gpc() { return false; }
 }
 if (!function_exists('get_magic_quotes_runtime')) {
+    /**
+     * @return bool
+     */
     function get_magic_quotes_runtime() { return false; }
 }
 /* end BC polyfill */
@@ -192,9 +199,9 @@ xoops_loadLanguage('pagetype');
 $xoopsUser        = '';
 $xoopsUserIsAdmin = false;
 /* @var XoopsMemberHandler $member_handler */
-$member_handler   = xoops_getHandler('member');
+$member_handler = xoops_getHandler('member');
 /* @var \XoopsSessionHandler $sess_handler */
-$sess_handler     = xoops_getHandler('session');
+$sess_handler = xoops_getHandler('session');
 if ($xoopsConfig['use_ssl'] && isset($_POST[$xoopsConfig['sslpost_name']]) && $_POST[$xoopsConfig['sslpost_name']] != '') {
     session_id($_POST[$xoopsConfig['sslpost_name']]);
 } elseif ($xoopsConfig['use_mysession'] && $xoopsConfig['session_name'] != '' && $xoopsConfig['session_expire'] > 0) {
@@ -279,8 +286,8 @@ if (!empty($_SESSION['xoopsUserId'])) {
             $claims = array(
                 'uid' => $_SESSION['xoopsUserId'],
             );
-            $rememberTime = 60*60*24*30;
-            $token = \Xmf\Jwt\TokenFactory::build('rememberme', $claims, $rememberTime);
+            $rememberTime = 60 * 60 * 24 * 30;
+            $token        = \Xmf\Jwt\TokenFactory::build('rememberme', $claims, $rememberTime);
             xoops_setcookie(
                 $GLOBALS['xoopsConfig']['usercookie'],
                 $token,
@@ -336,7 +343,7 @@ if ($xoopsConfig['closesite'] == 1) {
  * Load Xoops Module
  */
 if (file_exists('./xoops_version.php')) {
-    $url_arr        = explode('/', strstr($_SERVER['PHP_SELF'], '/modules/'));
+    $url_arr = explode('/', strstr($_SERVER['PHP_SELF'], '/modules/'));
     /* @var XoopsModuleHandler $module_handler */
     $module_handler = xoops_getHandler('module');
     $xoopsModule    = $module_handler->getByDirname($url_arr[2]);

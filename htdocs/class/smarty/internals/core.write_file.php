@@ -1,17 +1,17 @@
 <?php
 /**
  * Smarty plugin
- * @package Smarty
+ * @package    Smarty
  * @subpackage plugins
  */
 
 /**
  * write out a file to disk
  *
- * @param string $filename
- * @param string $contents
- * @param boolean $create_dirs
- * @return boolean
+ * @param string  $filename
+ * @param string  $contents
+ * @param bool $create_dirs
+ * @return bool
  */
 function smarty_core_write_file($params, &$smarty)
 {

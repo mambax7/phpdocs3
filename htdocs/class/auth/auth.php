@@ -29,7 +29,13 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
  */
 class XoopsAuth
 {
-    public $_dao;
+    /**
+     * @var \XoopsDatabase
+     */
+    public $_dao; 
+    /**
+     * @var array
+     */
     public $_errors;
 
     /**
@@ -42,8 +48,9 @@ class XoopsAuth
     }
 
     /**
-     * @param  string $uname
-     * @abstract need to be write in the derived class
+     * @param string $uname
+     * @abstract need to be written in the derived class
+     * @return bool
      */
     public function authenticate($uname)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -172,7 +173,7 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Create new Object
      *
-     * @param  bool $isNew
+     * @param bool $isNew
      * @return XoopsAvatar
      */
     public function create($isNew = true)
@@ -188,13 +189,13 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Egt Object
      *
-     * @param  int $id
-     * @return XoopsAvatar|false
+     * @param int $id
+     * @return false|\XoopsAvatar
      */
     public function get($id)
     {
         $avatar = false;
-        $id     = (int)$id;
+        $id = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('avatar') . ' WHERE avatar_id=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -215,7 +216,7 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Insert and Object into the database
      *
-     * @param  XoopsObject|XoopsAvatar $avatar a XoopsAvatar object
+     * @param XoopsObject|XoopsAvatar $avatar a XoopsAvatar object
      *
      * @return bool true on success, otherwise false
      */
@@ -254,7 +255,7 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Delete an object from the database
      *
-     * @param  XoopsObject|XoopsAvatar $avatar a XoopsAvatar object
+     * @param XoopsObject|XoopsAvatar $avatar a XoopsAvatar object
      *
      * @return bool true on success, otherwise false
      */
@@ -279,9 +280,9 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Fetch a row of objects from the database
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria
-     * @param  bool  $id_as_key
-     * @return object
+     * @param CriteriaElement|CriteriaCompo $criteria
+     * @param bool                          $id_as_key
+     * @return array
      */
     public function &getObjects(CriteriaElement $criteria = null, $id_as_key = false)
     {
@@ -289,8 +290,8 @@ class XoopsAvatarHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT a.*, COUNT(u.user_id) AS count FROM ' . $this->db->prefix('avatar') . ' a LEFT JOIN ' . $this->db->prefix('avatar_user_link') . ' u ON u.avatar_id=a.avatar_id';
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
-            $sql .= ' GROUP BY a.avatar_id ORDER BY avatar_weight, avatar_id';
+            $sql   .= ' ' . $criteria->renderWhere();
+            $sql   .= ' GROUP BY a.avatar_id ORDER BY avatar_weight, avatar_id';
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -316,13 +317,11 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Get count
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria
+     * @param CriteriaElement|CriteriaCompo $criteria
      * @return int
      */
     public function getCount(CriteriaElement $criteria = null)
     {
-
-
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('avatar');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
@@ -338,8 +337,8 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Add user
      *
-     * @param  int $avatar_id
-     * @param  int $user_id
+     * @param int $avatar_id
+     * @param int $user_id
      * @return bool
      */
     public function addUser($avatar_id, $user_id)
@@ -362,8 +361,8 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Get User
      *
-     * @param  XoopsAvatar $avatar
-     * @return array
+     * @param XoopsAvatar $avatar
+     * @return array|false
      */
     public function getUser(XoopsAvatar $avatar)
     {
@@ -388,8 +387,8 @@ class XoopsAvatarHandler extends XoopsObjectHandler
     /**
      * Get a list of Avatars
      *
-     * @param  string $avatar_type
-     * @param  string $avatar_display
+     * @param string|null $avatar_type
+     * @param string|null $avatar_display
      * @return array
      */
     public function getList($avatar_type = null, $avatar_display = null)
@@ -403,8 +402,7 @@ class XoopsAvatarHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('avatar_display', (int)$avatar_display));
         }
         $avatars = &$this->getObjects($criteria, true);
-        $ret     = array(
-            'blank.gif' => _NONE);
+        $ret     = array('blank.gif' => _NONE);
         foreach (array_keys($avatars) as $i) {
             $ret[$avatars[$i]->getVar('avatar_file')] = $avatars[$i]->getVar('avatar_name');
         }

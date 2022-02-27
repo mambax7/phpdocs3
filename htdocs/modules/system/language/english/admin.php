@@ -5,6 +5,7 @@
  * _LANGCODE    en
  * _CHARSET     UTF-8
  */
+
 // Main
 define('_AM_SYSTEM_CONFIG', 'System Configuration');
 define('_AM_SYSTEM_CPANEL', 'Control Panel');

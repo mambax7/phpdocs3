@@ -1,4 +1,5 @@
 <?php
+
 /**
  * select form element
  *
@@ -41,7 +42,6 @@ class XoopsFormSelect extends XoopsFormElement
      * @access private
      */
     public $_options = array();
-
     /**
      * Allow multiple selections?
      *
@@ -49,7 +49,6 @@ class XoopsFormSelect extends XoopsFormElement
      * @access private
      */
     public $_multiple = false;
-
     /**
      * Number of rows. "1" makes a dropdown list.
      *
@@ -57,7 +56,6 @@ class XoopsFormSelect extends XoopsFormElement
      * @access private
      */
     public $_size;
-
     /**
      * Pre-selcted values
      *
@@ -109,7 +107,7 @@ class XoopsFormSelect extends XoopsFormElement
     /**
      * Get an array of pre-selected values
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return array
      */
     public function getValue($encode = false)
@@ -199,7 +197,9 @@ class XoopsFormSelect extends XoopsFormElement
      */
     public function render()
     {
-        return XoopsFormRenderer::getInstance()->get()->renderFormSelect($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormSelect($this);
     }
 
     /**

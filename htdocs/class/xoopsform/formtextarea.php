@@ -33,7 +33,6 @@ class XoopsFormTextArea extends XoopsFormElement
      * @access private
      */
     public $_cols;
-
     /**
      * number of rows
      *
@@ -41,7 +40,6 @@ class XoopsFormTextArea extends XoopsFormElement
      * @access private
      */
     public $_rows;
-
     /**
      * initial content
      *
@@ -91,7 +89,7 @@ class XoopsFormTextArea extends XoopsFormElement
     /**
      * Get initial content
      *
-     * @param  bool $encode To sanitizer the text? Default value should be "true"; however we have to set "false" for backward compatibility
+     * @param bool $encode To sanitizer the text? Default value should be "true"; however we have to set "false" for backward compatibility
      * @return string
      */
     public function getValue($encode = false)
@@ -102,7 +100,7 @@ class XoopsFormTextArea extends XoopsFormElement
     /**
      * Set initial content
      *
-     * @param  string $value
+     * @param string $value
      */
     public function setValue($value)
     {
@@ -116,6 +114,8 @@ class XoopsFormTextArea extends XoopsFormElement
      */
     public function render()
     {
-        return XoopsFormRenderer::getInstance()->get()->renderFormTextArea($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormTextArea($this);
     }
 }

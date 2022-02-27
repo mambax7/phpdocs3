@@ -27,17 +27,17 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 class MytsWiki extends MyTextSanitizerExtension
 {
     /**
-     * @param $textarea_id
+     * @param string $textarea_id
      *
      * @return array
      */
     public function encode($textarea_id)
     {
-        $config     = parent::loadConfig(__DIR__);
-        $code = "<button type='button' class='btn btn-default btn-sm' onclick='xoopsCodeWiki(\"{$textarea_id}\",\""
-            . htmlspecialchars(_XOOPS_FORM_ENTERWIKITERM, ENT_QUOTES)
-            . "\");' onmouseover='style.cursor=\"hand\"' title='" . _XOOPS_FORM_ALTWIKI
-            . "'><span class='fa fa-fw fa-globe' aria-hidden='true'></span></button>";
+        $config = parent::loadConfig(__DIR__);
+        $code   = "<button type='button' class='btn btn-default btn-sm' onclick='xoopsCodeWiki(\"{$textarea_id}\",\""
+                  . htmlspecialchars(_XOOPS_FORM_ENTERWIKITERM, ENT_QUOTES)
+                  . "\");' onmouseover='style.cursor=\"hand\"' title='" . _XOOPS_FORM_ALTWIKI
+                  . "'><span class='fa fa-fw fa-globe' aria-hidden='true'></span></button>";
 
         $javascript = <<<EOH
             function xoopsCodeWiki(id, enterWikiPhrase)
@@ -62,46 +62,48 @@ EOH;
 
         return array(
             $code,
-            $javascript);
+            $javascript,
+        );
     }
 
     /**
-     * @param $match
+     * @param array $match
      *
      * @return string
      */
     public static function myCallback($match)
     {
-        return self::decode($match[1],0 ,0);
+        return self::decode($match[1], 0, 0);
     }
 
     /**
-     * @param $ts
+     * @param MyTextSanitizer $ts
      */
     public function load($ts)
     {
         //        $ts->patterns[] = "/\[\[([^\]]*)\]\]/esU";
         //        $ts->replacements[] = __CLASS__ . "::decode( '\\1' )";
         //mb------------------------------
-        $ts->callbackPatterns[] = "/\[\[([^\]]*)\]\]/sU";
+        $ts->callbackPatterns[] = '/\[\[([^\]]*)\]\]/sU';
         $ts->callbacks[]        = __CLASS__ . '::myCallback';
         //mb------------------------------
     }
 
     /**
-     * @param $text
-     *
+     * @param string $url
+     * @param int    $width
+     * @param int    $height
      * @return string
      */
-    public static function decode($text, $width, $height)
+    public static function decode($url, $width, $height)
     {
         $config = parent::loadConfig(__DIR__);
-        if (empty($text) || empty($config['link'])) {
-            return $text;
+        if (empty($url) || empty($config['link'])) {
+            return $url;
         }
         $charset = !empty($config['charset']) ? $config['charset'] : 'UTF-8';
         xoops_load('XoopsLocal');
-        $ret = "<a href='" . sprintf($config['link'], urlencode(XoopsLocal::convert_encoding($text, $charset))) . "' rel='external' title=''>{$text}</a>";
+        $ret = "<a href='" . sprintf($config['link'], urlencode(XoopsLocal::convert_encoding($url, $charset))) . "' rel='external' title=''>{$url}</a>";
 
         return $ret;
     }

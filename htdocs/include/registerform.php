@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Registeration Form
  *
@@ -28,7 +29,7 @@ $email_tray->addElement($email_option);
 
 $reg_form   = new XoopsThemeForm(_US_USERREG, 'userinfo', 'register.php', 'post', true);
 $uname_size = $xoopsConfigUser['maxuname'] < 25 ? $xoopsConfigUser['maxuname'] : 25;
-$uname = new XoopsFormText(_US_NICKNAME, 'uname', $uname_size, $uname_size, $myts->htmlSpecialChars($uname));
+$uname      = new XoopsFormText(_US_NICKNAME, 'uname', $uname_size, $uname_size, $myts->htmlSpecialChars($uname));
 $uname->setDescription(sprintf(_US_DESCRIPTIONMIN, $xoopsConfigUser['minuname']) . '<br>' . sprintf(_US_DESCRIPTIONMAX, $xoopsConfigUser['maxuname']));
 $reg_form->addElement($uname, true);
 $reg_form->addElement($email_tray);

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @return bool
+ * @return bool|null
  */
 function protector_postcommon()
 {
@@ -35,7 +35,11 @@ function protector_postcommon()
 
     // phpmailer vulnerability
     // http://larholm.com/2007/06/11/phpmailer-0day-remote-execution/
-    if (in_array(substr(XOOPS_VERSION, 0, 12), array('XOOPS 2.0.16', 'XOOPS 2.0.13', 'XOOPS 2.2.4'))) {
+    if (in_array(substr(XOOPS_VERSION, 0, 12), array(
+        'XOOPS 2.0.16',
+        'XOOPS 2.0.13',
+        'XOOPS 2.2.4',
+    ))) {
         /* @var XoopsConfigHandler $config_handler */
         $config_handler    = xoops_getHandler('config');
         $xoopsMailerConfig = $config_handler->getConfigsByCat(XOOPS_CONF_MAILER);
@@ -124,11 +128,11 @@ function protector_postcommon()
     }
 
     // check session hi-jacking
-    $masks = @$conf['session_fixed_topbit'];
+    $masks     = @$conf['session_fixed_topbit'];
     $maskArray = explode('/', $masks);
-    $ipv4Mask = empty($maskArray[0]) ? 24 : $maskArray[0];
-    $ipv6Mask = (!isset($maskArray[1])) ? 56 : $maskArray[1];
-    $ip = \Xmf\IPAddress::fromRequest();
+    $ipv4Mask  = empty($maskArray[0]) ? 24 : $maskArray[0];
+    $ipv6Mask  = (!isset($maskArray[1])) ? 56 : $maskArray[1];
+    $ip        = \Xmf\IPAddress::fromRequest();
     $maskCheck = true;
     if (isset($_SESSION['protector_last_ip'])) {
         $maskCheck = $ip->sameSubnet($_SESSION['protector_last_ip'], $ipv4Mask, $ipv6Mask);

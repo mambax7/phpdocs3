@@ -21,7 +21,7 @@ class xoopsart
     /**
      * Load a collective functions of Frameworks
      *
-     * @param  string $group name of  the collective functions, empty for functions.php
+     * @param string $group name of  the collective functions, empty for functions.php
      * @return bool
      */
     public function loadFunctions($group = '')

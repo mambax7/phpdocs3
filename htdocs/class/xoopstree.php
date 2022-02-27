@@ -30,36 +30,51 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
  */
 class XoopsTree
 {
+    /**
+     * @var string
+     */
     public $table; //table with parent-child structure
+    /**
+     * @var string
+     */
     public $id; //name of unique id for records in table $table
+    /**
+     * @var string
+     */
     public $pid; // name of parent id used in table $table
+    /**
+     * @var string
+     */
     public $order; //specifies the order of query results
+    /**
+     * @var string
+     */
     public $title; // name of a field in table $table which will be used when  selection box and paths are generated
     /**
      * @var \XoopsMySQLDatabase
      */
     public $db;
-
     //constructor of class XoopsTree
     //sets the names of table, unique id, and parend id
     /**
-     * @param $table_name
-     * @param $id_name
-     * @param $pid_name
+     * @param string $table_name
+     * @param string $id_name
+     * @param string $pid_name
      */
     public function __construct($table_name, $id_name, $pid_name)
     {
         $GLOBALS['xoopsLogger']->addDeprecated("Class '" . __CLASS__ . "' is deprecated, check 'XoopsObjectTree' in tree.php");
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db    = XoopsDatabaseFactory::getDatabaseConnection();
         $this->table = $table_name;
         $this->id    = $id_name;
         $this->pid   = $pid_name;
     }
 
     // returns an array of first child objects for a given id($sel_id)
+
     /**
-     * @param        $sel_id
-     * @param string $order
+     * @param string|int $sel_id
+     * @param string     $order
      *
      * @return array
      */
@@ -84,8 +99,9 @@ class XoopsTree
     }
 
     // returns an array of all FIRST child ids of a given id($sel_id)
+
     /**
-     * @param $sel_id
+     * @param string|int $sel_id
      *
      * @return array
      */
@@ -106,10 +122,11 @@ class XoopsTree
     }
 
     //returns an array of ALL child ids for a given id($sel_id)
+
     /**
-     * @param        $sel_id
-     * @param string $order
-     * @param array  $idarray
+     * @param string|int $sel_id
+     * @param string     $order
+     * @param array      $idarray
      *
      * @return array
      */
@@ -134,10 +151,11 @@ class XoopsTree
     }
 
     //returns an array of ALL parent ids for a given id($sel_id)
+
     /**
-     * @param        $sel_id
-     * @param string $order
-     * @param array  $idarray
+     * @param string|int $sel_id
+     * @param string     $order
+     * @param array      $idarray
      *
      * @return array
      */
@@ -162,9 +180,9 @@ class XoopsTree
     //generates path from the root id to a given id($sel_id)
     // the path is delimetered with "/"
     /**
-     * @param        $sel_id
-     * @param        $title
-     * @param string $path
+     * @param string|int $sel_id
+     * @param string     $title
+     * @param string     $path
      *
      * @return string
      */
@@ -191,7 +209,7 @@ class XoopsTree
     //$preset_id is used to specify a preselected item
     //set $none to 1 to add a option with value 0
     /**
-     * @param        $title
+     * @param string $title
      * @param string $order
      * @param int    $preset_id
      * @param int    $none
@@ -220,7 +238,7 @@ class XoopsTree
         while (false !== (list($catid, $name) = $this->db->fetchRow($result))) {
             $sel = '';
             if ($catid == $preset_id) {
-                $sel = " selected";
+                $sel = ' selected';
             }
             echo "<option value='$catid'$sel>$name</option>\n";
             $sel = '';
@@ -229,7 +247,7 @@ class XoopsTree
                 $option['prefix'] = str_replace('.', '--', $option['prefix']);
                 $catpath          = $option['prefix'] . '&nbsp;' . $myts->htmlSpecialChars($option[$title]);
                 if ($option[$this->id] == $preset_id) {
-                    $sel = " selected";
+                    $sel = ' selected';
                 }
                 echo "<option value='" . $option[$this->id] . "'$sel>$catpath</option>\n";
                 $sel = '';
@@ -239,10 +257,11 @@ class XoopsTree
     }
 
     //generates nicely formatted linked path from the root id to a given id
+
     /**
-     * @param        $sel_id
-     * @param        $title
-     * @param        $funcURL
+     * @param string|int   $sel_id
+     * @param string $title
+     * @param string $funcURL
      * @param string $path
      *
      * @return string
@@ -271,8 +290,8 @@ class XoopsTree
     //generates id path from the root id to a given id
     // the path is delimetered with "/"
     /**
-     * @param        $sel_id
-     * @param string $path
+     * @param string|int $sel_id
+     * @param string     $path
      *
      * @return string
      */
@@ -296,7 +315,7 @@ class XoopsTree
     /**
      * Enter description here...
      *
-     * @param int|mixed    $sel_id
+     * @param string|int   $sel_id
      * @param string|mixed $order
      * @param array|mixed  $parray
      *
@@ -325,10 +344,10 @@ class XoopsTree
     /**
      * Enter description here...
      *
-     * @param  int|mixed    $sel_id
-     * @param  string|mixed $order
-     * @param  array|mixed  $parray
-     * @param  string|mixed $r_prefix
+     * @param string|int   $sel_id
+     * @param string|mixed $order
+     * @param array|mixed  $parray
+     * @param string|mixed $r_prefix
      * @return mixed
      */
     public function getChildTreeArray($sel_id = 0, $order = '', $parray = array(), $r_prefix = '')

@@ -13,7 +13,9 @@
  * @license             GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
  * @author              Andricq Nicolas (AKA MusS)
  */
+
 /* @var XoopsModule $module */
+
 use Xmf\Request;
 
 // Include header
@@ -36,7 +38,7 @@ if ($mid > 0) {
     /* @var XoopsModuleHandler $module_handler */
     $module_handler = xoops_getHandler('module');
     /* @var XoopsModule $module */
-    $module         = $module_handler->get($mid);
+    $module = $module_handler->get($mid);
 
     $xoBreadCrumb->addLink($module->getVar('name'), 'help.php?mid=' . $module->getVar('mid', 's'));
     $xoBreadCrumb->addLink(system_adminVersion($page, 'name'));
@@ -60,7 +62,6 @@ if ($mid > 0) {
             }
         }
         unset($dirlist);
-
         // Handling for all other modules.
     } else {
         $list_help      = array();
@@ -112,7 +113,6 @@ if ($mid > 0) {
         }
         $xoopsTpl->assign('helpcontent', $helpcontent);
     }
-
     // This section is called if we're in the general help area.
 } else {
     $xoBreadCrumb->render();
@@ -157,7 +157,6 @@ if ($mid > 0) {
                 }
             }
             unset($dirlist);
-
             // Handling for all other modules
         } else {
             $helplist = $module->getInfo('helpsection');

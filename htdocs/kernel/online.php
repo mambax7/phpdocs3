@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -34,7 +35,6 @@ class XoopsOnlineHandler
      * @access    private
      */
     public $db;
-
     /**
      * This should be here, since this really should be a XoopsPersistableObjectHandler
      * Here, we fake it for future compatibility
@@ -50,7 +50,7 @@ class XoopsOnlineHandler
      */
     public function __construct(XoopsDatabase $db)
     {
-        $this->db = $db;
+        $this->db    = $db;
         $this->table = $this->db->prefix('online');
     }
 
@@ -68,11 +68,11 @@ class XoopsOnlineHandler
      */
     public function write($uid, $uname, $time, $module, $ip)
     {
-        $uid = (int) $uid;
-        $uname = $this->db->quote($uname);
-        $time = (int) $time;
-        $module = (int) $module;
-        $ip = $this->db->quote($ip);
+        $uid    = (int)$uid;
+        $uname  = $this->db->quote($uname);
+        $time   = (int)$time;
+        $module = (int)$module;
+        $ip     = $this->db->quote($ip);
 
         if ($uid > 0) {
             $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('online') . " WHERE online_uid={$uid}";
@@ -149,7 +149,7 @@ class XoopsOnlineHandler
     /**
      * Get an array of online information
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
+     * @param  CriteriaElement|CriteriaCompo|null $criteria {@link CriteriaElement}
      * @return array|false  Array of associative arrays of online information
      */
     public function getAll(CriteriaElement $criteria = null)
@@ -158,7 +158,7 @@ class XoopsOnlineHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('online');
         if (is_object($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -177,7 +177,7 @@ class XoopsOnlineHandler
     /**
      * Count the number of online users
      *
-     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
+     * @param CriteriaElement|CriteriaCompo|null $criteria {@link CriteriaElement}
      *
      * @return bool
      */

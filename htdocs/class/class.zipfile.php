@@ -1,5 +1,6 @@
 <?php
 // 
+
 /**
  * package::i.tools
  *
@@ -36,25 +37,22 @@ class Zipfile
      * @var array $datasec
      */
     public $datasec = array();
-
     /**
      * Central directory
      *
      * @var array $ctrl_dir
      */
     public $ctrl_dir = array();
-
     /**
      * End of central directory record
      *
      * @var string $eof_ctrl_dir
      */
     public $eof_ctrl_dir = "\x50\x4b\x05\x06\x00\x00\x00\x00";
-
     /**
      * Last offset position
      *
-     * @var integer $old_offset
+     * @var int $old_offset
      */
     public $old_offset = 0;
 
@@ -64,7 +62,7 @@ class Zipfile
      *
      * @param int $unixtime the current Unix timestamp
      *
-     * @return integer the current date in a four byte DOS format
+     * @return int the current date in a four byte DOS format
      * @access   private
      */
     public function unix2DosTime($unixtime = 0)
@@ -85,9 +83,9 @@ class Zipfile
     /**
      * Adds "file" to archive
      *
-     * @param string  $data file contents
-     * @param string  $name name of the file in the archive (may contains the path)
-     * @param integer $time the current timestamp
+     * @param string $data file contents
+     * @param string $name name of the file in the archive (may contains the path)
+     * @param int    $time the current timestamp
      * @access   public
      */
     public function addFile($data, $name, $time = 0)
@@ -109,12 +107,12 @@ class Zipfile
         $zdata   = gzcompress($data);
         $zdata   = substr(substr($zdata, 0, strlen($zdata) - 4), 2); // fix crc bug
         $c_len   = strlen($zdata);
-        $fr .= pack('V', $crc); // crc32
-        $fr .= pack('V', $c_len); // compressed filesize
-        $fr .= pack('V', $unc_len); // uncompressed filesize
-        $fr .= pack('v', strlen($name)); // length of filename
-        $fr .= pack('v', 0); // extra field length
-        $fr .= $name;
+        $fr      .= pack('V', $crc); // crc32
+        $fr      .= pack('V', $c_len); // compressed filesize
+        $fr      .= pack('V', $unc_len); // uncompressed filesize
+        $fr      .= pack('v', strlen($name)); // length of filename
+        $fr      .= pack('v', 0); // extra field length
+        $fr      .= $name;
         // "file data" segment
         $fr .= $zdata;
         // "data descriptor" segment (optional but necessary if archive is not
@@ -126,24 +124,24 @@ class Zipfile
         $this->datasec[] = $fr;
         $new_offset      = strlen(implode('', $this->datasec));
         // now add to central directory record
-        $cdrec = "\x50\x4b\x01\x02";
-        $cdrec .= "\x00\x00"; // version made by
-        $cdrec .= "\x14\x00"; // version needed to extract
-        $cdrec .= "\x00\x00"; // gen purpose bit flag
-        $cdrec .= "\x08\x00"; // compression method
-        $cdrec .= $hexdtime; // last mod time & date
-        $cdrec .= pack('V', $crc); // crc32
-        $cdrec .= pack('V', $c_len); // compressed filesize
-        $cdrec .= pack('V', $unc_len); // uncompressed filesize
-        $cdrec .= pack('v', strlen($name)); // length of filename
-        $cdrec .= pack('v', 0); // extra field length
-        $cdrec .= pack('v', 0); // file comment length
-        $cdrec .= pack('v', 0); // disk number start
-        $cdrec .= pack('v', 0); // internal file attributes
-        $cdrec .= pack('V', 32); // external file attributes - 'archive' bit set
-        $cdrec .= pack('V', $this->old_offset); // relative offset of local header
+        $cdrec            = "\x50\x4b\x01\x02";
+        $cdrec            .= "\x00\x00"; // version made by
+        $cdrec            .= "\x14\x00"; // version needed to extract
+        $cdrec            .= "\x00\x00"; // gen purpose bit flag
+        $cdrec            .= "\x08\x00"; // compression method
+        $cdrec            .= $hexdtime; // last mod time & date
+        $cdrec            .= pack('V', $crc); // crc32
+        $cdrec            .= pack('V', $c_len); // compressed filesize
+        $cdrec            .= pack('V', $unc_len); // uncompressed filesize
+        $cdrec            .= pack('v', strlen($name)); // length of filename
+        $cdrec            .= pack('v', 0); // extra field length
+        $cdrec            .= pack('v', 0); // file comment length
+        $cdrec            .= pack('v', 0); // disk number start
+        $cdrec            .= pack('v', 0); // internal file attributes
+        $cdrec            .= pack('V', 32); // external file attributes - 'archive' bit set
+        $cdrec            .= pack('V', $this->old_offset); // relative offset of local header
         $this->old_offset = $new_offset;
-        $cdrec .= $name;
+        $cdrec            .= $name;
         // optional extra field, file comment goes here
         // save to central directory
         $this->ctrl_dir[] = $cdrec;

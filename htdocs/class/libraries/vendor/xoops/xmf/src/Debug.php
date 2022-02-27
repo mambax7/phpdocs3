@@ -34,10 +34,16 @@ class Debug extends \Kint
     {
         static $done;
         if (true !== $done) {
-            $done = true;
-            $class = get_called_class();
-            parent::$aliases[] = array($class, 'dump');
-            parent::$aliases[] = array($class, 'backtrace');
+            $done                 = true;
+            $class                = get_called_class();
+            parent::$aliases[]    = array(
+                $class,
+                'dump',
+            );
+            parent::$aliases[]    = array(
+                $class,
+                'backtrace',
+            );
             parent::$enabled_mode = true;
             parent::$mode_default = \Kint::MODE_RICH;
             // display output inline ::folder = false, true puts all output at bottom of window
@@ -59,7 +65,10 @@ class Debug extends \Kint
         $args = func_get_args();
 
         static::doOnce();
-        forward_static_call_array(array('parent', 'dump'), $args);
+        forward_static_call_array(array(
+                                      'parent',
+                                      'dump',
+                                  ), $args);
     }
 
     /**
@@ -80,9 +89,9 @@ class Debug extends \Kint
      *
      * @param string $tracefile      file name for trace file
      * @param string $collect_params argument for ini_set('xdebug.collect_params',?)
-     *                             Controls display of parameters in trace output
+     *                               Controls display of parameters in trace output
      * @param string $collect_return argument for ini_set('xdebug.collect_return',?)
-     *                             Controls display of function return value in trace
+     *                               Controls display of function return value in trace
      *
      * @return void
      */

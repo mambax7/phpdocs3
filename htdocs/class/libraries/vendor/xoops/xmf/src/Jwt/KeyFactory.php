@@ -31,7 +31,7 @@ class KeyFactory
      * Create a Key object for JWT use based on default choices. If the key has not been
      * established, create it.
      *
-     * @param string           $keyName name of the key
+     * @param string                         $keyName name of the key
      * @param StorageInterface $storage key store to use, defaults to FileStorage
      *
      * @return Basic
@@ -44,7 +44,7 @@ class KeyFactory
             throw new \InvalidArgumentException('keyName must be a non-empty string');
         }
         $storage = (null === $storage) ? new FileStorage() : $storage;
-        $key = new Basic($storage, $keyName);
+        $key     = new Basic($storage, $keyName);
         $key->create(); // will automatically skip if key has already been generated
         return $key;
     }

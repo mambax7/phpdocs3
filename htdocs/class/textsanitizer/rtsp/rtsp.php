@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TextSanitizer extension
  *
@@ -25,22 +26,22 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 class MytsRtsp extends MyTextSanitizerExtension
 {
     /**
-     * @param $textarea_id
+     * @param string $textarea_id
      *
      * @return array
      */
     public function encode($textarea_id)
     {
-        $config     = parent::loadConfig(__DIR__);
+        $config = parent::loadConfig(__DIR__);
         if ($config['enable_rtsp_entry'] === false) {
             return array();
         }
         $code = "<button type='button' class='btn btn-default btn-sm' onclick='xoopsCodeRtsp(\"{$textarea_id}\",\""
-            . htmlspecialchars(_XOOPS_FORM_ENTERRTSPURL, ENT_QUOTES) . "\",\""
-            . htmlspecialchars(_XOOPS_FORM_ALT_ENTERHEIGHT, ENT_QUOTES) . "\",\""
-            . htmlspecialchars(_XOOPS_FORM_ALT_ENTERWIDTH, ENT_QUOTES)
-            . "\");' onmouseover='style.cursor=\"hand\"' title='" . _XOOPS_FORM_ALTRTSP
-            . "'><span class='fa fa-fw fa-comment-o' aria-hidden='true'></span></button>";
+                . htmlspecialchars(_XOOPS_FORM_ENTERRTSPURL, ENT_QUOTES) . "\",\""
+                . htmlspecialchars(_XOOPS_FORM_ALT_ENTERHEIGHT, ENT_QUOTES) . "\",\""
+                . htmlspecialchars(_XOOPS_FORM_ALT_ENTERWIDTH, ENT_QUOTES)
+                . "\");' onmouseover='style.cursor=\"hand\"' title='" . _XOOPS_FORM_ALTRTSP
+                . "'><span class='fa fa-fw fa-comment-o' aria-hidden='true'></span></button>";
         // $code = "<img src='{$this->image_path}/rtspimg.gif' alt='" . _XOOPS_FORM_ALTRTSP . "' title='" . _XOOPS_FORM_ALTRTSP . "' '" . "' onclick='xoopsCodeRtsp(\"{$textarea_id}\",\"" . htmlspecialchars(_XOOPS_FORM_ENTERRTSPURL, ENT_QUOTES) . "\",\"" . htmlspecialchars(_XOOPS_FORM_ALT_ENTERHEIGHT, ENT_QUOTES) . "\",\"" . htmlspecialchars(_XOOPS_FORM_ALT_ENTERWIDTH, ENT_QUOTES) . "\");'  onmouseover='style.cursor=\"hand\"'/>&nbsp;";
         $javascript = <<<EOH
             function xoopsCodeRtsp(id,enterRtspPhrase, enterRtspHeightPhrase, enterRtspWidthPhrase)
@@ -67,45 +68,45 @@ EOH;
     }
 
     /**
-     * @param $ts
+     * @param MyTextSanitizer $ts
      */
     public function load($ts)
     {
         $ts->patterns[] = "/\[rtsp=(['\"]?)([^\"']*),([^\"']*)\\1]([^\"]*)\[\/rtsp\]/sU";
         $rp             = "<object classid=\"clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA\" HEIGHT='\\3' ID=Player WIDTH='\\2' VIEWASTEXT>";
-        $rp .= "<param NAME=\"_ExtentX\" VALUE=\"12726\">";
-        $rp .= "<param NAME=\"_ExtentY\" VALUE=\"8520\">";
-        $rp .= "<param NAME=\"AUTOSTART\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"SHUFFLE\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"PREFETCH\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"NOLABELS\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"CONTROLS\" VALUE=\"ImageWindow\">";
-        $rp .= "<param NAME=\"CONSOLE\" VALUE=\"_master\">";
-        $rp .= "<param NAME=\"LOOP\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"NUMLOOP\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"CENTER\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"MAINTAINASPECT\" VALUE=\"1\">";
-        $rp .= "<param NAME=\"BACKGROUNDCOLOR\" VALUE=\"#000000\">";
-        $rp .= "<param NAME=\"SRC\" VALUE=\"\\4\">";
-        $rp .= "<embed autostart=\"0\" src=\"\\4\" type=\"audio/x-pn-realaudio-plugin\" HEIGHT='\\3' WIDTH='\\2' controls=\"ImageWindow\" console=\"cons\"> </embed>";
-        $rp .= '</object>';
-        $rp .= "<br><object CLASSID=clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA HEIGHT=32 ID=Player WIDTH='\\2' VIEWASTEXT>";
-        $rp .= "<param NAME=\"_ExtentX\" VALUE=\"18256\">";
-        $rp .= "<param NAME=\"_ExtentY\" VALUE=\"794\">";
-        $rp .= "<param NAME=\"AUTOSTART\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"SHUFFLE\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"PREFETCH\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"NOLABELS\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"CONTROLS\" VALUE=\"controlpanel\">";
-        $rp .= "<param NAME=\"CONSOLE\" VALUE=\"_master\">";
-        $rp .= "<param NAME=\"LOOP\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"NUMLOOP\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"CENTER\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"MAINTAINASPECT\" VALUE=\"0\">";
-        $rp .= "<param NAME=\"BACKGROUNDCOLOR\" VALUE=\"#000000\">";
-        $rp .= "<param NAME=\"SRC\" VALUE=\"\\4\">";
-        $rp .= "<embed autostart=\"0\" src=\"\\4\" type=\"audio/x-pn-realaudio-plugin\" HEIGHT='30' WIDTH='\\2' controls=\"ControlPanel\" console=\"cons\"> </embed>";
-        $rp .= '</object>';
+        $rp             .= "<param NAME=\"_ExtentX\" VALUE=\"12726\">";
+        $rp             .= "<param NAME=\"_ExtentY\" VALUE=\"8520\">";
+        $rp             .= "<param NAME=\"AUTOSTART\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"SHUFFLE\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"PREFETCH\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"NOLABELS\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"CONTROLS\" VALUE=\"ImageWindow\">";
+        $rp             .= "<param NAME=\"CONSOLE\" VALUE=\"_master\">";
+        $rp             .= "<param NAME=\"LOOP\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"NUMLOOP\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"CENTER\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"MAINTAINASPECT\" VALUE=\"1\">";
+        $rp             .= "<param NAME=\"BACKGROUNDCOLOR\" VALUE=\"#000000\">";
+        $rp             .= "<param NAME=\"SRC\" VALUE=\"\\4\">";
+        $rp             .= "<embed autostart=\"0\" src=\"\\4\" type=\"audio/x-pn-realaudio-plugin\" HEIGHT='\\3' WIDTH='\\2' controls=\"ImageWindow\" console=\"cons\"> </embed>";
+        $rp             .= '</object>';
+        $rp             .= "<br><object CLASSID=clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA HEIGHT=32 ID=Player WIDTH='\\2' VIEWASTEXT>";
+        $rp             .= "<param NAME=\"_ExtentX\" VALUE=\"18256\">";
+        $rp             .= "<param NAME=\"_ExtentY\" VALUE=\"794\">";
+        $rp             .= "<param NAME=\"AUTOSTART\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"SHUFFLE\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"PREFETCH\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"NOLABELS\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"CONTROLS\" VALUE=\"controlpanel\">";
+        $rp             .= "<param NAME=\"CONSOLE\" VALUE=\"_master\">";
+        $rp             .= "<param NAME=\"LOOP\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"NUMLOOP\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"CENTER\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"MAINTAINASPECT\" VALUE=\"0\">";
+        $rp             .= "<param NAME=\"BACKGROUNDCOLOR\" VALUE=\"#000000\">";
+        $rp             .= "<param NAME=\"SRC\" VALUE=\"\\4\">";
+        $rp             .= "<embed autostart=\"0\" src=\"\\4\" type=\"audio/x-pn-realaudio-plugin\" HEIGHT='30' WIDTH='\\2' controls=\"ControlPanel\" console=\"cons\"> </embed>";
+        $rp             .= '</object>';
 
         $ts->replacements[] = $rp;
     }

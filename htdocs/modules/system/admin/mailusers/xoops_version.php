@@ -17,7 +17,6 @@
  * @author       XOOPS Development Team, Kazumi Ono (AKA onokazu)
  */
 
-
 $modversion['name']        = _AM_SYSTEM_MLUS;
 $modversion['version']     = '1.0';
 $modversion['description'] = _AM_SYSTEM_MLUS_DESC;

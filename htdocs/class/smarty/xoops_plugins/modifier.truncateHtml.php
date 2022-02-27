@@ -1,10 +1,9 @@
 <?php
 /**
  * Smarty plugin
- * @package Smarty
+ * @package    Smarty
  * @subpackage plugins
  */
-
 
 /**
  * Smarty truncateHtml modifier plugin
@@ -15,15 +14,18 @@
  *           valid markup is maintained.
  * Example:  <{$body|truncateHtml:30:'...'}>
  *
- * @param string  $string HTML to be truncated
- * @param integer $count  truncate to $count words
- * @param string  $etc    ellipsis
+ * @param string $string HTML to be truncated
+ * @param int    $count  truncate to $count words
+ * @param string $etc    ellipsis
  *
  * @return string
  */
 function smarty_modifier_truncateHtml($string, $count = 80, $etc = '…')
 {
-    if($count <= 0) {
+    $string = (string)$string;
+    $count  = (int)$count;
+    $etc    = (string)$etc;
+    if ($count <= 0) {
         return '';
     }
     return BaseStringHelper::truncateWords($string, $count, $etc, true);
@@ -79,10 +81,10 @@ if (!class_exists('\BaseStringHelper', false)) {
          * Returns the portion of string specified by the start and length parameters.
          * This method ensures the string is treated as a byte array by using `mb_substr()`.
          *
-         * @param string $string the input string. Must be one character or longer.
-         * @param int    $start  the starting position
-         * @param int    $length the desired portion length. If not specified or `null`, there will be
-         *                       no limit on length i.e. the output will be until the end of the string.
+         * @param string   $string the input string. Must be one character or longer.
+         * @param int      $start  the starting position
+         * @param int|null $length the desired portion length. If not specified or `null`, there will be
+         *                         no limit on length i.e. the output will be until the end of the string.
          *
          * @return string the extracted part of string, or FALSE on failure or an empty string.
          * @see http://www.php.net/manual/en/function.substr.php
@@ -142,12 +144,12 @@ if (!class_exists('\BaseStringHelper', false)) {
         /**
          * Truncates a string to the number of characters specified.
          *
-         * @param string $string   The string to truncate.
-         * @param int    $length   How many characters from original string to include into truncated string.
-         * @param string $suffix   String to append to the end of truncated string.
-         * @param string $encoding The charset to use, defaults to charset currently used by application.
-         * @param bool   $asHtml   Whether to treat the string being truncated as HTML and preserve proper HTML tags.
-         *                         This parameter is available since version 2.0.1.
+         * @param string      $string   The string to truncate.
+         * @param int         $length   How many characters from original string to include into truncated string.
+         * @param string      $suffix   String to append to the end of truncated string.
+         * @param string|null $encoding The charset to use, defaults to charset currently used by application.
+         * @param bool        $asHtml   Whether to treat the string being truncated as HTML and preserve proper HTML tags.
+         *                              This parameter is available since version 2.0.1.
          *
          * @return string the truncated string.
          */
@@ -205,28 +207,28 @@ if (!class_exists('\BaseStringHelper', false)) {
          */
         protected static function truncateHtml($string, $count, $suffix, $encoding = false)
         {
-            $config = \HTMLPurifier_Config::create(null);
-            $lexer = \HTMLPurifier_Lexer::create($config);
-            $tokens = $lexer->tokenizeHTML($string, $config, new \HTMLPurifier_Context());
+            $config     = \HTMLPurifier_Config::create(null);
+            $lexer      = \HTMLPurifier_Lexer::create($config);
+            $tokens     = $lexer->tokenizeHTML($string, $config, new \HTMLPurifier_Context());
             $openTokens = array();
             $totalCount = 0;
-            $depth = 0;
-            $truncated = array();
+            $depth      = 0;
+            $truncated  = array();
             foreach ($tokens as $token) {
                 if ($token instanceof \HTMLPurifier_Token_Start) { //Tag begins
                     $openTokens[$depth] = $token->name;
-                    $truncated[] = $token;
+                    $truncated[]        = $token;
                     ++$depth;
                 } elseif ($token instanceof \HTMLPurifier_Token_Text && $totalCount <= $count) { //Text
                     if (false === $encoding) {
                         preg_match('/^(\s*)/um', $token->data, $prefixSpace) ?: $prefixSpace = array('', '');
-                        $token->data = $prefixSpace[1] . self::truncateWords(ltrim($token->data), $count - $totalCount, '');
+                        $token->data  = $prefixSpace[1] . self::truncateWords(ltrim($token->data), $count - $totalCount, '');
                         $currentCount = self::countWords($token->data);
                     } else {
-                        $token->data = self::truncate($token->data, $count - $totalCount, '', $encoding);
+                        $token->data  = self::truncate($token->data, $count - $totalCount, '', $encoding);
                         $currentCount = mb_strlen($token->data, $encoding);
                     }
-                    $totalCount += $currentCount;
+                    $totalCount  += $currentCount;
                     $truncated[] = $token;
                 } elseif ($token instanceof \HTMLPurifier_Token_End) { //Tag ends
                     if ($token->name === $openTokens[$depth - 1]) {
@@ -247,7 +249,7 @@ if (!class_exists('\BaseStringHelper', false)) {
                     break;
                 }
             }
-            $context = new \HTMLPurifier_Context();
+            $context   = new \HTMLPurifier_Context();
             $generator = new \HTMLPurifier_Generator($config, $context);
             return $generator->generateFromTokens($truncated) . ($totalCount >= $count ? $suffix : '');
         }
@@ -331,9 +333,11 @@ if (!class_exists('\BaseStringHelper', false)) {
             }
             if ($skipEmpty) {
                 // Wrapped with array_values to make array keys sequential after empty values removing
-                $result = array_values(array_filter($result, function ($value) {
-                    return $value !== '';
-                }));
+                $result = array_values(
+                    array_filter($result, function ($value) {
+                        return $value !== '';
+                    })
+                );
             }
 
             return $result;
@@ -342,11 +346,11 @@ if (!class_exists('\BaseStringHelper', false)) {
         /**
          * Counts words in a string.
          *
-         * @since 2.0.8
-         *
          * @param string $string
          *
          * @return int
+         * @since 2.0.8
+         *
          */
         public static function countWords($string)
         {
@@ -366,7 +370,7 @@ if (!class_exists('\BaseStringHelper', false)) {
         {
             $value = (string)$value;
 
-            $localeInfo = localeconv();
+            $localeInfo       = localeconv();
             $decimalSeparator = isset($localeInfo['decimal_point']) ? $localeInfo['decimal_point'] : null;
 
             if ($decimalSeparator !== null && $decimalSeparator !== '.') {
@@ -449,14 +453,14 @@ if (!class_exists('\BaseStringHelper', false)) {
 
             $replacements = array(
                 '\\\\\\\\' => '\\\\',
-                '\\\\\\*' => '[*]',
-                '\\\\\\?' => '[?]',
-                '\*' => '.*',
-                '\?' => '.',
-                '\[\!' => '[^',
-                '\[' => '[',
-                '\]' => ']',
-                '\-' => '-',
+                '\\\\\\*'  => '[*]',
+                '\\\\\\?'  => '[?]',
+                '\*'       => '.*',
+                '\?'       => '.',
+                '\[\!'     => '[^',
+                '\['       => '[',
+                '\]'       => ']',
+                '\-'       => '-',
             );
 
             if (isset($options['escape']) && !$options['escape']) {

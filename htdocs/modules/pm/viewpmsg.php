@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Private message module
  *
@@ -24,24 +25,28 @@ include_once dirname(dirname(__DIR__)) . '/mainfile.php';
 if (!is_object($GLOBALS['xoopsUser'])) {
     redirect_header(XOOPS_URL, 3, _NOPERM);
 }
-$xoopsConfig['module_cache']  = 0; //disable caching since the URL will be the same, but content different from one user to another
+$xoopsConfig['module_cache']             = 0; //disable caching since the URL will be the same, but content different from one user to another
 $GLOBALS['xoopsOption']['template_main'] = 'pm_viewpmsg.tpl';
 include $GLOBALS['xoops']->path('header.php');
 
-$valid_op_requests = array('out', 'save', 'in');
-$op = Request::getWord('op', 'in', 'request');
+$valid_op_requests = array(
+    'out',
+    'save',
+    'in',
+);
+$op                = Request::getWord('op', 'in', 'request');
 if (!in_array($op, $valid_op_requests)) {
     $op = 'in';
 }
 
-$start = Request::getInt('start', 0);
+$start      = Request::getInt('start', 0);
 $pm_handler = xoops_getModuleHandler('message');
 
 if (isset($_POST['delete_messages']) && (isset($_POST['msg_id']) || isset($_POST['msg_ids']))) {
     if (!$GLOBALS['xoopsSecurity']->check()) {
         $GLOBALS['xoopsTpl']->assign('errormsg', implode('<br>', $GLOBALS['xoopsSecurity']->getErrors()));
     } elseif (empty($_REQUEST['ok'])) {
-        xoops_confirm(array(
+        xoops_confirm(   array(
                           'ok'              => 1,
                           'delete_messages' => 1,
                           'op'              => $op,
@@ -111,7 +116,11 @@ if (isset($_REQUEST['empty_messages'])) {
     if (!$GLOBALS['xoopsSecurity']->check()) {
         $GLOBALS['xoopsTpl']->assign('errormsg', implode('<br>', $GLOBALS['xoopsSecurity']->getErrors()));
     } elseif (empty($_REQUEST['ok'])) {
-        xoops_confirm(array('ok' => 1, 'empty_messages' => 1, 'op' => $op), $_SERVER['REQUEST_URI'], _PM_RUSUREEMPTY);
+        xoops_confirm(   array(
+                          'ok'             => 1,
+                          'empty_messages' => 1,
+                          'op'             => $op,
+                      ), $_SERVER['REQUEST_URI'], _PM_RUSUREEMPTY);
         include $GLOBALS['xoops']->path('footer.php');
         exit();
     } else {

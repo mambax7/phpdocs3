@@ -23,13 +23,28 @@
  */
 class TinyMCE
 {
-    public        $rootpath;
-    public        $config                = array();
+    /**
+     * @var string
+     */
+    public $rootpath;
+    /**
+     * @var array
+     */
+    public $config = array();
+    /**
+     * @var array
+     */
     public        $setting               = array();
+    /**
+     * @var string
+     */    
     public static $LastOfElementsTinymce = '';
+    /**
+     * @var array
+     */
     public static $ListOfElementsTinymce = array();
-
     // PHP 5 Constructor
+
     /**
      * @param $config
      */
@@ -109,13 +124,16 @@ class TinyMCE
             if (empty($this->config['buttons'])) {
                 $this->config['buttons'][] = array(
                     'before' => '',
-                    'add' => '');
+                    'add'    => '',
+                );
                 $this->config['buttons'][] = array(
                     'before' => '',
-                    'add' => '');
+                    'add'    => '',
+                );
                 $this->config['buttons'][] = array(
                     'before' => '',
-                    'add' => '');
+                    'add'    => '',
+                );
             }
             $i = 0;
             foreach ($this->config['buttons'] as $button) {
@@ -207,6 +225,7 @@ class TinyMCE
     }
 
     // load all plugins execpt the plugins in setting["exclude_plugins"]
+
     /**
      * @return array
      */
@@ -230,6 +249,7 @@ class TinyMCE
     }
 
     // return all xoops plugins
+
     /**
      * @return array
      */
@@ -267,7 +287,7 @@ class TinyMCE
         $css_content = file_get_contents($css_path . '/' . $css_file);
 
         // get all import css files
-        if (preg_match_all("~\@import url\((.*\.css)\);~sUi", $css_content, $matches, PREG_PATTERN_ORDER)) {
+        if (preg_match_all('~\@import url\((.*\.css)\);~sUi', $css_content, $matches, PREG_PATTERN_ORDER)) {
             foreach ($matches[1] as $key => $css_import) {
                 $css = array_merge($css, $this->loadCss($css_import));
             }
@@ -350,7 +370,7 @@ class TinyMCE
         if ($isTinyMceJsLoaded) {
             $ret .= "<!-- 'tiny_mce.js' SCRIPT IS ALREADY LOADED -->\n"; //debug
         } else {
-            $ret .= "<script type='text/javascript' src='" . XOOPS_URL . $this->rootpath . "/tiny_mce.js'></script>\n";
+            $ret               .= "<script type='text/javascript' src='" . XOOPS_URL . $this->rootpath . "/tiny_mce.js'></script>\n";
             $isTinyMceJsLoaded = true;
         }
         $ret .= "<script type='text/javascript'>\n";

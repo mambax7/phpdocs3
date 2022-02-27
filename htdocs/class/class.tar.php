@@ -94,21 +94,37 @@ class Tar
     /**
      * *#@+
      * Unprocessed Archive Information
+     * @var string
      */
     public $filename;
+    /**
+     * @var bool
+     */
     public $isGzipped;
+    /**
+     * @var string
+     */
     public $tar_file;
     /**
      * *#@-
      */
-
     /**
      * *#@+
      * Processed Archive Information
+     * @var array
      */
     public $files;
+    /**
+     * @var array
+     */
     public $directories;
+    /**
+     * @var int
+     */
     public $numFiles;
+    /**
+     * @var int
+     */
     public $numDirectories;
     /**
      * *#@-
@@ -147,7 +163,7 @@ class Tar
     /**
      * Converts a NULL padded string to a non-NULL padded string
      *
-     * @param  string $string
+     * @param string $string
      * @return string
      * @access private
      */
@@ -253,7 +269,7 @@ class Tar
     /**
      * Read a non gzipped tar file in for processing.
      *
-     * @param  string $filename full filename
+     * @param string $filename full filename
      * @return bool   always TRUE
      * @access private
      */
@@ -371,7 +387,7 @@ class Tar
     /**
      * Open a TAR file
      *
-     * @param  string $filename
+     * @param string $filename
      * @return bool
      */
     public function openTAR($filename)
@@ -394,7 +410,7 @@ class Tar
     /**
      * Appends a tar file to the end of the currently opened tar file.
      *
-     * @param  string $filename
+     * @param string $filename
      * @return bool
      */
     public function appendTar($filename)
@@ -411,7 +427,7 @@ class Tar
     /**
      * Retrieves information about a file in the current tar archive
      *
-     * @param  string $filename
+     * @param string $filename
      * @return string|false FALSE on fail
      */
     public function getFile($filename)
@@ -430,7 +446,7 @@ class Tar
     /**
      * Retrieves information about a directory in the current tar archive
      *
-     * @param  string $dirname
+     * @param string $dirname
      * @return string|false FALSE on fail
      */
     public function getDirectory($dirname)
@@ -449,7 +465,7 @@ class Tar
     /**
      * Check if this tar archive contains a specific file
      *
-     * @param  string $filename
+     * @param string $filename
      * @return bool
      */
     public function containsFile($filename)
@@ -468,7 +484,7 @@ class Tar
     /**
      * Check if this tar archive contains a specific directory
      *
-     * @param  string $dirname
+     * @param string $dirname
      * @return bool
      */
     public function containsDirectory($dirname)
@@ -487,7 +503,7 @@ class Tar
     /**
      * Add a directory to this tar archive
      *
-     * @param  string $dirname
+     * @param string $dirname
      * @return bool
      */
     public function addDirectory($dirname)
@@ -513,8 +529,8 @@ class Tar
     /**
      * Add a file to the tar archive
      *
-     * @param  string  $filename
-     * @param  boolean $binary Binary file?
+     * @param string $filename
+     * @param bool   $binary Binary file?
      * @return bool
      */
     public function addFile($filename, $binary = false)
@@ -557,7 +573,7 @@ class Tar
     /**
      * Remove a file from the tar archive
      *
-     * @param  string $filename
+     * @param string $filename
      * @return bool
      */
     public function removeFile($filename)
@@ -579,7 +595,7 @@ class Tar
     /**
      * Remove a directory from the tar archive
      *
-     * @param  string $dirname
+     * @param string $dirname
      * @return bool
      */
     public function removeDirectory($dirname)
@@ -617,8 +633,8 @@ class Tar
     /**
      * Saves tar archive to a different file than the current file
      *
-     * @param  string $filename
-     * @param  bool   $useGzip Use GZ compression?
+     * @param string $filename
+     * @param bool   $useGzip Use GZ compression?
      * @return bool
      */
     public function toTar($filename, $useGzip)
@@ -649,8 +665,8 @@ class Tar
     /**
      * Sends tar archive to stdout
      *
-     * @param  string $filename
-     * @param  bool   $useGzip Use GZ compression?
+     * @param string $filename
+     * @param bool   $useGzip Use GZ compression?
      * @return string|false
      */
     public function toTarOutput($filename, $useGzip)

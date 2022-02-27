@@ -52,7 +52,7 @@ class XoopsUser extends XoopsObject
      * constructor
      * @param array|null $id ID of the user to be loaded from the database.
      */
-    public function __construct($id = null)
+    public function __construct(array $id = null)
     {
         $this->initVar('uid', XOBJ_DTYPE_INT, null, false);
         $this->initVar('name', XOBJ_DTYPE_TXTBOX, null, false, 60);
@@ -116,8 +116,8 @@ class XoopsUser extends XoopsObject
      * Updated by Catzwolf 11 Jan 2004
      * find the username for a given ID
      *
-     * @param  int $userid  ID of the user to find
-     * @param  int $usereal switch for usename or realname
+     * @param int $userid  ID of the user to find
+     * @param int $usereal switch for usename or realname
      * @return string name of the user. name for 'anonymous' if not found.
      */
     public static function getUnameFromId($userid, $usereal = 0)
@@ -149,6 +149,7 @@ class XoopsUser extends XoopsObject
     /**
      * increase the number of posts for the user
      *
+     * @return bool
      * @deprecated
      */
     public function incrementPost()
@@ -207,7 +208,7 @@ class XoopsUser extends XoopsObject
      * - If you don't specify any module ID, the current module will be checked.<br>
      * - If you set the module_id to -1, it will return true if the user has admin rights for at least one module
      *
-     * @param  int $module_id check if user is admin of this module
+     * @param int|null $module_id check if user is admin of this module
      * @return bool is the user admin of that module?
      */
     public function isAdmin($module_id = null)
@@ -263,7 +264,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the users UID
-     * @param  string $format
+     * @param string $format
      * @return int
      */
     public function uid($format = '')
@@ -273,7 +274,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the users UID
-     * @param  string $format
+     * @param string $format
      * @return int
      */
     public function id($format = 'N')
@@ -283,7 +284,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the users name
-     * @param  string $format format for the output, see {@link XoopsObject::getVar($format = '')}
+     * @param string $format format for the output, see {@link XoopsObject::getVar($format = '')}
      * @return string
      */
     public function name($format = 'S')
@@ -293,7 +294,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the user's uname
-     * @param  string $format format for the output, see {@link XoopsObject::getVar($format = '')}
+     * @param string $format format for the output, see {@link XoopsObject::getVar($format = '')}
      * @return string
      */
     public function uname($format = 'S')
@@ -304,7 +305,7 @@ class XoopsUser extends XoopsObject
     /**
      * get the user's email
      *
-     * @param  string $format format for the output, see {@link XoopsObject::getVar($format = '')}
+     * @param string $format format for the output, see {@link XoopsObject::getVar($format = '')}
      * @return string
      */
     public function email($format = 'S')
@@ -503,6 +504,7 @@ class XoopsUser extends XoopsObject
     }
 
     // RMV-NOTIFY
+
     /**
      * @param string $format
      *
@@ -553,9 +555,11 @@ class XoopsUser extends XoopsObject
         return $this->getVar('user_intrest', $format);
     }
     /**#@-*/
-
     /**#@+
      * @deprecated
+     */
+    /**
+     * @return bool
      */
     public function getProfile()
     {
@@ -606,12 +610,13 @@ class XoopsUserHandler extends XoopsPersistableObjectHandler
     }
 
     /**#@+
+     * @param bool   $uname
+     * @param string $pwd
+     * @param bool   $md5
+     * @return bool|false
      * @deprecated
-     * @param bool $uname
-     * @param      $pwd
-     * @param bool $md5
-     * @return bool|object
      */
+
     public function &loginUser($uname, $pwd, $md5 = false)
     {
         trigger_error(__CLASS__ . '::' . __FUNCTION__ . ' is deprecated', E_USER_WARNING);

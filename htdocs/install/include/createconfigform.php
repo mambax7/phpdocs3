@@ -39,7 +39,8 @@ if (defined('_MD_AM_AUTHENTICATION')) {
 function createConfigform($config)
 {
     xoops_load('XoopsFormRendererBootstrap3');
-    XoopsFormRenderer::getInstance()->set(new XoopsFormRendererBootstrap3());
+    XoopsFormRenderer::getInstance()
+                     ->set(new XoopsFormRendererBootstrap3());
 
     /* @var XoopsConfigHandler $config_handler */
     $config_handler         = xoops_getHandler('config');
@@ -127,7 +128,7 @@ function createConfigform($config)
                 break;
 
             case 'startpage':
-                $ele            = new XoopsFormSelect($title, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput());
+                $ele = new XoopsFormSelect($title, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput());
                 /* @var XoopsModuleHandler $module_handler */
                 $module_handler = xoops_getHandler('module');
                 $criteria       = new CriteriaCompo(new Criteria('hasmain', 1));
@@ -161,14 +162,14 @@ function createConfigform($config)
                 $currrent_val   = $config[$i]->getConfValueForOutput();
                 $cache_options  = array(
                     '0'      => _NOCACHE,
-                    '30'     => sprintf(_SECONDS, 30),
-                    '60'     => _MINUTE,
-                    '300'    => sprintf(_MINUTES, 5),
-                    '1800'   => sprintf(_MINUTES, 30),
-                    '3600'   => _HOUR,
-                    '18000'  => sprintf(_HOURS, 5),
-                    '86400'  => _DAY,
-                    '259200' => sprintf(_DAYS, 3),
+                                        '30'     => sprintf(_SECONDS, 30),
+                                        '60'     => _MINUTE,
+                                        '300'    => sprintf(_MINUTES, 5),
+                                        '1800'   => sprintf(_MINUTES, 30),
+                                        '3600'   => _HOUR,
+                                        '18000'  => sprintf(_HOURS, 5),
+                                        '86400'  => _DAY,
+                                        '259200' => sprintf(_DAYS, 3),
                     '604800' => _WEEK);
                 if (count($modules) > 0) {
                     $ele = new XoopsFormElementTray($title, '<br>');
@@ -188,32 +189,32 @@ function createConfigform($config)
                 $ele = new XoopsFormSelect($title, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput());
                 $ele->addOptionArray(array(
                                          '0'      => _NOCACHE,
-                                         '30'     => sprintf(_SECONDS, 30),
-                                         '60'     => _MINUTE,
-                                         '300'    => sprintf(_MINUTES, 5),
-                                         '1800'   => sprintf(_MINUTES, 30),
-                                         '3600'   => _HOUR,
-                                         '18000'  => sprintf(_HOURS, 5),
-                                         '86400'  => _DAY,
-                                         '259200' => sprintf(_DAYS, 3),
+                                           '30'     => sprintf(_SECONDS, 30),
+                                           '60'     => _MINUTE,
+                                           '300'    => sprintf(_MINUTES, 5),
+                                           '1800'   => sprintf(_MINUTES, 30),
+                                           '3600'   => _HOUR,
+                                           '18000'  => sprintf(_HOURS, 5),
+                                           '86400'  => _DAY,
+                                           '259200' => sprintf(_DAYS, 3),
                                          '604800' => _WEEK));
                 break;
 
             case 'password':
-                $ele  = new XoopsFormPassword($title, $config[$i]->getVar('conf_name'), 50, 255, installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
+                $ele = new XoopsFormPassword($title, $config[$i]->getVar('conf_name'), 50, 255, installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
                 break;
 
             case 'color':
-                $ele  = new XoopsFormColorPicker($title, $config[$i]->getVar('conf_name'), installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
+                $ele = new XoopsFormColorPicker($title, $config[$i]->getVar('conf_name'), installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
                 break;
 
             case 'hidden':
-                $ele  = new XoopsFormHidden($config[$i]->getVar('conf_name'), installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
+                $ele = new XoopsFormHidden($config[$i]->getVar('conf_name'), installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
                 break;
 
             case 'textbox':
             default:
-                $ele  = new XoopsFormText($title, $config[$i]->getVar('conf_name'), 50, 255, installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
+                $ele = new XoopsFormText($title, $config[$i]->getVar('conf_name'), 50, 255, installerHtmlSpecialChars($config[$i]->getConfValueForOutput()));
                 break;
         }
 
@@ -239,7 +240,8 @@ function createConfigform($config)
 function createThemeform($config)
 {
     xoops_load('XoopsFormRendererBootstrap3');
-    XoopsFormRenderer::getInstance()->set(new XoopsFormRendererBootstrap3());
+    XoopsFormRenderer::getInstance()
+                     ->set(new XoopsFormRendererBootstrap3());
 
     $title          = (!defined($config->getVar('conf_desc')) || constant($config->getVar('conf_desc')) === '') ? constant($config->getVar('conf_title')) : constant($config->getVar('conf_title')) . '<br><br><span>' . constant($config->getVar('conf_desc')) . '</span>';
     $form_theme_set = new XoopsFormSelect('', $config->getVar('conf_name'), $config->getConfValueForOutput(), 1, false);
@@ -256,22 +258,22 @@ function createThemeform($config)
         // set default value
         $theme_ini = array(
             'Name'        => $theme,
-            'Description' => '',
-            'Version'     => '',
-            'Format'      => '',
-            'Author'      => '',
-            'Demo'        => '',
-            'Url'         => '',
-            'Download'    => '',
-            'W3C'         => '',
-            'Licence'     => '',
-            'thumbnail'   => 'screenshot.gif',
+                           'Description' => '',
+                           'Version'     => '',
+                           'Format'      => '',
+                           'Author'      => '',
+                           'Demo'        => '',
+                           'Url'         => '',
+                           'Download'    => '',
+                           'W3C'         => '',
+                           'Licence'     => '',
+                           'thumbnail'   => 'screenshot.gif',
             'screenshot'  => 'screenshot.png');
 
         if ($theme == $config->getConfValueForOutput()) {
-            $label_content .= '<div class="theme_preview" id="'.$theme.'" style="display:block;">';
+            $label_content .= '<div class="theme_preview" id="' . $theme . '" style="display:block;">';
         } else {
-            $label_content .= '<div class="theme_preview" id="'.$theme.'" style="display:none;">';
+            $label_content .= '<div class="theme_preview" id="' . $theme . '" style="display:none;">';
         }
         if (file_exists(XOOPS_ROOT_PATH . "/themes/$theme/theme.ini")) {
             $theme_ini = parse_ini_file(XOOPS_ROOT_PATH . "/themes/$theme/theme.ini");
@@ -285,7 +287,7 @@ function createThemeform($config)
         }
         if ($theme_ini['screenshot'] !== '' && file_exists(XOOPS_ROOT_PATH . '/themes/' . $theme . '/' . $theme_ini['screenshot'])) {
             $label_content .= '<img class="img-responsive" src="' . XOOPS_URL . '/themes/' . $theme . '/' . $theme_ini['screenshot'] . '" alt="Screenshot" />';
-        } elseif ($theme_ini['thumbnail'] !== '' && file_exists(XOOPS_ROOT_PATH . '/themes/' . $theme .'/' . $theme_ini['thumbnail'])) {
+        } elseif ($theme_ini['thumbnail'] !== '' && file_exists(XOOPS_ROOT_PATH . '/themes/' . $theme . '/' . $theme_ini['thumbnail'])) {
             $label_content .= '<img class="img-responsive" src="' . XOOPS_URL . '/themes/' . $theme . '/' . $theme_ini['thumbnail'] . '" alt="$theme" />';
         } else {
             $label_content .= THEME_NO_SCREENSHOT;

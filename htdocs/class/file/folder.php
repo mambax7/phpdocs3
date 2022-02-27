@@ -58,23 +58,20 @@ class XoopsFolderHandler
      * @access public
      */
     public $path;
-
     /**
      * Sortedness.
      *
-     * @var boolean
+     * @var bool
      * @access public
      */
     public $sort = false;
-
     /**
      * mode to be used on create.
      *
-     * @var boolean
+     * @var bool
      * @access public
      */
     public $mode = '0755';
-
     /**
      * holds messages from last method.
      *
@@ -82,7 +79,6 @@ class XoopsFolderHandler
      * @access private
      */
     public $messages = array();
-
     /**
      * holds errors from last method.
      *
@@ -90,7 +86,6 @@ class XoopsFolderHandler
      * @access private
      */
     public $errors = false;
-
     /**
      * holds array of complete directory paths.
      *
@@ -98,7 +93,6 @@ class XoopsFolderHandler
      * @access private
      */
     public $directories;
-
     /**
      * holds array of complete file paths.
      *
@@ -111,7 +105,7 @@ class XoopsFolderHandler
      * Constructor.
      *
      * @param bool|string $path   Path to folder
-     * @param boolean     $create Create folder if not found
+     * @param bool        $create Create folder if not found
      * @param mixed       $mode   Mode (CHMOD) to apply to created folder, false to ignore
      */
     public function __construct($path = false, $create = true, $mode = false)
@@ -164,10 +158,10 @@ class XoopsFolderHandler
      * Returns an array of the contents of the current directory, or false on failure.
      * The returned array holds two arrays: one of dirs and one of files.
      *
-     * @param boolean $sort
-     * @param mixed   $exceptions either an array or boolean true will no grab dot files
+     * @param bool  $sort
+     * @param array|bool $exceptions either an array or boolean true will no grab dot files
      *
-     * @return mixed Contents of current directory as an array, false on failure
+     * @return array Contents of current directory as an array, false on failure
      * @access public
      */
     public function read($sort = true, $exceptions = false)
@@ -203,7 +197,8 @@ class XoopsFolderHandler
 
         return array(
             $dirs,
-            $files);
+            $files,
+        );
     }
 
     /**
@@ -282,13 +277,13 @@ class XoopsFolderHandler
      *
      * @param string $path Path to check
      *
-     * @return boolean true if windows path, false otherwise
+     * @return bool true if windows path, false otherwise
      * @access public
      * @static
      */
     public function isWindowsPath($path)
     {
-        if (preg_match('/^[A-Z]:\\\\/i', $path)) {
+        if (preg_match('/^[A-Z]:\\\\/i', isset($path) ? $path : '')) {
             return true;
         }
 
@@ -425,11 +420,11 @@ class XoopsFolderHandler
      * Change the mode on a directory structure recursively.
      *
      * @param string   $path       The path to chmod
-     * @param bool|int $mode       octal value 0755
-     * @param boolean  $recursive  chmod recursively
+     * @param bool|int $mode octal value 0755
+     * @param bool     $recursive chmod recursively
      * @param array    $exceptions array of files, directories to skip
      *
-     * @return boolean Returns TRUE on success, FALSE on failure
+     * @return bool Returns TRUE on success, FALSE on failure
      * @access public
      */
     public function chmod($path, $mode = false, $recursive = true, $exceptions = array())
@@ -475,29 +470,29 @@ class XoopsFolderHandler
     /**
      * Returns an array of nested directories and files in each directory
      *
-     * @param string  $path   the directory path to build the tree from
-     * @param boolean $hidden return hidden files and directories
-     * @param string  $type   either file or dir. null returns both files and directories
+     * @param string      $path   the directory path to build the tree from
+     * @param bool   $hidden return hidden files and directories
+     * @param string|null $type   either file or dir. null returns both files and directories
      *
-     * @return mixed array of nested directories and files in each directory
+     * @return array array of nested directories and files in each directory
      * @access public
      */
     public function tree($path, $hidden = true, $type = null)
     {
         $path              = rtrim($path, '/');
-        $this->files       = array();
-        $this->directories = array(
-            $path);
+        $this->files = array();
+        $this->directories = array($path);
         $directories       = array();
         while (count($this->directories)) {
             $dir = array_pop($this->directories);
             $this->_tree($dir, $hidden);
-            $directories[] =  $dir;
+            $directories[] = $dir;
         }
         if ($type === null) {
             return array(
                 $directories,
-                $this->files);
+                $this->files,
+            );
         }
         if ($type === 'dir') {
             return $directories;
@@ -510,7 +505,7 @@ class XoopsFolderHandler
      * Private method to list directories and files in each directory
      *
      * @param string $path
-     * @param        $hidden
+     * @param bool   $hidden
      *
      * @internal param $ $ = boolean $hidden
      * @access   private
@@ -526,9 +521,9 @@ class XoopsFolderHandler
                 }
                 if ($found !== false) {
                     if (is_dir($found)) {
-                        $this->directories[] =  $found;
+                        $this->directories[] = $found;
                     } else {
-                        $this->files[] =  $found;
+                        $this->files[] = $found;
                     }
                 }
             }
@@ -542,7 +537,7 @@ class XoopsFolderHandler
      * @param string   $pathname The directory structure to create
      * @param bool|int $mode     octal value 0755
      *
-     * @return boolean Returns TRUE on success, FALSE on failure
+     * @return bool Returns TRUE on success, FALSE on failure
      * @access public
      */
     public function create($pathname, $mode = false)
@@ -620,7 +615,7 @@ class XoopsFolderHandler
      *
      * @param string $path Path of directory to delete
      *
-     * @return boolean Success
+     * @return bool Success
      * @access public
      */
     public function delete($path)
@@ -633,7 +628,7 @@ class XoopsFolderHandler
             $files        = array_merge($normal_files, $hidden_files);
             if (is_array($files)) {
                 foreach ($files as $file) {
-                    if (preg_match("/(\.|\.\.)$/", $file)) {
+                    if (preg_match('/(\.|\.\.)$/', $file)) {
                         continue;
                     }
                     if (is_file($file) === true) {
@@ -679,11 +674,12 @@ class XoopsFolderHandler
             $to      = $options;
             $options = array();
         }
-        $options = array_merge(array(
+        $options = array_merge(   array(
                                    'to'   => $to,
                                    'from' => $this->path,
                                    'mode' => $this->mode,
-                                   'skip' => array()), $options);
+                                   'skip' => array(),
+                               ), $options);
 
         $fromDir = $options['from'];
         $toDir   = $options['to'];
@@ -701,10 +697,11 @@ class XoopsFolderHandler
 
             return false;
         }
-        $exceptions = array_merge(array(
+        $exceptions = array_merge(   array(
                                       '.',
                                       '..',
-                                      '.svn'), $options['skip']);
+                                      '.svn',
+                                  ), $options['skip']);
         $handle     = opendir($fromDir);
         if ($handle) {
             while (false !== ($item = readdir($handle))) {
@@ -725,8 +722,9 @@ class XoopsFolderHandler
                             chmod($to, intval($mode, 8));
                             $this->messages[] = sprintf('%s created', $to);
                             $options          = array_merge($options, array(
-                                                                        'to'   => $to,
-                                                                        'from' => $from));
+                                'to'   => $to,
+                                'from' => $from,
+                            ));
                             $this->copy($options);
                         } else {
                             $this->errors[] = sprintf('%s not created', $to);
@@ -750,7 +748,7 @@ class XoopsFolderHandler
      *
      * @param array|string $options (to, from, chmod, skip)
      *
-     * @return string|boolean Success
+     * @return string|bool Success
      * @access public
      */
     public function move($options)
@@ -760,11 +758,12 @@ class XoopsFolderHandler
             $to      = $options;
             $options = (array)$options;
         }
-        $options = array_merge(array(
+        $options = array_merge(   array(
                                    'to'   => $to,
                                    'from' => $this->path,
                                    'mode' => $this->mode,
-                                   'skip' => array()), $options);
+                                   'skip' => array(),
+                               ), $options);
         if ($this->copy($options)) {
             if ($this->delete($options['from'])) {
                 return $this->cd($options['to']);
@@ -843,13 +842,13 @@ class XoopsFolderHandler
      *
      * @param string $path Path to check
      *
-     * @return boolean true if path ends with slash, false otherwise
+     * @return bool true if path ends with slash, false otherwise
      * @access public
      * @static
      */
     public function isSlashTerm($path)
     {
-        if (preg_match('/[\/\\\]$/', $path)) {
+        if (preg_match('/[\/\\\]$/', isset($path) ? $path : '')) {
             return true;
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS form element of datetime
  *
@@ -34,11 +35,11 @@ class XoopsFormDateTime extends XoopsFormElementTray
     /**
      * XoopsFormDateTime::XoopsFormDateTime()
      *
-     * @param mixed   $caption  form field caption
-     * @param mixed   $name     form variable name
-     * @param integer $size     size of date select
-     * @param integer $value    unix timestamp, defaults to now
-     * @param mixed   $showtime control display of date and time elements
+     * @param mixed $caption     form field caption
+     * @param mixed $name        form variable name
+     * @param int   $size        size of date select
+     * @param int   $value       unix timestamp, defaults to now
+     * @param mixed $showtime    control display of date and time elements
      *                           SHOW_BOTH, true  - show both date and time selectors
      *                           SHOW_DATE, false - only show date selector
      *                           SHOW_TIME        - only show time selector
@@ -46,7 +47,7 @@ class XoopsFormDateTime extends XoopsFormElementTray
     public function __construct($caption, $name, $size = 15, $value = 0, $showtime = true)
     {
         parent::__construct($caption, '&nbsp;');
-        switch ((int) $showtime) {
+        switch ((int)$showtime) {
             case static::SHOW_DATE:
                 $displayDate = true;
                 $displayTime = false;
@@ -66,8 +67,8 @@ class XoopsFormDateTime extends XoopsFormElementTray
         if ($displayDate) {
             $this->addElement(new XoopsFormTextDateSelect('', $name . '[date]', $size, $value));
         } else {
-            $value = !is_numeric($value) ? time() : (int)$value;
-            $value = ($value == 0) ? time() : $value;
+            $value        = !is_numeric($value) ? time() : (int)$value;
+            $value        = ($value == 0) ? time() : $value;
             $displayValue = date(_SHORTDATESTRING, $value);
             $this->addElement(new XoopsFormHidden($name . '[date]', $displayValue));
         }
@@ -76,7 +77,7 @@ class XoopsFormDateTime extends XoopsFormElementTray
             $timearray = array();
             for ($i = 0; $i < 24; ++$i) {
                 for ($j = 0; $j < 60; $j += 10) {
-                    $key = ($i * 3600) + ($j * 60);
+                    $key             = ($i * 3600) + ($j * 60);
                     $timearray[$key] = ($j != 0) ? $i . ':' . $j : $i . ':0' . $j;
                 }
             }

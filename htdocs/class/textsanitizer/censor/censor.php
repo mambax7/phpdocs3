@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TextSanitizer extension
  *
@@ -21,17 +22,17 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 /**
  * Replaces banned words in a string with their replacements or terminate current request
  *
- * @param   string $text
+ * @param string $text
  * @return  string
  *
  */
 class MytsCensor extends MyTextSanitizerExtension
 {
     /**
-     * @param $ts
-     * @param $text
+     * @param MyTextSanitizer $ts
+     * @param string $text
      *
-     * @return mixed|string
+     * @return string
      */
     public function load($ts, $text)
     {

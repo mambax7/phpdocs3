@@ -14,6 +14,7 @@
  * @package             core
  * @since               2.0.0
  */
+
 /* @var  XoopsUser $xoopsUser */
 
 include __DIR__ . '/mainfile.php';
@@ -111,11 +112,11 @@ switch ($op) {
                         }
                         $xoopsTpl->append('images', array(
                             'id'       => $images[$i]->getVar('image_id'),
-                            'nicename' => $images[$i]->getVar('image_nicename'),
-                            'mimetype' => $images[$i]->getVar('image_mimetype'),
-                            'src'      => $src,
-                            'lxcode'   => $lcode,
-                            'xcode'    => $code,
+                                                          'nicename' => $images[$i]->getVar('image_nicename'),
+                                                          'mimetype' => $images[$i]->getVar('image_mimetype'),
+                                                          'src'      => $src,
+                                                          'lxcode'   => $lcode,
+                                                          'xcode'    => $code,
                             'rxcode'   => $rcode));
                     }
                     if ($total > 10) {
@@ -185,12 +186,12 @@ switch ($op) {
 
         $payload = array(
             'aud' => 'ajaxfineupload.php',
-            'cat' => $imgcat_id,
-            'uid' => $xoopsUser instanceof \XoopsUser ? $xoopsUser->id() : 0,
-            'handler' => 'fineimuploadhandler',
-            'moddir' => 'system',
+                         'cat'     => $imgcat_id,
+                         'uid'     => $xoopsUser instanceof \XoopsUser ? $xoopsUser->id() : 0,
+                         'handler' => 'fineimuploadhandler',
+                         'moddir'  => 'system',
         );
-        $jwt = \Xmf\Jwt\TokenFactory::build('fineuploader', $payload, 60*30); // token good for 30 minutes
+        $jwt     = \Xmf\Jwt\TokenFactory::build('fineuploader', $payload, 60 * 30); // token good for 30 minutes
         $xoopsTpl->assign('jwt', $jwt);
         $fineup_debug = 'false';
         if (($xoopsUser instanceof \XoopsUser ? $xoopsUser->isAdmin() : false)

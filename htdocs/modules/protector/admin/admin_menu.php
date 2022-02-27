@@ -2,8 +2,8 @@
 
 defined('XOOPS_TRUST_PATH') || exit('set XOOPS_TRUST_PATH in mainfile.php');
 
-$mydirname = basename( dirname(__DIR__) ) ;
-$mydirpath = dirname(__DIR__) ;
-require $mydirpath.'/mytrustdirname.php' ; // set $mytrustdirname
+$mydirname = basename(dirname(__DIR__));
+$mydirpath = dirname(__DIR__);
+require $mydirpath . '/mytrustdirname.php'; // set $mytrustdirname
 
-require XOOPS_TRUST_PATH.'/modules/'.$mytrustdirname.'/admin_menu.php' ;
+require XOOPS_TRUST_PATH . '/modules/' . $mytrustdirname . '/admin_menu.php';

@@ -18,7 +18,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CACHE')):
      *
      * @return string
      */
-    function mod_generateCacheId_byGroup($groups = null)
+    function mod_generateCacheId_byGroup(array $groups = null)
     {
         global $xoopsUser;
 
@@ -58,8 +58,8 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CACHE')):
     {
         global $xoopsModule;
 
-        $name    = $name ? : (string)time();
-        $dirname = $dirname ? : (is_object($xoopsModule) ? $xoopsModule->getVar('dirname', 'n') : 'system');
+        $name    = $name ?: (string)time();
+        $dirname = $dirname ?: (is_object($xoopsModule) ? $xoopsModule->getVar('dirname', 'n') : 'system');
 
         xoops_load('XoopsCache');
         $key = "{$dirname}_{$name}";
@@ -101,7 +101,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CACHE')):
      *
      * @return mixed|null
      */
-    function mod_loadFile($name, $dirname = null, $root_path = XOOPS_CACHE_PATH)
+    function mod_loadFile($name,  $dirname = null, $root_path = XOOPS_CACHE_PATH)
     {
         global $xoopsModule;
 
@@ -110,7 +110,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CACHE')):
         if (empty($name)) {
             return $data;
         }
-        $dirname = $dirname ? : (is_object($xoopsModule) ? $xoopsModule->getVar('dirname', 'n') : 'system');
+        $dirname = $dirname ?: (is_object($xoopsModule) ? $xoopsModule->getVar('dirname', 'n') : 'system');
         xoops_load('XoopsCache');
         $key = "{$dirname}_{$name}";
 
@@ -177,7 +177,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CACHE')):
     }
 
     /**
-     * @param string      $name
+     * @param string $name
      * @param string|null $dirname
      *
      * @return bool

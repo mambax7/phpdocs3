@@ -17,8 +17,8 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
      * Load configs of a module
      *
      *
-     * @param    string $dirname module dirname
-     * @return    array
+     * @param string $dirname module dirname
+     * @return array|null
      */
     function mod_loadConfig($dirname = '')
     {
@@ -50,7 +50,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
     /**
      * @param string $dirname
      *
-     * @return array
+     * @return array|null
      */
     function mod_loadConfg($dirname = '')
     {
@@ -61,8 +61,8 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
      * Fetch configs of a module from database
      *
      *
-     * @param    string $dirname module dirname
-     * @return    array
+     * @param string $dirname module dirname
+     * @return array|null
      */
     function mod_fetchConfig($dirname = '')
     {
@@ -93,7 +93,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
     /**
      * @param string $dirname
      *
-     * @return array
+     * @return array|null
      */
     function mod_fetchConfg($dirname = '')
     {
@@ -104,7 +104,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
      * clear config cache of a module
      *
      *
-     * @param    string $dirname module dirname
+     * @param string $dirname module dirname
      * @return    bool
      */
     function mod_clearConfig($dirname = '')

@@ -28,14 +28,19 @@ use Xmf\Language;
  */
 class Admin
 {
-
     /**
      * The real ModuleAdmin object
      *
      * @var object
      */
-    protected static $ModuleAdmin = null;
-    protected $lastInfoBoxTitle = null;
+    protected static $ModuleAdmin;
+    /**
+     * @var string
+     */
+    protected $lastInfoBoxTitle; //mb TODO this is not null
+    /**
+     * @var string
+     */
     protected static $paypal = '';
 
     /**
@@ -56,16 +61,15 @@ class Admin
      */
     public static function getInstance()
     {
-
         static $instance;
 
         if ($instance === null) {
             if (class_exists('\Xoops\Module\Admin', true)) {
-                $instance = new \Xoops\Module\Admin;
+                $instance            = new \Xoops\Module\Admin();
                 static::$ModuleAdmin = $instance;
             } else {
                 include_once $GLOBALS['xoops']->path('Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
-                static::$ModuleAdmin = new \ModuleAdmin;
+                static::$ModuleAdmin = new \ModuleAdmin();
                 Language::load('xmf');
                 $instance = new static();
             }
@@ -77,14 +81,14 @@ class Admin
     /**
      * Add config line
      *
-     * @param string $value message to include in config box
-     * @param string $type  type of line to add
-     *                       minimal set of acceptable types and value expectation
-     *                       'default' - value is message displayed directly (also used for unknown types)
-     *                       'folder'  - value is directory name, will display accept if exists, error if not
-     *                       'chmod'   - value is array(directory, permission) accept if exists with permission,
+     * @param string $value              message to include in config box
+     * @param string $type               type of line to add
+     *                                   minimal set of acceptable types and value expectation
+     *                                   'default' - value is message displayed directly (also used for unknown types)
+     *                                   'folder'  - value is directory name, will display accept if exists, error if not
+     *                                   'chmod'   - value is array(directory, permission) accept if exists with permission,
      *                                   else error
-     *                       'module'  - value is string module name, or array(module name, errortype)
+     *                                   'module'  - value is string module name, or array(module name, errortype)
      *                                   If module is active, an accept line displays, otherwise, a warning
      *                                   (if value is array(module, "warning") or an error displays.
      *
@@ -98,7 +102,7 @@ class Admin
                 return $this->addConfigAccept(sprintf(_AM_XMF_MODULE_INSTALLED, $mod));
             } else {
                 $nomod = (is_array($value)) ? $value[1] : 'error';
-                $line = sprintf(_AM_XMF_MODULE_NOT_INSTALLED, $mod);
+                $line  = sprintf(_AM_XMF_MODULE_NOT_INSTALLED, $mod);
                 if ($nomod === 'warning') {
                     return $this->addConfigWarning($line);
                 } else {
@@ -163,12 +167,12 @@ class Admin
     /**
      * Render all items buttons
      *
-     * @param string $position  button position (left, right)
-     * @param string $delimiter delimiter between buttons
+     * @param string|null $position  button position (left, right)
+     * @param string      $delimiter delimiter between buttons
      *
      * @return string
      */
-    public function renderButton($position = null, $delimiter = "&nbsp;")
+    public function renderButton($position = null, $delimiter = '&nbsp;')
     {
         if (null === $position) {
             $position = 'right';
@@ -180,12 +184,12 @@ class Admin
     /**
      * Display all item buttons
      *
-     * @param string $position  button position (left, right)
-     * @param string $delimiter delimiter between buttons
+     * @param string|null $position  button position (left, right)
+     * @param string      $delimiter delimiter between buttons
      *
      * @return void
      */
-    public function displayButton($position = null, $delimiter = "&nbsp;")
+    public function displayButton($position = null, $delimiter = '&nbsp;')
     {
         echo $this->renderButton($position, $delimiter);
     }
@@ -287,14 +291,14 @@ class Admin
      */
     public function addConfigError($value = '')
     {
-        $path = XOOPS_URL . '/Frameworks/moduleclasses/icons/16/';
-        $line = "";
-        $line .= "<span style='color : red; font-weight : bold;'>";
-        $line .= "<img src='" . $path . "0.png' >";
-        $line .= $value;
-        $line .= "</span>";
+        $path  = XOOPS_URL . '/Frameworks/moduleclasses/icons/16/';
+        $line  = '';
+        $line  .= "<span style='color : red; font-weight : bold;'>";
+        $line  .= "<img src='" . $path . "0.png' >";
+        $line  .= $value;
+        $line  .= '</span>';
         $value = $line;
-        $type = 'default';
+        $type  = 'default';
 
         return static::$ModuleAdmin->addConfigBoxLine($value, $type);
     }
@@ -308,14 +312,14 @@ class Admin
      */
     public function addConfigAccept($value = '')
     {
-        $path = XOOPS_URL . '/Frameworks/moduleclasses/icons/16/';
-        $line = "";
-        $line .= "<span style='color : green;'>";
-        $line .= "<img src='" . $path . "1.png' >";
-        $line .= $value;
-        $line .= "</span>";
+        $path  = XOOPS_URL . '/Frameworks/moduleclasses/icons/16/';
+        $line  = '';
+        $line  .= "<span style='color : green;'>";
+        $line  .= "<img src='" . $path . "1.png' >";
+        $line  .= $value;
+        $line  .= '</span>';
         $value = $line;
-        $type = 'default';
+        $type  = 'default';
 
         return static::$ModuleAdmin->addConfigBoxLine($value, $type);
     }
@@ -329,24 +333,23 @@ class Admin
      */
     public function addConfigWarning($value = '')
     {
-        $path = XOOPS_URL . '/Frameworks/moduleclasses/icons/16/';
-        $line = "";
-        $line .= "<span style='color : orange; font-weight : bold;'>";
-        $line .= "<img src='" . $path . "warning.png' >";
-        $line .= $value;
-        $line .= "</span>";
+        $path  = XOOPS_URL . '/Frameworks/moduleclasses/icons/16/';
+        $line  = '';
+        $line  .= "<span style='color : orange; font-weight : bold;'>";
+        $line  .= "<img src='" . $path . "warning.png' >";
+        $line  .= $value;
+        $line  .= '</span>';
         $value = $line;
-        $type = 'default';
+        $type  = 'default';
 
         return static::$ModuleAdmin->addConfigBoxLine($value, $type);
     }
 
-
     /**
      * Check for installed module and version and do addConfigBoxLine()
      *
-     * @param string  $moddir     - module directory name
-     * @param integer $minversion - minimum acceptable module version (100 = V1.00)
+     * @param string $moddir     - module directory name
+     * @param int    $minversion - minimum acceptable module version (100 = V1.00)
      *
      * @return bool true if requested version of the module is available
      */
@@ -355,10 +358,11 @@ class Admin
         $return = false;
         $helper = Helper::getHelper($moddir);
         if (is_object($helper) && is_object($helper->getModule())) {
-            $mod_modversion = $helper->getModule()->getVar('version');
-            $mod_version_f = $mod_modversion / 100;
-            $min_version_f = $minversion / 100;
-            $value = sprintf(
+            $mod_modversion = $helper->getModule()
+                                     ->getVar('version');
+            $mod_version_f  = $mod_modversion / 100;
+            $min_version_f  = $minversion / 100;
+            $value          = sprintf(
                 _AM_XMF_MODULE_VERSION,
                 strtoupper($moddir),
                 $min_version_f,
@@ -410,11 +414,11 @@ class Admin
     public static function menuIconPath($image)
     {
         if (static::isXng()) {
-            return($image);
+            return ($image);
         } else {
             $path = '../../Frameworks/moduleclasses/icons/32/';
 
-            return($path . $image);
+            return ($path . $image);
         }
     }
 
@@ -455,7 +459,7 @@ class Admin
             $path = '/Frameworks/moduleclasses/icons/' . $path;
         }
 
-        return(XOOPS_URL . $path . $name);
+        return (XOOPS_URL . $path . $name);
     }
 
     /**

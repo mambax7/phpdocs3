@@ -26,21 +26,25 @@ require_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpcapi.php';
 class MovableTypeApi extends XoopsXmlRpcApi
 {
     /**
-     * @param array $params
+     * @param array                $params
      * @param \XoopsXmlRpcResponse $response
-     * @param \XoopsModule $module
+     * @param \XoopsModule         $module
      */
     public function __construct(&$params, $response, $module)
     {
         parent::__construct($params, $response, $module);
     }
 
+    /**
+     * @return void
+     */
     public function getCategoryList()
     {
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
             $this->response->add(new XoopsXmlRpcFault(104));
         } else {
-            $xoopsapi =& $this->_getXoopsApi($this->params);
+            /** @var XoopsApi $xoopsapi */
+            $xoopsapi = $this->_getXoopsApi($this->params);
             $xoopsapi->_setUser($this->user, $this->isadmin);
             $ret =& $xoopsapi->getCategories(false);
             if (is_array($ret)) {
@@ -59,16 +63,25 @@ class MovableTypeApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function getPostCategories()
     {
         $this->response->add(new XoopsXmlRpcFault(107));
     }
 
+    /**
+     * @return void
+     */
     public function setPostCategories()
     {
         $this->response->add(new XoopsXmlRpcFault(107));
     }
 
+    /**
+     * @return void
+     */
     public function supportedMethods()
     {
         $this->response->add(new XoopsXmlRpcFault(107));

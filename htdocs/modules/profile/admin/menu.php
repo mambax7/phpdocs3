@@ -22,7 +22,7 @@
 $path = dirname(dirname(dirname(__DIR__)));
 include_once $path . '/mainfile.php';
 
-$dirname         = basename(dirname(__DIR__));
+$dirname = basename(dirname(__DIR__));
 /* @var XoopsModuleHandler $module_handler */
 $module_handler  = xoops_getHandler('module');
 $module          = $module_handler->getByDirname($dirname);

@@ -51,17 +51,17 @@ class ProfileVisibilityHandler extends XoopsPersistableObjectHandler
     /**
      * Get fields visible to the $user_groups on a $profile_groups profile
      *
-     * @param array $profile_groups groups of the user to be accessed
-     * @param array $user_groups    groups of the visitor, default as $GLOBALS['xoopsUser']
+     * @param array $profile_groups   groups of the user to be accessed
+     * @param array|null $user_groups groups of the visitor, default as $GLOBALS['xoopsUser']
      *
      * @return array
      */
     public function getVisibleFields($profile_groups, $user_groups = null)
     {
         $profile_groups[] = $user_groups[] = 0;
-        $sql  = "SELECT field_id FROM {$this->table} WHERE profile_group IN (" . implode(',', $profile_groups) . ')';
-        $sql .= ' AND user_group IN (' . implode(',', $user_groups) . ')';
-        $field_ids = array();
+        $sql              = "SELECT field_id FROM {$this->table} WHERE profile_group IN (" . implode(',', $profile_groups) . ')';
+        $sql              .= ' AND user_group IN (' . implode(',', $user_groups) . ')';
+        $field_ids        = array();
         if ($result = $this->db->query($sql)) {
             while (false !== (list($field_id) = $this->db->fetchRow($result))) {
                 $field_ids[] = $field_id;
@@ -74,7 +74,7 @@ class ProfileVisibilityHandler extends XoopsPersistableObjectHandler
     /**
      * get all rows matching a condition
      *
-     * @param  CriteriaElement $criteria  {@link CriteriaElement} to match
+     * @param \CriteriaElement|null $criteria  {@link CriteriaElement} to match
      *
      * @return array of row arrays, indexed by field_id
      */
@@ -82,7 +82,10 @@ class ProfileVisibilityHandler extends XoopsPersistableObjectHandler
     {
         $rawRows = parent::getAll($criteria, null, false, false);
 
-        usort($rawRows, array($this, 'visibilitySort'));
+        usort($rawRows, array(
+            $this,
+            'visibilitySort',
+        ));
 
         $rows = array();
         foreach ($rawRows as $rawRow) {

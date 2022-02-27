@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS form element of CAPTCHA
  *
@@ -46,16 +47,19 @@ xoops_load('XoopsFormElement');
  */
 class XoopsFormCaptcha extends XoopsFormElement
 {
+    /**
+     * @var \XoopsCaptcha
+     */
     public $captchaHandler;
 
     /**
      * Constructor
-     * @param string  $caption    Caption of the form element, default value is defined in captcha/language/
-     * @param string  $name       Name for the input box
-     * @param boolean $skipmember Skip CAPTCHA check for members
-     * @param array   $configs
+     * @param string $caption    Caption of the form element, default value is defined in captcha/language/
+     * @param string $name       Name for the input box
+     * @param bool   $skipmember Skip CAPTCHA check for members
+     * @param array  $configs
      */
-    public function __construct($caption = '', $name = 'xoopscaptcha', $skipmember = true, $configs = array())
+    public function __construct($caption = '', $name = 'xoopscaptcha', $skipmember = true, array $configs = array())
     {
         xoops_load('XoopsCaptcha');
         $this->captchaHandler  = XoopsCaptcha::getInstance();
@@ -75,7 +79,7 @@ class XoopsFormCaptcha extends XoopsFormElement
      * @param $name
      * @param $val
      *
-     * @return mixed
+     * @return bool
      */
     public function setConfig($name, $val)
     {
@@ -83,7 +87,7 @@ class XoopsFormCaptcha extends XoopsFormElement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function render()
     {
@@ -93,7 +97,7 @@ class XoopsFormCaptcha extends XoopsFormElement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function renderValidationJS()
     {

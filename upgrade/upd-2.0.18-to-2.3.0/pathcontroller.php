@@ -23,19 +23,31 @@
  */
 class PathStuffController
 {
-    public $xoopsPath   = array(
+    /**
+     * @var array
+     */
+    public $xoopsPath = array(
         'lib'  => '',
-        'data' => '');
+        'data' => '',
+    );
+    /**
+     * @var array
+     */
     public $path_lookup = array(
         'data' => 'VAR_PATH',
-        'lib'  => 'PATH');
-
+        'lib'  => 'PATH',
+    );
+    /**
+     * @var array
+     */
     public $validPath = array(
         'data' => 0,
-        'lib'  => 0);
-
-    public $permErrors = array(
-        'data' => null);
+        'lib'  => 0,
+    );
+    /**
+     * @var array
+     */
+    public $permErrors = array('data' => null);
 
     public function __construct()
     {
@@ -67,7 +79,7 @@ class PathStuffController
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function execute()
     {
@@ -196,10 +208,12 @@ class PathStuffController
                 'caches' => array(
                     'xoops_cache',
                     'smarty_cache',
-                    'smarty_compile'),
-                'configs'));
-        $errors = array(
-            'data' => null);
+                    'smarty_compile',
+                ),
+                'configs',
+            ),
+        );
+        $errors = array('data' => null);
         if (!isset($this->xoopsPath[$path])) {
             return false;
         }

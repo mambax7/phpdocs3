@@ -16,6 +16,7 @@
  * @since
  * @author       XOOPS Development Team, Kazumi Ono (AKA onokazu)
  */
+
 use Xmf\Request;
 
 /**
@@ -34,7 +35,13 @@ if (!xoops_getModuleOption('active_userrank', 'system')) {
 
 // Parameters
 $nb_rank     = xoops_getModuleOption('userranks_pager', 'system');
-$mimetypes   = array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png');
+$mimetypes   = array(
+    'image/gif',
+    'image/jpeg',
+    'image/pjpeg',
+    'image/x-png',
+    'image/png',
+);
 $upload_size = 500000;
 // Get Action type
 $op = Request::getString('op', 'list');
@@ -43,7 +50,6 @@ $op = Request::getString('op', 'list');
 $userrank_Handler = xoops_getModuleHandler('userrank', 'system');
 
 switch ($op) {
-
     case 'list':
     default:
         // Define main template
@@ -172,8 +178,8 @@ switch ($op) {
                         $err[] = sprintf(_FAILSAVEIMG, $obj->getVar('rank_title'));
                     }
                 }
-            }else{
-                 $err[] = $uploader_rank_img->getErrors();
+            } else {
+                $err[] = $uploader_rank_img->getErrors();
             }
         } else {
             $obj->setVar('rank_image', 'ranks/' . $_POST['rank_image']);
@@ -256,5 +262,4 @@ switch ($op) {
             echo $obj->getHtmlErrors();
         }
         break;
-
 }

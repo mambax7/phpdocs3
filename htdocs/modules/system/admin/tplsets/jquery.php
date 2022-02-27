@@ -58,7 +58,13 @@ switch ($op) {
                 foreach ($files as $file) {
                     if (file_exists($root . $_REQUEST['dir'] . $file) && $file !== '.' && $file !== '..' && is_dir($root . $_REQUEST['dir'] . $file)) {
                         //retirer .svn
-                        $file_no_valid = array('.svn', 'icons', 'img', 'images', 'language');
+                        $file_no_valid = array(
+                            '.svn',
+                            'icons',
+                            'img',
+                            'images',
+                            'language',
+                        );
 
                         if (!in_array($file, $file_no_valid)) {
                             echo "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . htmlentities($_REQUEST['dir'] . $file) . "/\">" . htmlentities($file) . '</a></li>';
@@ -70,7 +76,12 @@ switch ($op) {
                     if (file_exists($root . $_REQUEST['dir'] . $file) && $file !== '.' && $file !== '..' && !is_dir($root . $_REQUEST['dir'] . $file) && $file !== 'index.html') {
                         $ext = preg_replace('/^.*\./', '', $file);
 
-                        $extensions      = array('.html', '.htm', '.css', '.tpl');
+                        $extensions      = array(
+                            '.html',
+                            '.htm',
+                            '.css',
+                            '.tpl',
+                        );
                         $extension_verif = strrchr($file, '.');
 
                         if (in_array($extension_verif, $extensions)) {
@@ -86,13 +97,13 @@ switch ($op) {
         break;
     // Edit File
     case 'tpls_edit_file':
-        $clean_file = XoopsRequest::getString('file', '');
+        $clean_file      = XoopsRequest::getString('file', '');
         $clean_path_file = XoopsRequest::getString('path_file', '');
-        $path_file = realpath(XOOPS_ROOT_PATH.'/themes'.trim($clean_path_file));
-        $check_path = realpath(XOOPS_ROOT_PATH.'/themes');
+        $path_file       = realpath(XOOPS_ROOT_PATH . '/themes' . trim($clean_path_file));
+        $check_path      = realpath(XOOPS_ROOT_PATH . '/themes');
         try {
             Assert::startsWith($path_file, $check_path, _AM_SYSTEM_TEMPLATES_ERROR);
-        } catch(\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             // handle the exception
             redirect_header(XOOPS_URL . '/modules/system/admin.php?fct=tplsets', 2, $e->getMessage());
             exit;
@@ -137,21 +148,26 @@ switch ($op) {
                 </tr>
                 <tr>
                     <td><textarea id="code_mirror" name="templates" rows=24 cols=110>'
-                        . htmlentities($content, ENT_QUOTES)
-                    . '</textarea></td>
+             . htmlentities($content, ENT_QUOTES)
+             . '</textarea></td>
                 </tr>
               </table>';
         XoopsLoad::load('XoopsFormHiddenToken');
         $xoopsToken = new XoopsFormHiddenToken();
         echo $xoopsToken->render();
         echo '<input type="hidden" name="path_file" value="' . htmlentities($clean_path_file, ENT_QUOTES)
-            .'"><input type="hidden" name="file" value="' . htmlentities(trim($clean_file), ENT_QUOTES)
-            .'"><input type="hidden" name="ext" value="' . htmlentities($ext, ENT_QUOTES) . '"></form>';
+             . '"><input type="hidden" name="file" value="' . htmlentities(trim($clean_file), ENT_QUOTES)
+             . '"><input type="hidden" name="ext" value="' . htmlentities($ext, ENT_QUOTES) . '"></form>';
         break;
 
     // Restore backup file
     case 'tpls_restore':
-        $extensions = array('.html', '.htm', '.css', '.tpl');
+        $extensions = array(
+            '.html',
+            '.htm',
+            '.css',
+            '.tpl',
+        );
 
         //check if the file is inside themes directory
         $valid_dir = stristr(realpath($_REQUEST['path_file']), realpath(XOOPS_ROOT_PATH . '/themes'));
@@ -170,5 +186,4 @@ switch ($op) {
         }
         xoops_error(_AM_SYSTEM_TEMPLATES_RESTORE_NOTOK);
         break;
-
 }

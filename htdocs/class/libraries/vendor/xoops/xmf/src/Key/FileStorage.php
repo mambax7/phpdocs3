@@ -25,12 +25,10 @@ namespace Xmf\Key;
  */
 class FileStorage implements StorageInterface
 {
-
     /**
      * @var string $storagePath filesystem path to storage
      */
     protected $storagePath;
-
     /**
      * @var string $systemSecret prefix unique to this system
      */
@@ -44,7 +42,7 @@ class FileStorage implements StorageInterface
      */
     public function __construct($storagePath = null, $systemSecret = null)
     {
-        $this->storagePath = (null === $storagePath) ? XOOPS_VAR_PATH . '/data' : $storagePath;
+        $this->storagePath  = (null === $storagePath) ? XOOPS_VAR_PATH . '/data' : $storagePath;
         $this->systemSecret = (null === $systemSecret) ? $this->generateSystemSecret() : $systemSecret;
     }
 
@@ -67,7 +65,7 @@ class FileStorage implements StorageInterface
      */
     protected function generateSystemSecret()
     {
-        $db = \XoopsDatabaseFactory::getDatabaseConnection();
+        $db     = \XoopsDatabaseFactory::getDatabaseConnection();
         $prefix = $db->prefix();
         $secret = md5($prefix);
         $secret = substr($secret, 8, 8);
@@ -80,7 +78,7 @@ class FileStorage implements StorageInterface
      * @param string $name key name
      * @param string $data key data, serialized to string if required
      *
-     * @return boolean true if key saved, otherwise false
+     * @return bool true if key saved, otherwise false
      */
     public function save($name, $data)
     {
@@ -88,7 +86,7 @@ class FileStorage implements StorageInterface
             throw new \DomainException('Invalid key data');
         }
         $fileContents = "<?php\n//**Warning** modifying this file will break things!\n"
-            . "return '{$data}';\n";
+                        . "return '{$data}';\n";
         return (false !== file_put_contents($this->fileName($name), $fileContents));
     }
 
@@ -109,7 +107,7 @@ class FileStorage implements StorageInterface
      *
      * @param string $name key name
      *
-     * @return boolean true if key exists, otherwise false
+     * @return bool true if key exists, otherwise false
      */
     public function exists($name)
     {
@@ -121,7 +119,7 @@ class FileStorage implements StorageInterface
      *
      * @param string $name key name
      *
-     * @return boolean true if key deleted, otherwise false
+     * @return bool true if key deleted, otherwise false
      */
     public function delete($name)
     {

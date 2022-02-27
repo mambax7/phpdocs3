@@ -48,7 +48,7 @@ class Upgrade_258 extends XoopsUpgrade
         $db = XoopsDatabaseFactory::getDatabaseConnection();
 
         $dbname = constant('XOOPS_DB_NAME');
-        $table = $db->prefix($table);
+        $table  = $db->prefix($table);
 
         $sql = sprintf(
             'SELECT `CHARACTER_MAXIMUM_LENGTH` FROM `information_schema`.`COLUMNS` '
@@ -64,7 +64,7 @@ class Upgrade_258 extends XoopsUpgrade
             $row = $db->fetchRow($result);
             if ($row) {
                 $columnLength = $row[0];
-                return (int) $columnLength;
+                return (int)$columnLength;
             }
         }
         return 0;
@@ -77,7 +77,7 @@ class Upgrade_258 extends XoopsUpgrade
      */
     public function check_users_pass()
     {
-        return (bool) ($this->getColumnLength('users', 'pass') >= 255);
+        return (bool)($this->getColumnLength('users', 'pass') >= 255);
     }
 
     /**
@@ -106,7 +106,7 @@ class Upgrade_258 extends XoopsUpgrade
      */
     public function check_com_ip()
     {
-        return (bool) ($this->getColumnLength('xoopscomments', 'com_ip') >= 45);
+        return (bool)($this->getColumnLength('xoopscomments', 'com_ip') >= 45);
     }
 
     /**
@@ -127,7 +127,7 @@ class Upgrade_258 extends XoopsUpgrade
      */
     public function check_sess_ip()
     {
-        return (bool) ($this->getColumnLength('session', 'sess_ip') >= 45);
+        return (bool)($this->getColumnLength('session', 'sess_ip') >= 45);
     }
 
     /**
@@ -148,7 +148,7 @@ class Upgrade_258 extends XoopsUpgrade
      */
     public function check_online_ip()
     {
-        return (bool) ($this->getColumnLength('online', 'online_ip') >= 45);
+        return (bool)($this->getColumnLength('online', 'online_ip') >= 45);
     }
 
     /**

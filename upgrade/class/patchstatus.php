@@ -4,13 +4,10 @@ class PatchStatus
 {
     /** @var string $patchClass class name of patch */
     public $patchClass;
-
     /** @var bool $applied true if this patch is applied, false if it is needed */
     public $applied = true;
-
     /** @var string[] $tasks tasks that need to be run */
     public $tasks = array();
-
     /** @var string[] $files files that need to be writable */
     public $files = array();
 

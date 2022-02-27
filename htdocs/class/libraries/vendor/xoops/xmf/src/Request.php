@@ -67,15 +67,15 @@ class Request
      *  - method     via current $_SERVER['REQUEST_METHOD']
      *  - default    $_REQUEST
      *
-     * @param string $name    Variable name
-     * @param mixed  $default Default value if the variable does not exist
-     * @param string $hash    Source of variable value (POST, GET, FILES, COOKIE, METHOD)
-     * @param string $type    Return type for the variable (INT, FLOAT, BOOLEAN, WORD,
+     * @param string $name     Variable name
+     * @param mixed  $default  Default value if the variable does not exist
+     * @param string $hash     Source of variable value (POST, GET, FILES, COOKIE, METHOD)
+     * @param string $type     Return type for the variable (INT, FLOAT, BOOLEAN, WORD,
      *                         ALPHANUM, CMD, BASE64, STRING, ARRAY, PATH, NONE) For more
      *                         information see FilterInput::clean().
-     * @param int    $mask    Filter mask for the variable
+     * @param int    $mask     Filter mask for the variable
      *
-     * @return mixed Requested variable
+     * @return array|string|null Requested variable
      */
     public static function getVar($name, $default = null, $hash = 'default', $type = 'none', $mask = 0)
     {
@@ -117,7 +117,8 @@ class Request
 
             // Handle magic quotes compatibility
             if (function_exists('get_magic_quotes_gpc')
-                && @get_magic_quotes_gpc() && ($var != $default)
+                && @get_magic_quotes_gpc()
+                && ($var != $default)
                 && ($hash !== 'FILES')
             ) {
                 $var = static::stripSlashesRecursive($var);
@@ -240,7 +241,7 @@ class Request
     public static function getString($name, $default = '', $hash = 'default', $mask = 0)
     {
         // Cast to string, in case static::MASK_ALLOW_RAW was specified for mask
-        return (string) static::getVar($name, $default, $hash, 'string', $mask);
+        return (string)static::getVar($name, $default, $hash, 'string', $mask);
     }
 
     /**
@@ -268,7 +269,7 @@ class Request
      */
     public static function getText($name, $default = '', $hash = 'default')
     {
-        return (string) static::getVar($name, $default, $hash, 'string', static::MASK_ALLOW_RAW);
+        return (string)static::getVar($name, $default, $hash, 'string', static::MASK_ALLOW_RAW);
     }
 
     /**
@@ -282,7 +283,7 @@ class Request
      */
     public static function getUrl($name, $default = '', $hash = 'default')
     {
-        return (string) static::getVar($name, $default, $hash, 'weburl');
+        return (string)static::getVar($name, $default, $hash, 'weburl');
     }
 
     /**
@@ -296,7 +297,7 @@ class Request
      */
     public static function getPath($name, $default = '', $hash = 'default')
     {
-        return (string) static::getVar($name, $default, $hash, 'path');
+        return (string)static::getVar($name, $default, $hash, 'path');
     }
 
     /**
@@ -310,7 +311,7 @@ class Request
      */
     public static function getEmail($name, $default = '', $hash = 'default')
     {
-        $ret = (string) static::getVar($name, $default, $hash, 'email');
+        $ret = (string)static::getVar($name, $default, $hash, 'email');
         return empty($ret) ? $default : $ret;
     }
 
@@ -325,7 +326,7 @@ class Request
      */
     public static function getIP($name, $default = '', $hash = 'default')
     {
-        $ret = (string) static::getVar($name, $default, $hash, 'ip');
+        $ret = (string)static::getVar($name, $default, $hash, 'ip');
         return empty($ret) ? $default : $ret;
     }
 
@@ -352,7 +353,7 @@ class Request
                 // From joyview - http://php.net/manual/en/function.getallheaders.php
                 foreach ($_SERVER as $name => $value) {
                     if (substr($name, 0, 5) === 'HTTP_') {
-                        $translatedName = str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($name, 5))));
+                        $translatedName           = str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($name, 5))));
                         $headers[$translatedName] = $value;
                     }
                 }
@@ -372,7 +373,7 @@ class Request
      * @param string $name variable to look for
      * @param string $hash hash to check
      *
-     * @return boolean True if hash has an element 'name', otherwise false
+     * @return bool True if hash has an element 'name', otherwise false
      */
     public static function hasVar($name, $hash = 'default')
     {
@@ -392,12 +393,12 @@ class Request
     /**
      * Set a variable in one of the request variables
      *
-     * @param string  $name      Name
-     * @param string  $value     Value
-     * @param string  $hash      Hash
-     * @param boolean $overwrite Boolean
+     * @param string      $name      Name
+     * @param string|null $value     Value
+     * @param string      $hash      Hash
+     * @param bool        $overwrite Boolean
      *
-     * @return string Previous value
+     * @return string|null Previous value
      */
     public static function setVar($name, $value = null, $hash = 'method', $overwrite = true)
     {
@@ -421,18 +422,18 @@ class Request
         // set the value
         switch ($hash) {
             case 'GET':
-                $_GET[$name] = $value;
+                $_GET[$name]     = $value;
                 $_REQUEST[$name] = $value;
                 break;
             case 'POST':
-                $_POST[$name] = $value;
+                $_POST[$name]    = $value;
                 $_REQUEST[$name] = $value;
                 break;
             case 'REQUEST':
                 $_REQUEST[$name] = $value;
                 break;
             case 'COOKIE':
-                $_COOKIE[$name] = $value;
+                $_COOKIE[$name]  = $value;
                 $_REQUEST[$name] = $value;
                 break;
             case 'FILES':
@@ -470,7 +471,7 @@ class Request
      * @param string $hash to get (POST, GET, FILES, METHOD)
      * @param int    $mask Filter mask for the variable
      *
-     * @return mixed Request hash
+     * @return array|string Request hash
      */
     public static function get($hash = 'default', $mask = 0)
     {
@@ -517,9 +518,9 @@ class Request
     /**
      * Sets a request variable
      *
-     * @param array   $array     An associative array of key-value pairs
-     * @param string  $hash      The request variable to set (POST, GET, FILES, METHOD)
-     * @param boolean $overwrite If true and an existing key is found, the value is overwritten,
+     * @param array  $array       An associative array of key-value pairs
+     * @param string $hash        The request variable to set (POST, GET, FILES, METHOD)
+     * @param bool   $overwrite   If true and an existing key is found, the value is overwritten,
      *                            otherwise it is ignored
      *
      * @return void
@@ -534,15 +535,15 @@ class Request
     /**
      * Clean up an input variable.
      *
-     * @param mixed  $var  The input variable.
-     * @param int    $mask Filter bit mask.
-     *                      - 1=no trim: If this flag is cleared and the input is a string,
-     *                        the string will have leading and trailing whitespace trimmed.
-     *                      - 2=allow_raw: If set, no more filtering is performed, higher bits are ignored.
-     *                      - 4=allow_html: HTML is allowed, but passed through a safe HTML filter first.
-     *                        If set, no more filtering is performed.
-     *                      - If no bits other than the 1 bit is set, a strict filter is applied.
-     * @param string $type The variable type. See {@link FilterInput::clean()}.
+     * @param mixed       $var  The input variable.
+     * @param int         $mask Filter bit mask.
+     *                          - 1=no trim: If this flag is cleared and the input is a string,
+     *                          the string will have leading and trailing whitespace trimmed.
+     *                          - 2=allow_raw: If set, no more filtering is performed, higher bits are ignored.
+     *                          - 4=allow_html: HTML is allowed, but passed through a safe HTML filter first.
+     *                          If set, no more filtering is performed.
+     *                          - If no bits other than the 1 bit is set, a strict filter is applied.
+     * @param string|null $type The variable type. See {@link FilterInput::clean()}.
      *
      * @return string
      */
@@ -576,7 +577,7 @@ class Request
                 if (null === $noHtmlFilter) {
                     $noHtmlFilter = FilterInput::getInstance();
                 }
-                $var = $noHtmlFilter->clean($var, $type);
+                $var = $noHtmlFilter::clean($var, $type);
             }
         }
 
@@ -586,9 +587,9 @@ class Request
     /**
      * Clean up an array of variables.
      *
-     * @param mixed  $var  The input variable.
-     * @param int    $mask Filter bit mask. See {@link Request::cleanVar()}
-     * @param string $type The variable type. See {@link FilterInput::clean()}.
+     * @param mixed       $var  The input variable.
+     * @param int         $mask Filter bit mask. See {@link Request::cleanVar()}
+     * @param string|null $type The variable type. See {@link FilterInput::clean()}.
      *
      * @return string
      */
@@ -615,7 +616,10 @@ class Request
     protected static function stripSlashesRecursive($value)
     {
         $value = is_array($value)
-            ? array_map(array(get_called_class(), 'stripSlashesRecursive'), $value)
+            ? array_map(array(
+                            get_called_class(),
+                            'stripSlashesRecursive',
+                        ), $value)
             : stripslashes($value);
 
         return $value;

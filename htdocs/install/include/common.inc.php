@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  * Installer common include file
  *
@@ -48,6 +49,7 @@ function fatalPhpErrorHandler($e = null) {
         printf($messageFormat, get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
     }
 }
+
 register_shutdown_function('fatalPhpErrorHandler');
 set_exception_handler('fatalPhpErrorHandler');
 
@@ -72,7 +74,6 @@ if (empty($xoopsOption['hascommon'])) {
         require_once '../include/xoopssetcookie.php';
         xoops_setcookie(session_name(), session_id(), $options);
     }
-
 }
 
 @include '../mainfile.php';
@@ -81,7 +82,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
 }
 
 date_default_timezone_set(@date_default_timezone_get());
-include './class/installwizard.php';
+include __DIR__ . '/class/installwizard.php';
 include_once '../include/version.php';
 require_once '../include/xoopssetcookie.php';
 include_once './include/functions.php';

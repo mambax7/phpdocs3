@@ -1,4 +1,5 @@
 <?php
+
 // start hack by Trabis
 if (!class_exists('ProtectorRegistry')) {
     exit('Registry not found');
@@ -13,7 +14,6 @@ $language  = $registry->getEntry('language');
 eval(' function xoops_module_uninstall_' . $mydirname . '( $module ) { return protector_onuninstall_base( $module , "' . $mydirname . '" ) ; } ');
 
 if (!function_exists('protector_onuninstall_base')) {
-
     /**
      * @param $module
      * @param $mydirname
@@ -88,7 +88,6 @@ if (!function_exists('protector_onuninstall_base')) {
                 $log->add(strip_tags($message));
             }
         }
-
         // use mLog->addWarning() or mLog->addError() if necessary
     }
 }

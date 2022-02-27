@@ -34,7 +34,7 @@ class Basic extends KeyAbstract
      */
     public function getSigning()
     {
-        return (string) $this->storage->fetch($this->name);
+        return (string)$this->storage->fetch($this->name);
     }
 
     /**
@@ -44,13 +44,13 @@ class Basic extends KeyAbstract
      */
     public function getVerifying()
     {
-        return (string) $this->storage->fetch($this->name);
+        return (string)$this->storage->fetch($this->name);
     }
 
     /**
      * create the key and store it for use
      *
-     * @return boolean true if key was created and stored, otherwise false
+     * @return bool true if key was created and stored, otherwise false
      */
     public function create()
     {
@@ -63,7 +63,7 @@ class Basic extends KeyAbstract
     /**
      * delete the key
      *
-     * @return boolean true if key was deleted, otherwise false
+     * @return bool true if key was deleted, otherwise false
      */
     public function kill()
     {

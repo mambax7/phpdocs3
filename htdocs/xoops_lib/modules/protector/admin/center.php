@@ -1,4 +1,5 @@
 <?php
+
 //require_once XOOPS_ROOT_PATH.'/include/cp_header.php' ;
 include_once 'admin_header.php'; //mb problem: it shows always the same "Center" tab
 xoops_cp_header();
@@ -32,7 +33,6 @@ $conf      = $protector->getConf();
 //
 
 if (!empty($_POST['action'])) {
-
     // Ticket check
     if (!$xoopsGTicket->check(true, 'protector_admin')) {
         redirect_header(XOOPS_URL . '/', 3, $xoopsGTicket->getErrors());
@@ -65,7 +65,7 @@ if (!empty($_POST['action'])) {
             $error_msg .= _AM_MSG_GROUP1IPSCANTOPEN;
         }
 
-        $redirect_msg = $error_msg ? : _AM_MSG_IPFILESUPDATED;
+        $redirect_msg = $error_msg ?: _AM_MSG_IPFILESUPDATED;
         redirect_header('center.php?page=center', 2, $redirect_msg);
         exit;
     } elseif ($_POST['action'] === 'delete' && isset($_POST['ids']) && is_array($_POST['ids'])) {
@@ -79,7 +79,7 @@ if (!empty($_POST['action'])) {
     } elseif ($_POST['action'] === 'banbyip' && isset($_POST['ids']) && is_array($_POST['ids'])) {
         // remove selected records
         foreach ($_POST['ids'] as $lid) {
-            $lid = (int)$lid;
+            $lid    = (int)$lid;
             $result = $db->query("SELECT `ip` FROM $log_table WHERE lid='$lid'");
             if (false !== $result) {
                 list($ip) = $db->fetchRow($result);
@@ -127,7 +127,12 @@ $nav_html = $nav->renderNav(10);
 
 // Number selection
 $num_options = '';
-$num_array   = array(20, 100, 500, 2000);
+$num_array   = array(
+    20,
+    100,
+    500,
+    2000,
+);
 foreach ($num_array as $n) {
     if ($n == $num) {
         $num_options .= "<option value='$n' selected>$n</option>\n";
@@ -152,8 +157,8 @@ $bad_ips = $protector->get_bad_ips(true);
 uksort($bad_ips, 'protector_ip_cmp');
 $bad_ips4disp = '';
 foreach ($bad_ips as $bad_ip => $jailed_time) {
-    $line = $jailed_time ? $bad_ip . ':' . $jailed_time : $bad_ip;
-    $line = str_replace(':2147483647', '', $line); // remove :0x7fffffff
+    $line         = $jailed_time ? $bad_ip . ':' . $jailed_time : $bad_ip;
+    $line         = str_replace(':2147483647', '', $line); // remove :0x7fffffff
     $bad_ips4disp .= htmlspecialchars($line, ENT_QUOTES) . "\n";
 }
 
@@ -233,19 +238,19 @@ echo "
 $oddeven = 'odd';
 while (false !== (list($lid, $uid, $ip, $agent, $type, $description, $timestamp, $uname) = $db->fetchRow($prs))) {
     $oddeven = ($oddeven === 'odd' ? 'even' : 'odd');
-    $style = '';
+    $style   = '';
 
-    $ip = htmlspecialchars($ip, ENT_QUOTES);
+    $ip   = htmlspecialchars($ip, ENT_QUOTES);
     $type = htmlspecialchars($type, ENT_QUOTES);
     if ('{"' == substr($description, 0, 2)) {
         $temp = json_decode($description);
         if (is_object($temp)) {
-            $description = json_encode($temp, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
-            $style = ' log_description';
+            $description = json_encode($temp, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $style       = ' log_description';
         }
     }
     $description = htmlspecialchars($description, ENT_QUOTES);
-    $uname = htmlspecialchars(($uid ? $uname : _GUESTS), ENT_QUOTES);
+    $uname       = htmlspecialchars(($uid ? $uname : _GUESTS), ENT_QUOTES);
 
     // make agents shorter
     if (preg_match('/MSIE\s+([0-9.]+)/', $agent, $regs)) {

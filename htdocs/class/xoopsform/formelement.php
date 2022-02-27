@@ -34,7 +34,6 @@ class XoopsFormElement
      * @var array ()
      */
     public $customValidationCode = array();
-
     /**
      * *#@+
      *
@@ -46,56 +45,48 @@ class XoopsFormElement
      * @var string
      */
     public $_name;
-
     /**
      * caption of the element
      *
      * @var string
      */
     public $_caption;
-
     /**
      * Accesskey for this element
      *
      * @var string
      */
     public $_accesskey = '';
-
     /**
      * HTML classes for this element
      *
      * @var array
      */
     public $_class = array();
-
     /**
      * hidden?
      *
      * @var bool
      */
     public $_hidden = false;
-
     /**
      * extra attributes to go in the tag
      *
      * @var array
      */
     public $_extra = array();
-
     /**
      * required field?
      *
      * @var bool
      */
     public $_required = false;
-
     /**
      * description of the field
      *
      * @var string
      */
     public $_description = '';
-
     /**
      * *#@-
      */
@@ -111,11 +102,11 @@ class XoopsFormElement
      * @var bool
      */
     public $_nocolspan = false;
-
     /**
      * Get form type
      *
      * @deprecated  PLEASE AVOID USING THIS METHOD
+     * @var string
      */
     public $_formtype = '';
 
@@ -157,7 +148,7 @@ class XoopsFormElement
     public function getName($encode = true)
     {
         if (false !== (bool)$encode) {
-            return str_replace('&amp;', '&', htmlspecialchars($this->_name, ENT_QUOTES));
+            return str_replace('&amp;', '&', htmlspecialchars(isset($this->_name) ? $this->_name : '', ENT_QUOTES));
         }
 
         return $this->_name;
@@ -186,7 +177,7 @@ class XoopsFormElement
     /**
      * If the accesskey is found in the specified string, underlines it
      *
-     * @param  string $str String where to search the accesskey occurence
+     * @param string $str String where to search the accesskey occurence
      * @return string Enhanced string with the 1st occurence of accesskey underlined
      */
     public function getAccessString($str)
@@ -243,7 +234,7 @@ class XoopsFormElement
     /**
      * get the caption for the element
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string
      */
     public function getCaption($encode = false)
@@ -254,7 +245,7 @@ class XoopsFormElement
     /**
      * get the caption for the element
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string
      */
     public function getTitle($encode = true)
@@ -279,7 +270,7 @@ class XoopsFormElement
     /**
      * get the element's description
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string
      */
     public function getDescription($encode = false)
@@ -321,8 +312,8 @@ class XoopsFormElement
      * This string will be inserted verbatim and unvalidated in the
      * element's tag. Know what you are doing!
      *
-     * @param  string $extra
-     * @param  bool   $replace If true, passed string will replace current content otherwise it will be appended to it
+     * @param string $extra
+     * @param bool   $replace If true, passed string will replace current content otherwise it will be appended to it
      * @return array  New content of the extra string
      */
     public function setExtra($extra, $replace = false)
@@ -339,7 +330,7 @@ class XoopsFormElement
     /**
      * Get the extra attributes for the element
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string
      */
     public function getExtra($encode = false)
@@ -372,7 +363,7 @@ class XoopsFormElement
      * Get the element's nocolspan
      * Modified by Catzwolf
      *
-     * @return string|bool
+     * @return bool
      *
      * @deprecated  PLEASE AVOID USING THIS METHOD
      */

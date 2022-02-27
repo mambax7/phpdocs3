@@ -1,4 +1,5 @@
 <?php
+
 /**
  * user/member handlers
  *
@@ -27,9 +28,9 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_USER')):
     }
 
     /**
-     * @param      $uid
-     * @param bool $usereal
-     * @param bool $linked
+     * @param mixed $uid
+     * @param bool  $usereal
+     * @param bool  $linked
      *
      * @return array
      */
@@ -42,9 +43,9 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_USER')):
     }
 
     /**
-     * @param      $uid
-     * @param int  $usereal
-     * @param bool $linked
+     * @param mixed $uid
+     * @param int   $usereal
+     * @param bool  $linked
      *
      * @return string
      */

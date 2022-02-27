@@ -20,12 +20,17 @@ class Upgrade_256 extends XoopsUpgrade
     public function __construct()
     {
         parent::__construct(basename(__DIR__));
-        $this->tasks = array('com_user', 'com_email',  'com_url');
+        $this->tasks = array(
+            'com_user',
+            'com_email',
+            'com_url',
+        );
     }
 
     /**
      * Check if Fast Comment fields already exist
      *
+     * @return bool
      */
     public function check_com_user()
     {
@@ -91,7 +96,6 @@ class Upgrade_256 extends XoopsUpgrade
      */
     public function apply_com_url()
     {
-
         //$this->query( "ALTER TABLE `xoopscomments` ADD `com_user` VARCHAR( 60 ) NOT NULL AFTER `com_uid`, ADD INDEX ( `com_url` )" );
 
         $sql = 'ALTER TABLE ' . $GLOBALS['xoopsDB']->prefix('xoopscomments') . ' ADD `com_url` VARCHAR( 60 ) NOT NULL AFTER `com_email` ';

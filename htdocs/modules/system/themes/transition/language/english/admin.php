@@ -1,4 +1,5 @@
 <?php
+
 //
 define('_OXYGEN_SYSOPTIONS', 'System Options');
 define('_OXYGEN_INSTALLEDMODULES', 'Installed Modules');

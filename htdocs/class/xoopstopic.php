@@ -32,17 +32,41 @@ class XoopsTopic
      * @var \XoopsMySQLDatabase
      */
     public $db;
+    /**
+     * @var string
+     */
     public $table;
+    /**
+     * @var int|string|null
+     */
     public $topic_id;
+    /**
+     * @var int|null
+     */
     public $topic_pid;
+    /**
+     * @var string
+     */
     public $topic_title;
+    /**
+     * @var string
+     */
     public $topic_imgurl;
+    /**
+     * @var string
+     */
     public $prefix; // only used in topic tree
+    /**
+     * @var bool
+     */
     public $use_permission = false;
+    /**
+     * @var int
+     */
     public $mid; // module id used for setting permission
 
     /**
-     * @param     $table
+     * @param string    $table
      * @param int|array $topicid
      */
     public function __construct($table, $topicid = 0)
@@ -59,7 +83,7 @@ class XoopsTopic
     }
 
     /**
-     * @param $value
+     * @param string $value
      */
     public function setTopicTitle($value)
     {
@@ -67,7 +91,7 @@ class XoopsTopic
     }
 
     /**
-     * @param $value
+     * @param string $value
      */
     public function setTopicImgurl($value)
     {
@@ -75,7 +99,7 @@ class XoopsTopic
     }
 
     /**
-     * @param $value
+     * @param int $value
      */
     public function setTopicPid($value)
     {
@@ -83,7 +107,7 @@ class XoopsTopic
     }
 
     /**
-     * @param $topicid
+     * @param int $topicid
      */
     public function getTopic($topicid)
     {
@@ -94,7 +118,9 @@ class XoopsTopic
     }
 
     /**
-     * @param $array
+     * @param array $array
+     *
+     * @return void
      */
     public function makeTopic($array)
     {
@@ -104,7 +130,8 @@ class XoopsTopic
     }
 
     /**
-     * @param $mid
+     * @param int $mid
+     * @return void
      */
     public function usePermission($mid)
     {
@@ -224,6 +251,9 @@ class XoopsTopic
         return $this->topic_id;
     }
 
+    /**
+     * @return int|null
+     */
     public function topic_pid()
     {
         return $this->topic_pid;
@@ -232,7 +262,7 @@ class XoopsTopic
     /**
      * @param string $format
      *
-     * @return mixed
+     * @return string
      */
     public function topic_title($format = 'S')
     {
@@ -254,7 +284,7 @@ class XoopsTopic
     /**
      * @param string $format
      *
-     * @return mixed
+     * @return string
      */
     public function topic_imgurl($format = 'S')
     {
@@ -273,6 +303,9 @@ class XoopsTopic
         return $imgurl;
     }
 
+    /**
+     * @return string|null
+     */
     public function prefix()
     {
         if (isset($this->prefix)) {
@@ -334,7 +367,7 @@ class XoopsTopic
 
     /**
      * @param int    $none
-     * @param        $seltopic
+     * @param int    $seltopic
      * @param string $selname
      * @param string $onchange
      */
@@ -351,8 +384,9 @@ class XoopsTopic
     }
 
     //generates nicely formatted linked path from the root id to a given id
+
     /**
-     * @param $funcURL
+     * @param string $funcURL
      *
      * @return string
      */
@@ -384,15 +418,18 @@ class XoopsTopic
         $ret    = array();
         $myts   = MyTextSanitizer::getInstance();
         while (false !== ($myrow = $this->db->fetchArray($result))) {
-            $ret[$myrow['topic_id']] = array('title' => $myts->htmlSpecialChars($myrow['topic_title']), 'pid' => $myrow['topic_pid']);
+            $ret[$myrow['topic_id']] = array(
+                'title' => $myts->htmlSpecialChars($myrow['topic_title']),
+                'pid'   => $myrow['topic_pid'],
+            );
         }
 
         return $ret;
     }
 
     /**
-     * @param $pid
-     * @param $title
+     * @param int    $pid
+     * @param string $title
      *
      * @return bool
      */

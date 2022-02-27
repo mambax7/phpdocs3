@@ -1,4 +1,5 @@
 <?php
+
 include '../../../include/cp_header.php';
 include 'admin_header.php';
 $db = XoopsDatabaseFactory::getDatabaseConnection();

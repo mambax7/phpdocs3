@@ -18,7 +18,7 @@
  * @author    Richard Griffith <richard@geekwright.com>
  */
 
-$loadCommon = !isset($xoopsOption['nocommon']);
+$loadCommon              = !isset($xoopsOption['nocommon']);
 $xoopsOption['nocommon'] = true;
 include_once '../mainfile.php';
 
@@ -26,11 +26,11 @@ $mainfileKeys = array(
     // in mainfile.php
     'XOOPS_ROOT_PATH'       => null,
     'XOOPS_PATH'            => null,
-    'XOOPS_VAR_PATH'        => null, // *
+    'XOOPS_VAR_PATH'        => null,    // *
     'XOOPS_TRUST_PATH'      => null,
     'XOOPS_URL'             => null,
-    'XOOPS_COOKIE_DOMAIN'   => null, // *
-    'XOOPS_PROT'            => null, // *
+    'XOOPS_COOKIE_DOMAIN'   => null,    // *
+    'XOOPS_PROT'            => null,    // *
     'XOOPS_GROUP_ADMIN'     => null,
     'XOOPS_GROUP_USERS'     => null,
     'XOOPS_GROUP_ANONYMOUS' => null,
@@ -58,7 +58,7 @@ foreach ($mainfileKeys as $key => $unused) {
 unset ($mainfileKeys['XOOPS_PROT']);
 if (!defined('XOOPS_PROT')) {
     $parts = parse_url(XOOPS_URL);
-    $http = (empty($parts['scheme']) ? 'http' : $parts['scheme']) . '://';
+    $http  = (empty($parts['scheme']) ? 'http' : $parts['scheme']) . '://';
     define('XOOPS_PROT', $http);
     unset($parts, $http);
 }

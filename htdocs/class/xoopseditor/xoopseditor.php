@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Editor Abstract class
  *
@@ -24,10 +25,25 @@ xoops_load('XoopsFormTextArea');
  */
 class XoopsEditor extends XoopsFormTextArea
 {
+    /**
+     * @var bool
+     */
     public $isEnabled;
+    /**
+     * @var array
+     */
     public $configs;
+    /**
+     * @var string
+     */
     public $rootPath;
+    /**
+     * @var int
+     */
     public $_rows = 5;
+    /**
+     * @var int
+     */
     public $_cols = 50;
 
     /**
@@ -39,7 +55,16 @@ class XoopsEditor extends XoopsFormTextArea
         // For backward compatibility
         if (!is_array($args[0])) {
             $i = 0;
-            foreach (array('caption', 'name', 'value', 'rows', 'cols', 'hiddentext') as $key) {
+            foreach (
+                array(
+                    'caption',
+                    'name',
+                    'value',
+                    'rows',
+                    'cols',
+                    'hiddentext',
+                ) as $key
+            ) {
                 if (isset($args[$i])) {
                     $configs[$key] = $args[$i];
                 }
@@ -88,8 +113,17 @@ class XoopsEditor extends XoopsFormTextArea
 class XoopsEditorHandler
 {
     // static $instance;
-    public $root_path       = '';
-    public $nohtml          = false;
+    /**
+     * @var string
+     */
+    public $root_path = '';
+    /**
+     * @var bool
+     */
+    public $nohtml = false;
+    /**
+     * @var array
+     */
     public $allowed_editors = array();
 
     /**
@@ -180,7 +214,10 @@ class XoopsEditorHandler
                         continue;
                     }
                     $order[]     = $config['order'];
-                    $list[$item] = array('title' => $config['title'], 'nohtml' => $config['nohtml']);
+                    $list[$item] = array(
+                        'title'  => $config['title'],
+                        'nohtml' => $config['nohtml'],
+                    );
                 }
             }
             array_multisort($order, $list);
@@ -206,7 +243,7 @@ class XoopsEditorHandler
      * XoopsEditorHandler::render()
      *
      * @param mixed $editor
-     * @return
+     * @return mixed
      */
     public function render($editor)
     {
@@ -218,8 +255,8 @@ class XoopsEditorHandler
     /**
      * XoopsEditorHandler::setConfig()
      *
-     * @param  mixed $editor
-     * @param  mixed $options
+     * @param mixed $editor
+     * @param mixed $options
      * @return void
      */
     public function setConfig($editor, $options)
@@ -238,7 +275,7 @@ class XoopsEditorHandler
      *
      * @param mixed $name
      * @param mixed $options
-     * @return
+     * @return mixed|null
      */
     public function _loadEditor($name, $options = null)
     {

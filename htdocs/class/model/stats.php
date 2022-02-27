@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Object stats handler class.
  *
@@ -30,7 +31,7 @@ class XoopsModelStats extends XoopsModelAbstract
     /**
      * count objects matching a condition
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} to match
+     * @param \CriteriaElement|CriteriaCompo|null $criteria {@link CriteriaElement} to match
      * @return int|array    count of objects
      */
     public function getCount(CriteriaElement $criteria = null)
@@ -55,11 +56,11 @@ class XoopsModelStats extends XoopsModelAbstract
         if ($groupby == false) {
             list($count) = $this->handler->db->fetchRow($result);
 
-            return (int) $count;
+            return (int)$count;
         } else {
             $ret = array();
             while (false !== (list($id, $count) = $this->handler->db->fetchRow($result))) {
-                $ret[$id] = (int) $count;
+                $ret[$id] = (int)$count;
             }
 
             return $ret;
@@ -69,7 +70,7 @@ class XoopsModelStats extends XoopsModelAbstract
     /**
      * get counts matching a condition
      *
-     * @param  CriteriaElement|CriteriaCompo  $criteria {@link CriteriaElement} to match
+     * @param  \CriteriaElement|CriteriaCompo|null  $criteria {@link CriteriaElement} to match
      * @return array  of counts
      */
     public function getCounts(CriteriaElement $criteria = null)
@@ -92,7 +93,7 @@ class XoopsModelStats extends XoopsModelAbstract
             return $ret;
         }
         while (false !== (list($id, $count) = $this->handler->db->fetchRow($result))) {
-            $ret[$id] = (int) $count;
+            $ret[$id] = (int)$count;
         }
 
         return $ret;

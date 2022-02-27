@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Send tar files through a http socket
  *
@@ -39,7 +40,7 @@ class XoopsTarDownloader extends XoopsDownloader
      */
     public function __construct($ext = '.tar.gz', $mimyType = 'application/x-gzip')
     {
-        $this->archiver = new tar();
+        $this->archiver = new Tar();
         $this->ext      = trim($ext);
         $this->mimetype = trim($mimyType);
     }
@@ -47,8 +48,8 @@ class XoopsTarDownloader extends XoopsDownloader
     /**
      * Add a file to the archive
      *
-     * @param string $filepath    Full path to the file
-     * @param string $newfilename Filename (if you don't want to use the original)
+     * @param string      $filepath    Full path to the file
+     * @param string|null $newfilename Filename (if you don't want to use the original)
      */
     public function addFile($filepath, $newfilename = null)
     {
@@ -67,8 +68,8 @@ class XoopsTarDownloader extends XoopsDownloader
     /**
      * Add a binary file to the archive
      *
-     * @param string $filepath    Full path to the file
-     * @param string $newfilename Filename (if you don't want to use the original)
+     * @param string      $filepath    Full path to the file
+     * @param string|null $newfilename Filename (if you don't want to use the original)
      */
     public function addBinaryFile($filepath, $newfilename = null)
     {
@@ -87,9 +88,9 @@ class XoopsTarDownloader extends XoopsDownloader
     /**
      * Add a dummy file to the archive
      *
-     * @param string  $data     Data to write
-     * @param string  $filename Name for the file in the archive
-     * @param integer $time
+     * @param string $data     Data to write
+     * @param string $filename Name for the file in the archive
+     * @param int    $time
      */
     public function addFileData(&$data, $filename, $time = 0)
     {
@@ -114,9 +115,9 @@ class XoopsTarDownloader extends XoopsDownloader
     /**
      * Add a binary dummy file to the archive
      *
-     * @param string  $data     Data to write
-     * @param string  $filename Name for the file in the archive
-     * @param integer $time
+     * @param string $data     Data to write
+     * @param string $filename Name for the file in the archive
+     * @param int    $time
      */
     public function addBinaryFileData(&$data, $filename, $time = 0)
     {
@@ -141,8 +142,8 @@ class XoopsTarDownloader extends XoopsDownloader
     /**
      * Send the file to the client
      *
-     * @param string  $name Filename
-     * @param boolean $gzip Use GZ compression
+     * @param string $name Filename
+     * @param bool   $gzip Use GZ compression
      */
     public function download($name, $gzip = true)
     {

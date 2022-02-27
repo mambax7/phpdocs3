@@ -66,7 +66,7 @@ class Session extends AbstractHelper
      */
     public function set($name, $value)
     {
-        $prefixedName = $this->prefix($name);
+        $prefixedName            = $this->prefix($name);
         $_SESSION[$prefixedName] = serialize($value);
     }
 
@@ -97,7 +97,7 @@ class Session extends AbstractHelper
      */
     public function del($name)
     {
-        $prefixedName = $this->prefix($name);
+        $prefixedName            = $this->prefix($name);
         $_SESSION[$prefixedName] = null;
         unset($_SESSION[$prefixedName]);
     }

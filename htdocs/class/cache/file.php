@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cache engine For XOOPS
  *
@@ -59,7 +60,6 @@ class XoopsCacheFile extends XoopsCacheEngine
      * @access private
      */
     private $file;
-
     /**
      * settings
      *                path = absolute path to cache directory, default => CACHE
@@ -72,19 +72,17 @@ class XoopsCacheFile extends XoopsCacheEngine
      * @access public
      */
     public $settings = array();
-
     /**
      * Set to true if FileEngine::init(); and FileEngine::active(); do not fail.
      *
-     * @var boolean
+     * @var bool
      * @access private
      */
     private $active = false;
-
     /**
      * True unless FileEngine::active(); fails
      *
-     * @var boolean
+     * @var bool
      * @access private
      */
     private $init = true;
@@ -95,8 +93,8 @@ class XoopsCacheFile extends XoopsCacheEngine
      * Called automatically by the cache frontend
      * To reinitialize the settings call Cache::engine('EngineName', [optional] settings = array());
      *
-     * @param  array $settings array of setting for the engine
-     * @return boolean True if the engine has been successfully initialized, false if not
+     * @param array $settings array of setting for the engine
+     * @return bool True if the engine has been successfully initialized, false if not
      * @access   public
      */
     public function init($settings = array())
@@ -108,7 +106,8 @@ class XoopsCacheFile extends XoopsCacheEngine
             'prefix'    => 'xoops_',
             'lock'      => false,
             'serialize' => false,
-            'duration'  => 31556926);
+            'duration'  => 31556926,
+        );
         $this->settings = array_merge($defaults, $this->settings);
         if (!isset($this->file)) {
             XoopsLoad::load('XoopsFile');
@@ -125,7 +124,7 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Garbage collection. Permanently remove all expired and deleted data
      *
-     * @return boolean True if garbage collection was successful, false on failure
+     * @return bool True if garbage collection was successful, false on failure
      * @access public
      */
     public function gc()
@@ -136,15 +135,15 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Write data for key into cache
      *
-     * @param  string $key      Identifier for the data
-     * @param  mixed  $data     Data to be cached
-     * @param  mixed  $duration How long to cache the data, in seconds
-     * @return boolean True if the data was successfully cached, false on failure
+     * @param string $key      Identifier for the data
+     * @param mixed  $value    Data to be cached
+     * @param mixed  $duration How long to cache the data, in seconds
+     * @return bool True if the data was successfully cached, false on failure
      * @access public
      */
-    public function write($key, $data = null, $duration = null)
+    public function write($key, $value = null, $duration = null)
     {
-        if (!isset($data) || !$this->init) {
+        if (!isset($value) || !$this->init) {
             return false;
         }
 
@@ -165,13 +164,13 @@ class XoopsCacheFile extends XoopsCacheEngine
         $expires = time() + $duration;
         if (!empty($this->settings['serialize'])) {
             if ($windows) {
-                $data = str_replace('\\', '\\\\\\\\', serialize($data));
+                $value = str_replace('\\', '\\\\\\\\', serialize($value));
             } else {
-                $data = serialize($data);
+                $value = serialize($value);
             }
-            $contents = $expires . $lineBreak . $data . $lineBreak;
+            $contents = $expires . $lineBreak . $value . $lineBreak;
         } else {
-            $contents = $expires . $lineBreak . 'return ' . var_export($data, true) . ';' . $lineBreak;
+            $contents = $expires . $lineBreak . 'return ' . var_export($value, true) . ';' . $lineBreak;
         }
 
         if ($this->settings['lock']) {
@@ -186,7 +185,7 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Read a key from the cache
      *
-     * @param  string $key Identifier for the data
+     * @param string $key Identifier for the data
      * @return mixed  The cached data, or false if the data doesn't exist, has expired, or if there was an error fetching it
      * @access public
      */
@@ -228,8 +227,8 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Delete a key from the cache
      *
-     * @param  string $key Identifier for the data
-     * @return boolean True if the value was successfully deleted, false if it didn't exist or couldn't be removed
+     * @param string $key Identifier for the data
+     * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
      * @access public
      */
     public function delete($key)
@@ -244,8 +243,8 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Delete all values from the cache
      *
-     * @param  boolean $check Optional - only delete expired cache items
-     * @return boolean True if the cache was successfully cleared, false otherwise
+     * @param bool $check Optional - only delete expired cache items
+     * @return bool True if the cache was successfully cleared, false otherwise
      * @access public
      */
     public function clear($check = true)
@@ -286,8 +285,8 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Get absolute file for a given key
      *
-     * @param  string $key The key
-     * @return mixed  Absolute cache file for the given key or false if erroneous
+     * @param string $key The key
+     * @return bool|null Absolute cache file for the given key or false if erroneous
      * @access private
      */
     private function setKey($key)
@@ -305,7 +304,7 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Determine is cache directory is writable
      *
-     * @return boolean
+     * @return bool
      * @access private
      */
     private function active()

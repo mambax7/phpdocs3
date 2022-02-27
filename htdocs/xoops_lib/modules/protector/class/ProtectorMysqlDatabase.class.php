@@ -13,6 +13,9 @@ require_once XOOPS_ROOT_PATH . '/class/database/database.php';
  */
 class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
 {
+    /**
+     * @var array
+     */
     public $doubtful_requests = array();
     public $doubtful_needles  = array(
         // 'order by' ,
@@ -20,9 +23,11 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
         'information_schema',
         'select',
         'union',
-        '/*', /**/
+        '/*',
+        /**/
         '--',
-        '#');
+        '#',
+    );
 
     /**
      * ProtectorMySQLDatabase constructor.
@@ -42,7 +47,7 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
         $protector = Protector::getInstance();
 
         $protector->last_error_type = 'SQL Injection';
-        $protector->message .= $sql;
+        $protector->message         .= $sql;
         $protector->output_log($protector->last_error_type);
         die('SQL Injection found');
     }
@@ -67,9 +72,9 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
             $char = $sql[$i];
             if ($in_string) {
                 while (1) {
-                    $new_i = strpos($sql, $string_start, $i);
+                    $new_i          = strpos($sql, $string_start, $i);
                     $current_string .= substr($sql, $i, $new_i - $i + 1);
-                    $i = $new_i;
+                    $i              = $new_i;
                     if ($i === false) {
                         break 2;
                     } elseif (/* $string_start == '`' || */
@@ -107,7 +112,10 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
             // because unescaped ' or " have been already checked in stage1
         }
 
-        return array($sql_wo_string, $strings);
+        return array(
+            $sql_wo_string,
+            $strings,
+        );
     }
 
     /**

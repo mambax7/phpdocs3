@@ -45,7 +45,6 @@
  */
 class Protector_postcommon_post_language_match extends ProtectorFilterAbstract
 {
-
     /** @var int after this number of posts by the user, skip this filter */
     protected $minPosts = 10;
 
@@ -53,18 +52,26 @@ class Protector_postcommon_post_language_match extends ProtectorFilterAbstract
     protected $maximumTolerance = 0.02;
 
     /** @var string|null custom character range to match, null to use default for current language */
-    protected $customRange = null;
+    protected $customRange;
 
     /** @var int do not run analysis if input length is less than this */
     protected $minLength = 15;
 
     /** @var string[] script names we do NOT want to process */
-    protected $skipThese = array('edituser.php', 'register.php', 'search.php', 'user.php', 'lostpass.php');
-
+    protected $skipThese = array(
+        'edituser.php',
+        'register.php',
+        'search.php',
+        'user.php',
+        'lostpass.php',
+    );
     // map regex compatible unicode script range to a XOOPS language name
     // http://php.net/manual/en/regexp.reference.unicode.php
     // http://www.regular-expressions.info/unicode.html
     // http://www.localizingjapan.com/blog/2012/01/20/regular-expressions-for-japanese-text/
+    /**
+     * @var array
+     */
     protected $scriptCodes = array(
         'arabic'       => '\p{Arabic}',
         'brazilian'    => 'A-Za-zÁáÂâĀãÀàÇçÉéÊêÍíÓóÔôŌõÚú',
@@ -110,7 +117,7 @@ class Protector_postcommon_post_language_match extends ProtectorFilterAbstract
      */
     protected function stripEmoji($string)
     {
-        return  preg_replace('/([0-9#][\x{20E3}])|[\x{00ae}\x{00a9}\x{203C}\x{2047}\x{2048}\x{2049}\x{3030}\x{303D}\x{2139}\x{2122}\x{3297}\x{3299}][\x{FE00}-\x{FEFF}]?|[\x{2190}-\x{21FF}][\x{FE00}-\x{FEFF}]?|[\x{2300}-\x{23FF}][\x{FE00}-\x{FEFF}]?|[\x{2460}-\x{24FF}][\x{FE00}-\x{FEFF}]?|[\x{25A0}-\x{25FF}][\x{FE00}-\x{FEFF}]?|[\x{2600}-\x{27BF}][\x{FE00}-\x{FEFF}]?|[\x{2900}-\x{297F}][\x{FE00}-\x{FEFF}]?|[\x{2B00}-\x{2BF0}][\x{FE00}-\x{FEFF}]?|[\x{1F000}-\x{1F6FF}][\x{FE00}-\x{FEFF}]?/u', '', $string);
+        return preg_replace('/([0-9#][\x{20E3}])|[\x{00ae}\x{00a9}\x{203C}\x{2047}\x{2048}\x{2049}\x{3030}\x{303D}\x{2139}\x{2122}\x{3297}\x{3299}][\x{FE00}-\x{FEFF}]?|[\x{2190}-\x{21FF}][\x{FE00}-\x{FEFF}]?|[\x{2300}-\x{23FF}][\x{FE00}-\x{FEFF}]?|[\x{2460}-\x{24FF}][\x{FE00}-\x{FEFF}]?|[\x{25A0}-\x{25FF}][\x{FE00}-\x{FEFF}]?|[\x{2600}-\x{27BF}][\x{FE00}-\x{FEFF}]?|[\x{2900}-\x{297F}][\x{FE00}-\x{FEFF}]?|[\x{2B00}-\x{2BF0}][\x{FE00}-\x{FEFF}]?|[\x{1F000}-\x{1F6FF}][\x{FE00}-\x{FEFF}]?/u', '', $string);
     }
 
     /**
@@ -160,23 +167,23 @@ class Protector_postcommon_post_language_match extends ProtectorFilterAbstract
         }
 
         $language = $GLOBALS['xoopsConfig']['language'];
-        $range = isset($this->scriptCodes[$language]) ? $this->scriptCodes[$language] : 'p\{Latin}';
-        $range = !empty($this->customRange) ? $this->customRange : $range;
+        $range    = isset($this->scriptCodes[$language]) ? $this->scriptCodes[$language] : 'p\{Latin}';
+        $range    = !empty($this->customRange) ? $this->customRange : $range;
 
         // remove emoji from computations (a smilie cat is universal)
         $testString = $this->stripEmoji($testString);
 
         $reduced = preg_replace('/[\p{Common}' . $range . ']+/u', '', $testString);
 
-        $remainingLength = (float) mb_strlen($reduced, 'UTF-8');
-        $fullLength = (float) mb_strlen($testString, 'UTF-8');
-        $percent = ($fullLength > 0) ? $remainingLength / $fullLength : 0.0;
+        $remainingLength = (float)mb_strlen($reduced, 'UTF-8');
+        $fullLength      = (float)mb_strlen($testString, 'UTF-8');
+        $percent         = ($fullLength > 0) ? $remainingLength / $fullLength : 0.0;
 
         if ($percent > $this->maximumTolerance) {
-            $report = array(
+            $report                   = array(
                 'score' => $percent,
-                'uri' => $_SERVER['REQUEST_URI'],
-                'post' => $_POST,
+                'uri'   => $_SERVER['REQUEST_URI'],
+                'post'  => $_POST,
             );
             $this->protector->message = json_encode($report);
             $this->protector->output_log('SPAM Language Map', $uid);
@@ -188,7 +195,7 @@ class Protector_postcommon_post_language_match extends ProtectorFilterAbstract
             }
             // write any message as you like
             echo 'Your post has been denied. '
-                . 'If you feel this is in error, please contact the site administrator.';
+                 . 'If you feel this is in error, please contact the site administrator.';
             exit;
         }
 

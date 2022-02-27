@@ -15,8 +15,11 @@
  * @since               2.3.0
  * @author              Jan Pedersen
  * @author              Taiwen Jiang <phppp@users.sourceforge.net>
- * @param $module
- * @return bool
+ */
+
+/**
+ * @param \XoopsModule $module
+ * @return true
  */
 
 function xoops_module_install_profile(XoopsModule $module)
@@ -42,18 +45,22 @@ function xoops_module_install_profile(XoopsModule $module)
     $umode_options         = array(
         'nest'   => _NESTED,
         'flat'   => _FLAT,
-        'thread' => _THREADED);
+        'thread' => _THREADED,
+    );
     $uorder_options        = array(
         0 => _OLDESTFIRST,
-        1 => _NEWESTFIRST);
+        1 => _NEWESTFIRST,
+    );
     $notify_mode_options   = array(
         XOOPS_NOTIFICATION_MODE_SENDALWAYS         => _NOT_MODE_SENDALWAYS,
         XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE => _NOT_MODE_SENDONCE,
-        XOOPS_NOTIFICATION_MODE_SENDONCETHENWAIT   => _NOT_MODE_SENDONCEPERLOGIN);
+        XOOPS_NOTIFICATION_MODE_SENDONCETHENWAIT   => _NOT_MODE_SENDONCEPERLOGIN,
+    );
     $notify_method_options = array(
         XOOPS_NOTIFICATION_METHOD_DISABLE => _NOT_METHOD_DISABLE,
         XOOPS_NOTIFICATION_METHOD_PM      => _NOT_METHOD_PM,
-        XOOPS_NOTIFICATION_METHOD_EMAIL   => _NOT_METHOD_EMAIL);
+        XOOPS_NOTIFICATION_METHOD_EMAIL   => _NOT_METHOD_EMAIL,
+    );
 
     profile_install_addField('name', _US_REALNAME, '', 1, 'textbox', 1, 1, 1, array(), 2, 255);
     profile_install_addField('user_from', _US_LOCATION, '', 1, 'textbox', 1, 2, 1, array(), 2, 255);
@@ -100,18 +107,18 @@ function profile_install_initializeProfiles()
 
 // canedit: 0 - no; 1 - admin; 2 - admin & owner
 /**
- * @param      $name
- * @param      $title
- * @param      $description
- * @param      $category
- * @param      $type
- * @param      $valuetype
- * @param      $weight
- * @param      $canedit
- * @param      $options
- * @param      $step_id
- * @param      $length
- * @param bool $visible
+ * @param string $name
+ * @param string $title
+ * @param string $description
+ * @param int    $category
+ * @param string $type
+ * @param string $valuetype
+ * @param int    $weight
+ * @param bool   $canedit
+ * @param array  $options
+ * @param int    $step_id
+ * @param int    $length
+ * @param bool   $visible
  *
  * @return bool
  */
@@ -179,10 +186,10 @@ function profile_install_addField($name, $title, $description, $category, $type,
 }
 
 /**
- * @param $field_id
- * @param $module_id
- * @param $canedit
- * @param $visible
+ * @param int  $field_id
+ * @param int  $module_id
+ * @param bool $canedit
+ * @param bool $visible
  */
 function profile_install_setPermissions($field_id, $module_id, $canedit, $visible)
 {
@@ -191,8 +198,8 @@ function profile_install_setPermissions($field_id, $module_id, $canedit, $visibl
 
     if (!in_array($field_id, $skip_icq_aim_yim_msnm)) {
         $gperm_itemid = $field_id;
-        $gperm_modid = $module_id;
-        $sql = 'INSERT INTO ' . $GLOBALS['xoopsDB']->prefix('group_permission') . ' (gperm_groupid, gperm_itemid, gperm_modid, gperm_name) ' . ' VALUES ' . ($canedit ? ' (' . XOOPS_GROUP_ADMIN . ", {$gperm_itemid}, {$gperm_modid}, 'profile_edit'), " : '') . ($canedit == 1 ? ' (' . XOOPS_GROUP_USERS . ", {$gperm_itemid}, {$gperm_modid}, 'profile_edit'), " : '') . ' (' . XOOPS_GROUP_ADMIN . ", {$gperm_itemid}, {$gperm_modid}, 'profile_search'), " . ' (' . XOOPS_GROUP_USERS . ", {$gperm_itemid}, {$gperm_modid}, 'profile_search') " . ' ';
+        $gperm_modid  = $module_id;
+        $sql          = 'INSERT INTO ' . $GLOBALS['xoopsDB']->prefix('group_permission') . ' (gperm_groupid, gperm_itemid, gperm_modid, gperm_name) ' . ' VALUES ' . ($canedit ? ' (' . XOOPS_GROUP_ADMIN . ", {$gperm_itemid}, {$gperm_modid}, 'profile_edit'), " : '') . ($canedit == 1 ? ' (' . XOOPS_GROUP_USERS . ", {$gperm_itemid}, {$gperm_modid}, 'profile_edit'), " : '') . ' (' . XOOPS_GROUP_ADMIN . ", {$gperm_itemid}, {$gperm_modid}, 'profile_search'), " . ' (' . XOOPS_GROUP_USERS . ", {$gperm_itemid}, {$gperm_modid}, 'profile_search') " . ' ';
         $GLOBALS['xoopsDB']->queryF($sql);
     }
 
@@ -212,10 +219,10 @@ function profile_install_addCategory($name, $weight)
 }
 
 /**
- * @param $name
- * @param $desc
- * @param $order
- * @param $save
+ * @param string $name
+ * @param string $desc
+ * @param int    $order
+ * @param int    $save
  */
 function profile_install_addStep($name, $desc, $order, $save)
 {

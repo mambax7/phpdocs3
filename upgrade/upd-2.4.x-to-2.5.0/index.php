@@ -26,6 +26,7 @@ class Upgrade_250 extends XoopsUpgrade
     /**
      * Check if cpanel config already exists
      *
+     * @return bool
      */
     public function check_config()
     {
@@ -168,14 +169,14 @@ class Upgrade_250 extends XoopsUpgrade
      *
      * Installs are not a problem, just upgrades. This is the only block affected.
      *
-     * @return CriteriaElement
+     * @return \CriteriaCompo
      */
     private function strayblockCriteria()
     {
-        $criteria = new CriteriaCompo(new Criteria('mid','1', '='));
-        $criteria->add(new Criteria('block_type','S', '='));
-        $criteria->add(new Criteria('func_num','1', '='));
-        $criteria->add(new Criteria('template','system_block_user.html', '='));
+        $criteria = new \CriteriaCompo(new Criteria('mid', '1', '='));
+        $criteria->add(new Criteria('block_type', 'S', '='));
+        $criteria->add(new Criteria('func_num', '1', '='));
+        $criteria->add(new Criteria('template', 'system_block_user.html', '='));
         return $criteria;
     }
 
@@ -185,7 +186,7 @@ class Upgrade_250 extends XoopsUpgrade
     public function check_strayblock()
     {
         $criteria = $this->strayblockCriteria();
-        $count = Xmf\Database\TableLoad::countRows('newblocks', $criteria);
+        $count    = Xmf\Database\TableLoad::countRows('newblocks', $criteria);
 
         return ($count === 0);
     }
@@ -195,8 +196,9 @@ class Upgrade_250 extends XoopsUpgrade
      */
     public function apply_strayblock()
     {
+        /** @var \CriteriaCompo $criteria */
         $criteria = $this->strayblockCriteria();
-        $tables = new Xmf\Database\Tables();
+        $tables   = new Xmf\Database\Tables();
         $tables->useTable('newblocks');
         $tables->update('newblocks', array('func_num' => '0'), $criteria);
 
@@ -206,7 +208,11 @@ class Upgrade_250 extends XoopsUpgrade
     public function __construct()
     {
         parent::__construct(basename(__DIR__));
-        $this->tasks = array('config', 'templates', 'strayblock');
+        $this->tasks = array(
+            'config',
+            'templates',
+            'strayblock',
+        );
     }
 }
 

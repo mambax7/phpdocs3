@@ -1,4 +1,5 @@
 <?php
+
 /**
  * xoopsCodeTarea function
  *
@@ -25,9 +26,9 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 /**
  * Displayes xoopsCode buttons and target textarea to which xoopscodes are inserted
  *
- * @param string      $textarea_id a unique id of the target textarea
- * @param int         $cols
- * @param int         $rows
+ * @param string $textarea_id a unique id of the target textarea
+ * @param int    $cols
+ * @param int    $rows
  * @param string|null $suffix
  */
 function xoopsCodeTarea($textarea_id, $cols = 60, $rows = 15, $suffix = null)
@@ -44,13 +45,13 @@ function xoopsCodeTarea($textarea_id, $cols = 60, $rows = 15, $suffix = null)
 /**
  * Displays smilie image buttons used to insert smilie codes to a target textarea in a form
  *
- * @param   string $textarea_id a unique id of the target textarea
+ * @param string $textarea_id a unique id of the target textarea
  */
 function xoopsSmilies($textarea_id)
 {
-    $myts   = MyTextSanitizer::getInstance();
-    $smiles = $myts->getSmileys(false);
-    $count  = count($smiles);
+    $myts        = MyTextSanitizer::getInstance();
+    $smiles      = $myts->getSmileys(false);
+    $count       = count($smiles);
     for ($i = 0; $i < $count; ++$i) {
         echo "<img src='" . XOOPS_UPLOAD_URL . '/' . htmlspecialchars($smiles[$i]['smile_url'], ENT_QUOTES) . "' border='0' alt='' onclick='xoopsCodeSmilie(\"{$textarea_id}\", \" " . $smiles[$i]['code'] . " \");' onmouseover='style.cursor=\"hand\"' />";
     }

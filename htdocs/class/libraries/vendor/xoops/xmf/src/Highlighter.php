@@ -62,7 +62,7 @@ class Highlighter
      * @param string $pre      insert before needle
      * @param string $post     insert after needle
      *
-     * @return mixed return from preg_replace_callback()
+     * @return array|string|string[]|null return from preg_replace_callback()
      */
     protected static function splitOnTag($needle, $haystack, $pre, $post)
     {
@@ -72,23 +72,23 @@ class Highlighter
             function ($capture) use ($needle, $pre, $post, $encoding) {
                 $haystack = $capture[1];
                 if (function_exists('mb_substr')) {
-                    $p1 = mb_stripos($haystack, $needle, 0, $encoding);
-                    $l1 = mb_strlen($needle, $encoding);
+                    $p1  = mb_stripos($haystack, $needle, 0, $encoding);
+                    $l1  = mb_strlen($needle, $encoding);
                     $ret = '';
                     while ($p1 !== false) {
-                        $ret .= mb_substr($haystack, 0, $p1, $encoding) . $pre
-                            . mb_substr($haystack, $p1, $l1, $encoding) . $post;
+                        $ret      .= mb_substr($haystack, 0, $p1, $encoding) . $pre
+                                     . mb_substr($haystack, $p1, $l1, $encoding) . $post;
                         $haystack = mb_substr($haystack, $p1 + $l1, mb_strlen($haystack), $encoding);
-                        $p1 = mb_stripos($haystack, $needle, 0, $encoding);
+                        $p1       = mb_stripos($haystack, $needle, 0, $encoding);
                     }
                 } else {
-                    $p1 = stripos($haystack, $needle);
-                    $l1 = strlen($needle);
+                    $p1  = stripos($haystack, $needle);
+                    $l1  = strlen($needle);
                     $ret = '';
                     while ($p1 !== false) {
-                        $ret .= substr($haystack, 0, $p1) . $pre . substr($haystack, $p1, $l1) . $post;
+                        $ret      .= substr($haystack, 0, $p1) . $pre . substr($haystack, $p1, $l1) . $post;
                         $haystack = substr($haystack, $p1 + $l1);
-                        $p1 = stripos($haystack, $needle);
+                        $p1       = stripos($haystack, $needle);
                     }
                 }
                 $ret .= $haystack . $capture[2];

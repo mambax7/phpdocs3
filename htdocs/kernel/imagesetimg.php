@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -40,7 +41,7 @@ class XoopsImageSetImg extends XoopsObject
 
     /**
      * Returns Class Base Variable imgsetimg_id with default format N
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -50,7 +51,7 @@ class XoopsImageSetImg extends XoopsObject
 
     /**
      * Returns Class Base Variable imgsetimg_id
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgsetimg_id($format = '')
@@ -60,7 +61,7 @@ class XoopsImageSetImg extends XoopsObject
 
     /**
      * Returns Class Base Variable imgsetimg_file
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgsetimg_file($format = '')
@@ -70,7 +71,7 @@ class XoopsImageSetImg extends XoopsObject
 
     /**
      * Returns Class Base Variable imgsetimg_body
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgsetimg_body($format = '')
@@ -80,7 +81,7 @@ class XoopsImageSetImg extends XoopsObject
 
     /**
      * Returns Class Base Variable imgsetimg_imgset
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function imgsetimg_imgset($format = '')
@@ -102,7 +103,7 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
     /**
      * Create a new {@link XoopsImageSetImg}
      *
-     * @param  boolean $isNew Flag the object as "new"
+     * @param bool $isNew Flag the object as "new"
      * @return XoopsImageSetImg
      **/
     public function create($isNew = true)
@@ -120,13 +121,13 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
      *
      * @param int $id ID
      *
+     * @return false|\XoopsImageSetImg {@link XoopsImageSetImg}, FALSE on fail
      * @internal param bool $getbinary
-     * @return XoopsImageSetImg {@link XoopsImageSetImg}, FALSE on fail
      */
-    public function get($id)
+    public function get($id) //mb TODO should we refactor XoopsObject to rename $id to $id?
     {
         $imgsetimg = false;
-        $id        = (int)$id;
+        $id    = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('imgsetimg') . ' WHERE imgsetimg_id=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -134,7 +135,7 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $imgsetimg = new XoopsImageSetImg();
+                $imgsetimg = new \XoopsImageSetImg();
                 $imgsetimg->assignVars($this->db->fetchArray($result));
             }
         }
@@ -145,7 +146,7 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
     /**
      * Write a {@link XoopsImageSetImg} object to the database
      *
-     * @param  XoopsObject|XoopsImageSetImg $imgsetimg a XoopsImageSet object
+     * @param XoopsObject|XoopsImageSetImg $imgsetimg a XoopsImageSet object
      *
      * @return bool true on success, otherwise false
      **/
@@ -185,7 +186,7 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
     /**
      * Delete an image from the database
      *
-     * @param  XoopsObject|XoopsImageSetImg $imgsetimg a XoopsImageSet object
+     * @param XoopsObject|XoopsImageSetImg $imgsetimg a XoopsImageSet object
      *
      * @return bool true on success, otherwise false
      **/
@@ -208,7 +209,7 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
      * Load {@link XoopsImageSetImg}s from the database
      *
      * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param boolean         $id_as_key Use the ID as key into the array
+     * @param bool                       $id_as_key Use the ID as key into the array
      * @internal param bool $getbinary
      * @return array Array of {@link XoopsImageSetImg} objects
      */
@@ -218,8 +219,8 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT DISTINCT i.* FROM ' . $this->db->prefix('imgsetimg') . ' i LEFT JOIN ' . $this->db->prefix('imgset_tplset_link') . ' l ON l.imgset_id=i.imgsetimg_imgset LEFT JOIN ' . $this->db->prefix('imgset') . ' s ON s.imgset_id=l.imgset_id';
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
-            $sql .= ' ORDER BY imgsetimg_id ' . $criteria->getOrder();
+            $sql   .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ORDER BY imgsetimg_id ' . $criteria->getOrder();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -244,7 +245,7 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
     /**
      * Count some imagessetsimg
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
+     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
      * @return int
      **/
     public function getCount(CriteriaElement $criteria = null)
@@ -263,8 +264,8 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
 
     /**
      * Function-Documentation
-     * @param  int   $imgset_id id of image set
-     * @param  bool  $id_as_key Use the ID as key into the array
+     * @param int  $imgset_id id of image set
+     * @param bool $id_as_key Use the ID as key into the array
      * @return array Array of {@link XoopsImageSetImg} objects
      * @author Kazumi Ono <onokazu@xoops.org>
      */
@@ -275,8 +276,8 @@ class XoopsImageSetImgHandler extends XoopsObjectHandler
 
     /**
      * Function-Documentation
-     * @param  string $filename
-     * @param  int    $imgset_id
+     * @param string $filename
+     * @param int    $imgset_id
      * @return bool true if image exists
      * @author Kazumi Ono <onokazu@xoops.org>
      **/

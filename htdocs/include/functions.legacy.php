@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  XOOPS legacy functions
  *
@@ -20,8 +21,8 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 /**
  * Deprecated functions
  * @param         $name
- * @param  string $module
- * @param  string $default
+ * @param string  $module
+ * @param string  $default
  * @return bool
  */
 

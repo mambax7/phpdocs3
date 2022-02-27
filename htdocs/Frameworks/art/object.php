@@ -24,7 +24,7 @@ if (class_exists('ArtObject')) {
  * @copyright       (c) 2000-2016 XOOPS Project (www.xoops.org)
  * @package             module::article
  *
- * @deprecated ArtObject is deprecated since XOOPS 2.5.8 and will be removed in the next major release
+ * @deprecated          ArtObject is deprecated since XOOPS 2.5.8 and will be removed in the next major release
  */
 class ArtObject extends XoopsObject
 {
@@ -52,10 +52,13 @@ class ArtObject extends XoopsObject
  * @author              D.J. (phppp)
  * @copyright       (c) 2000-2016 XOOPS Project (www.xoops.org)
  *
- * @deprecated ArtObjectHandler is deprecated since XOOPS 2.5.8 and will be removed in the next major release
+ * @deprecated          ArtObjectHandler is deprecated since XOOPS 2.5.8 and will be removed in the next major release
  */
 class ArtObjectHandler extends XoopsPersistableObjectHandler
 {
+    /**
+     * @var \XoopsMySQLDatabase
+     */
     public $db;
 
     /**
@@ -70,7 +73,7 @@ class ArtObjectHandler extends XoopsPersistableObjectHandler
 
     public function __construct(XoopsMySQLDatabase $db, $table = '', $className = '', $keyName = '', $identifierName = '')
     {
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+        $trace          = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
         trigger_error("ArtObjectHandler is deprecated, instantiated from {$trace[0]['file']} line {$trace[0]['line']},");
         $this->db = $db;
         parent::__construct($db, $table, $className, $keyName, $identifierName);

@@ -71,9 +71,9 @@ function getDbCollations()
 }
 
 /**
- * @param        $name
- * @param        $value
- * @param        $label
+ * @param string $name
+ * @param string $value
+ * @param string $label
  * @param string $help
  *
  * @return string

@@ -36,13 +36,12 @@ use Symfony\Component\Yaml\Yaml as VendorYaml;
  */
 class Yaml
 {
-
     /**
      * Dump an PHP array as a YAML string
      *
-     * @param mixed   $var    Variable which will be dumped
-     * @param integer $inline Nesting level where you switch to inline YAML
-     * @param integer $indent Number of spaces to indent for nested nodes
+     * @param mixed $var    Variable which will be dumped
+     * @param int   $inline Nesting level where you switch to inline YAML
+     * @param int   $indent Number of spaces to indent for nested nodes
      *
      * @return string|bool YAML string or false on error
      */
@@ -62,7 +61,7 @@ class Yaml
      *
      * @param string $yamlString YAML dump string
      *
-     * @return array|boolean PHP array or false on error
+     * @return array|bool PHP array or false on error
      */
     public static function load($yamlString)
     {
@@ -89,7 +88,7 @@ class Yaml
         }
         try {
             $yamlString = file_get_contents($yamlFile);
-            $ret = VendorYaml::parse($yamlString);
+            $ret        = VendorYaml::parse($yamlString);
         } catch (\Exception $e) {
             static::logError($e);
             $ret = false;
@@ -100,18 +99,18 @@ class Yaml
     /**
      * Save a PHP array as a YAML file
      *
-     * @param array   $var      variable which will be dumped
-     * @param string  $yamlFile filename of YAML file
-     * @param integer $inline   Nesting level where you switch to inline YAML
-     * @param integer $indent   Number of spaces to indent for nested nodes
+     * @param array  $var      variable which will be dumped
+     * @param string $yamlFile filename of YAML file
+     * @param int    $inline   Nesting level where you switch to inline YAML
+     * @param int    $indent   Number of spaces to indent for nested nodes
      *
-     * @return integer|boolean number of bytes written, or false on error
+     * @return int|bool number of bytes written, or false on error
      */
     public static function save($var, $yamlFile, $inline = 4, $indent = 4)
     {
         try {
             $yamlString = VendorYaml::dump($var, $inline, $indent);
-            $ret = file_put_contents($yamlFile, $yamlString);
+            $ret        = file_put_contents($yamlFile, $yamlString);
         } catch (\Exception $e) {
             static::logError($e);
             $ret = false;
@@ -127,17 +126,17 @@ class Yaml
      * yaml file contents from being revealed by serving the file directly from
      * a poorly configured server.
      *
-     * @param mixed   $var    Variable which will be dumped
-     * @param integer $inline Nesting level where you switch to inline YAML
-     * @param integer $indent Number of spaces to indent for nested nodes
+     * @param mixed $var    Variable which will be dumped
+     * @param int   $inline Nesting level where you switch to inline YAML
+     * @param int   $indent Number of spaces to indent for nested nodes
      *
-     * @return string|boolean YAML string or false on error
+     * @return string|bool YAML string or false on error
      */
     public static function dumpWrapped($var, $inline = 4, $indent = 4)
     {
         try {
             $yamlString = VendorYaml::dump($var, $inline, $indent);
-            $ret = empty($yamlString) ? false : "<?php\n/*\n---\n" . $yamlString . "\n...\n*/\n";
+            $ret        = empty($yamlString) ? false : "<?php\n/*\n---\n" . $yamlString . "\n...\n*/\n";
         } catch (\Exception $e) {
             static::logError($e);
             $ret = false;
@@ -155,7 +154,7 @@ class Yaml
      *
      * @param string $yamlString YAML dump string
      *
-     * @return array|boolean PHP array or false on error
+     * @return array|bool PHP array or false on error
      */
     public static function loadWrapped($yamlString)
     {
@@ -176,7 +175,7 @@ class Yaml
                 }
             }
             $unwrapped = implode("\n", $lines);
-            $ret = VendorYaml::parse($unwrapped);
+            $ret       = VendorYaml::parse($unwrapped);
         } catch (\Exception $e) {
             static::logError($e);
             $ret = false;
@@ -203,7 +202,7 @@ class Yaml
         }
         try {
             $yamlString = file_get_contents($yamlFile);
-            $ret = static::loadWrapped($yamlString);
+            $ret        = static::loadWrapped($yamlString);
         } catch (\Exception $e) {
             static::logError($e);
             $ret = false;
@@ -219,18 +218,18 @@ class Yaml
      * yaml file contents from being revealed by serving the file directly from
      * a poorly configured server.
      *
-     * @param array   $var      variable which will be dumped
-     * @param string  $yamlFile filename of YAML file
-     * @param integer $inline   Nesting level where you switch to inline YAML
-     * @param integer $indent   Number of spaces to indent for nested nodes
+     * @param array  $var      variable which will be dumped
+     * @param string $yamlFile filename of YAML file
+     * @param int    $inline   Nesting level where you switch to inline YAML
+     * @param int    $indent   Number of spaces to indent for nested nodes
      *
-     * @return integer|boolean number of bytes written, or false on error
+     * @return int|bool number of bytes written, or false on error
      */
     public static function saveWrapped($var, $yamlFile, $inline = 4, $indent = 4)
     {
         try {
             $yamlString = static::dumpWrapped($var, $inline, $indent);
-            $ret = file_put_contents($yamlFile, $yamlString);
+            $ret        = file_put_contents($yamlFile, $yamlString);
         } catch (\Exception $e) {
             static::logError($e);
             $ret = false;
@@ -244,7 +243,9 @@ class Yaml
     protected static function logError($e)
     {
         if (class_exists('Xoops')) {
-            \Xoops::getInstance()->events()->triggerEvent('core.exception', $e);
+            \Xoops::getInstance()
+                  ->events()
+                  ->triggerEvent('core.exception', $e);
         } else {
             trigger_error($e->getMessage(), E_USER_ERROR);
         }

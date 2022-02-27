@@ -30,12 +30,10 @@ class Permission extends AbstractHelper
      * @var int
      */
     protected $mid;
-
     /**
      * @var string
      */
     protected $dirname;
-
     /**
      * @var \XoopsGrouppermHandler
      */
@@ -48,9 +46,9 @@ class Permission extends AbstractHelper
      */
     public function init()
     {
-        $this->mid = $this->module->getVar('mid');
+        $this->mid     = $this->module->getVar('mid');
         $this->dirname = $this->module->getVar('dirname');
-        /* @var $this->permissionHandler XoopsGroupPermHandler */
+        /* @var $this- >permissionHandler XoopsGroupPermHandler */
         $this->permissionHandler = xoops_getHandler('groupperm');
     }
 
@@ -65,7 +63,7 @@ class Permission extends AbstractHelper
      **/
     public function checkPermission($gperm_name, $gperm_itemid, $trueifadmin = true)
     {
-        $gperm_itemid = (int) $gperm_itemid;
+        $gperm_itemid  = (int)$gperm_itemid;
         $gperm_groupid = $this->getUserGroups();
 
         return $this->permissionHandler->checkRight(
@@ -73,7 +71,7 @@ class Permission extends AbstractHelper
             $gperm_itemid,
             $gperm_groupid,
             $this->mid,
-            (bool) $trueifadmin
+            (bool)$trueifadmin
         );
     }
 
@@ -97,14 +95,14 @@ class Permission extends AbstractHelper
         $message = '',
         $trueifadmin = true
     ) {
-        $gperm_itemid = (int) $gperm_itemid;
+        $gperm_itemid  = (int)$gperm_itemid;
         $gperm_groupid = $this->getUserGroups();
-        $permission = $this->permissionHandler->checkRight(
+        $permission    = $this->permissionHandler->checkRight(
             $gperm_name,
             $gperm_itemid,
             $gperm_groupid,
             $this->mid,
-            (bool) $trueifadmin
+            (bool)$trueifadmin
         );
         if (!$permission) {
             $helper = Helper::getHelper($this->dirname);
@@ -122,7 +120,7 @@ class Permission extends AbstractHelper
      **/
     public function getGroupsForItem($gperm_name, $gperm_itemid)
     {
-        $gperm_itemid = (int) $gperm_itemid;
+        $gperm_itemid = (int)$gperm_itemid;
         return $this->permissionHandler->getGroupIds($gperm_name, $gperm_itemid, $this->mid);
     }
 
@@ -137,9 +135,9 @@ class Permission extends AbstractHelper
      **/
     public function savePermissionForItem($gperm_name, $gperm_itemid, $groups)
     {
-        $gperm_itemid = (int) $gperm_itemid;
+        $gperm_itemid = (int)$gperm_itemid;
         foreach ($groups as $index => $group) {
-            $groups[$index] = (int) $group;
+            $groups[$index] = (int)$group;
         }
 
         $result = true;
@@ -172,9 +170,9 @@ class Permission extends AbstractHelper
      */
     public function deletePermissionForItem($gperm_name, $gperm_itemid)
     {
-        $gperm_itemid = (int) $gperm_itemid;
+        $gperm_itemid = (int)$gperm_itemid;
         if (!is_array($gperm_name)) {
-            $gperm_name = (array) $gperm_name;
+            $gperm_name = (array)$gperm_name;
         }
         $return = true;
         foreach ($gperm_name as $pname) {
@@ -188,13 +186,13 @@ class Permission extends AbstractHelper
      * to a specific gperm_name and gperm_item. Field will be preset
      * with existing permissions.
      *
-     * @param string $gperm_name   name of the permission to test
-     * @param int    $gperm_itemid id of the object to check
-     * @param string $caption      caption for form field
-     * @param string $name         name/id of form field
-     * @param bool   $include_anon true to include anonymous group
-     * @param int    $size         size of list
-     * @param bool   $multiple     true to allow multiple selections
+     * @param string      $gperm_name   name of the permission to test
+     * @param int         $gperm_itemid id of the object to check
+     * @param string      $caption      caption for form field
+     * @param string|null $name         name/id of form field
+     * @param bool        $include_anon true to include anonymous group
+     * @param int         $size         size of list
+     * @param bool        $multiple     true to allow multiple selections
      *
      * @return object XoopsFormSelectGroup
      */
@@ -213,9 +211,9 @@ class Permission extends AbstractHelper
         if (empty($name)) {
             $name = $this->defaultFieldName($gperm_name, $gperm_itemid);
         }
-        $gperm_itemid = (int) $gperm_itemid;
-        $value = $this->getGroupsForItem($gperm_name, $gperm_itemid);
-        $element = new \XoopsFormSelectGroup(
+        $gperm_itemid = (int)$gperm_itemid;
+        $value        = $this->getGroupsForItem($gperm_name, $gperm_itemid);
+        $element      = new \XoopsFormSelectGroup(
             $caption,
             $name,
             $include_anon,
@@ -238,9 +236,9 @@ class Permission extends AbstractHelper
      */
     public function defaultFieldName($gperm_name, $gperm_itemid)
     {
-        $gperm_itemid = (int) $gperm_itemid;
-        $name = $this->module->getVar('dirname') . '_' .
-            $gperm_name . '_' . $gperm_itemid;
+        $gperm_itemid = (int)$gperm_itemid;
+        $name         = $this->module->getVar('dirname') . '_' .
+                        $gperm_name . '_' . $gperm_itemid;
 
         return $name;
     }
@@ -248,7 +246,7 @@ class Permission extends AbstractHelper
     /**
      * Get any groups associated with the current user
      *
-     * @return int|int[] group id(s)
+     * @return int[]|string group id(s)
      */
     protected function getUserGroups()
     {

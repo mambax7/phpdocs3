@@ -36,7 +36,6 @@ class XoopsSessionHandler
      * @access    private
      */
     public $db;
-
     /**
      * Security checking level
      *
@@ -51,13 +50,23 @@ class XoopsSessionHandler
      * @access    public
      */
     public $securityLevel = 3;
-
+    /**
+     * @var array
+     */
     protected $bitMasks = array(
-        2 => array('v4' => 16, 'v6' => 64),
-        3 => array('v4' => 24, 'v6' => 56),
-        4 => array('v4' => 32, 'v6' => 128),
+        2 => array(
+            'v4' => 16,
+            'v6' => 64,
+        ),
+        3 => array(
+            'v4' => 24,
+            'v6' => 56,
+        ),
+        4 => array(
+            'v4' => 32,
+            'v6' => 128,
+        ),
     );
-
     /**
      * Enable regenerate_id
      *
@@ -81,7 +90,7 @@ class XoopsSessionHandler
         $lifetime = ($xoopsConfig['use_mysession'] && $xoopsConfig['session_name'] != '')
             ? $xoopsConfig['session_expire'] * 60
             : ini_get('session.cookie_lifetime');
-        $secure = (XOOPS_PROT === 'https://');
+        $secure   = (XOOPS_PROT === 'https://');
         if (PHP_VERSION_ID >= 70300) {
             $options = array(
                 'lifetime' => $lifetime,
@@ -131,7 +140,7 @@ class XoopsSessionHandler
      */
     public function read($sessionId)
     {
-        $ip = \Xmf\IPAddress::fromRequest();
+        $ip  = \Xmf\IPAddress::fromRequest();
         $sql = sprintf(
             'SELECT sess_data, sess_ip FROM %s WHERE sess_id = %s',
             $this->db->prefix('session'),
@@ -143,10 +152,10 @@ class XoopsSessionHandler
             if (list($sess_data, $sess_ip) = $this->db->fetchRow($result)) {
                 if ($this->securityLevel > 1) {
                     if (false === $ip->sameSubnet(
-                        $sess_ip,
-                        $this->bitMasks[$this->securityLevel]['v4'],
-                        $this->bitMasks[$this->securityLevel]['v6']
-                    )) {
+                            $sess_ip,
+                            $this->bitMasks[$this->securityLevel]['v4'],
+                            $this->bitMasks[$this->securityLevel]['v6']
+                        )) {
                         $sess_data = '';
                     }
                 }
@@ -168,10 +177,11 @@ class XoopsSessionHandler
      **/
     public function write($sessionId, $data)
     {
-        $myReturn = true;
-        $remoteAddress = \Xmf\IPAddress::fromRequest()->asReadable();
-        $sessionId = $this->db->quoteString($sessionId);
-        $sql = sprintf(
+        $myReturn      = true;
+        $remoteAddress = \Xmf\IPAddress::fromRequest()
+                                       ->asReadable();
+        $sessionId     = $this->db->quoteString($sessionId);
+        $sql           = sprintf(
             'UPDATE %s SET sess_updated = %u, sess_data = %s WHERE sess_id = %s',
             $this->db->prefix('session'),
             time(),
@@ -219,7 +229,7 @@ class XoopsSessionHandler
     /**
      * Garbage Collector
      *
-     * @param  int $expire Time in seconds until a session expires
+     * @param int $expire Time in seconds until a session expires
      * @return bool
      **/
     public function gc($expire)
@@ -251,7 +261,7 @@ class XoopsSessionHandler
      *
      * To be refactored
      *
-     * @param  bool $delete_old_session
+     * @param bool $delete_old_session
      * @return bool
      **/
     public function regenerate_id($delete_old_session = false)
@@ -276,25 +286,25 @@ class XoopsSessionHandler
      * To be refactored
      * FIXME: how about $xoopsConfig['use_ssl'] is enabled?
      *
-     * @param  string $sess_id session ID
-     * @param  int    $expire  Time in seconds until a session expires
-     * @return bool
+     * @param string|null $sess_id session ID
+     * @param int|null    $expire  Time in seconds until a session expires
+     * @return void
      **/
     public function update_cookie($sess_id = null, $expire = null)
     {
         if (PHP_VERSION_ID < 70300) {
             global $xoopsConfig;
-            $session_name = session_name();
+            $session_name   = session_name();
             $session_expire = null !== $expire
                 ? (int)$expire
                 : (($xoopsConfig['use_mysession'] && $xoopsConfig['session_name'] != '')
                     ? $xoopsConfig['session_expire'] * 60
                     : ini_get('session.cookie_lifetime')
                 );
-            $session_id = empty($sess_id) ? session_id() : $sess_id;
-            $cookieDomain = XOOPS_COOKIE_DOMAIN;
+            $session_id     = empty($sess_id) ? session_id() : $sess_id;
+            $cookieDomain   = XOOPS_COOKIE_DOMAIN;
             if (2 > substr_count($cookieDomain, '.')) {
-                $cookieDomain  = '.' . $cookieDomain ;
+                $cookieDomain = '.' . $cookieDomain;
             }
 
             xoops_setcookie(

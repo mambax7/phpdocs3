@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CAPTCHA for Image mode
  *
@@ -43,7 +44,8 @@ class XoopsCaptchaImage extends XoopsCaptchaMethod
                 'imagefilledrectangle',
                 'imagejpeg',
                 'imagedestroy',
-                'imageftbbox');
+                'imageftbbox',
+            );
             foreach ($required_functions as $func) {
                 if (!function_exists($func)) {
                     trigger_error('Function ' . $func . ' is not defined', E_USER_WARNING);
@@ -59,11 +61,11 @@ class XoopsCaptchaImage extends XoopsCaptchaMethod
     /**
      * XoopsCaptchaImage::render()
      *
-     * @return string|void
+     * @return string
      */
     public function render()
     {
-        $js    = "<script type='text/javascript'>
+        $js = "<script type='text/javascript'>
                 function xoops_captcha_refresh(imgId)
                 {
                     xoopsGetElementById(imgId).src = '" . XOOPS_URL . "/class/captcha/image/scripts/image.php?refresh='+Math.random();
@@ -72,7 +74,7 @@ class XoopsCaptchaImage extends XoopsCaptchaMethod
         $image = $this->loadImage();
         $image .= "<br><a href=\"javascript: xoops_captcha_refresh('" . $this->config['name'] . "')\">" . _CAPTCHA_REFRESH . '</a>';
         $input = '<input type="text" name="' . $this->config['name'] . '" id="' . $this->config['name'] . '" size="' . $this->config['num_chars'] . '" maxlength="' . $this->config['num_chars'] . '" value="" />';
-        $rule  = _CAPTCHA_RULE_IMAGE;
+        $rule = _CAPTCHA_RULE_IMAGE;
         $rule .= '<br>' . (empty($this->config['casesensitive']) ? _CAPTCHA_RULE_CASEINSENSITIVE : _CAPTCHA_RULE_CASESENSITIVE);
         if (!empty($this->config['maxattempts'])) {
             $rule .= '<br>' . sprintf(_CAPTCHA_MAXATTEMPTS, $this->config['maxattempts']);

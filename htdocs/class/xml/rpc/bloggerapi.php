@@ -26,11 +26,11 @@ require_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpcapi.php';
 class BloggerApi extends XoopsXmlRpcApi
 {
     /**
-     * @param array $params
+     * @param array                $params
      * @param \XoopsXmlRpcResponse $response
-     * @param \XoopsModule $module
+     * @param \XoopsModule         $module
      */
-    public function __construct(&$params, &$response, &$module)
+    public function __construct(&$params, $response, $module)
     {
         parent::__construct($params, $response, $module);
         $this->_setXoopsTagMap('storyid', 'postid');
@@ -38,6 +38,9 @@ class BloggerApi extends XoopsXmlRpcApi
         $this->_setXoopsTagMap('uid', 'userid');
     }
 
+    /**
+     * @return void
+     */
     public function newPost()
     {
         if (!$this->_checkUser($this->params[2], $this->params[3])) {
@@ -85,6 +88,9 @@ class BloggerApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function editPost()
     {
         if (!$this->_checkUser($this->params[2], $this->params[3])) {
@@ -130,6 +136,9 @@ class BloggerApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function deletePost()
     {
         if (!$this->_checkUser($this->params[2], $this->params[3])) {
@@ -137,12 +146,15 @@ class BloggerApi extends XoopsXmlRpcApi
         } else {
             // XOOPS API ignores App key (index 0 of params)
             array_shift($this->params);
-            $xoopsapi =& $this->_getXoopsApi($this->params);
+            $xoopsapi = $this->_getXoopsApi($this->params);
             $xoopsapi->_setUser($this->user, $this->isadmin);
             $xoopsapi->deletePost();
         }
     }
 
+    /**
+     * @return void
+     */
     public function getPost()
     {
         if (!$this->_checkUser($this->params[2], $this->params[3])) {
@@ -150,7 +162,7 @@ class BloggerApi extends XoopsXmlRpcApi
         } else {
             // XOOPS API ignores App key (index 0 of params)
             array_shift($this->params);
-            $xoopsapi =& $this->_getXoopsApi($this->params);
+            $xoopsapi = $this->_getXoopsApi($this->params);
             $xoopsapi->_setUser($this->user, $this->isadmin);
             $ret =& $xoopsapi->getPost();
             if (is_array($ret)) {
@@ -181,6 +193,9 @@ class BloggerApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function getRecentPosts()
     {
         if (!$this->_checkUser($this->params[2], $this->params[3])) {
@@ -188,7 +203,7 @@ class BloggerApi extends XoopsXmlRpcApi
         } else {
             // XOOPS API ignores App key (index 0 of params)
             array_shift($this->params);
-            $xoopsapi =& $this->_getXoopsApi($this->params);
+            $xoopsapi = $this->_getXoopsApi($this->params);
             $xoopsapi->_setUser($this->user, $this->isadmin);
             $ret =& $xoopsapi->getRecentPosts();
             if (is_array($ret)) {
@@ -229,6 +244,9 @@ class BloggerApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function getUsersBlogs()
     {
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
@@ -244,6 +262,9 @@ class BloggerApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function getUserInfo()
     {
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
@@ -260,6 +281,9 @@ class BloggerApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function getTemplate()
     {
         if (!$this->_checkUser($this->params[2], $this->params[3])) {
@@ -279,6 +303,9 @@ class BloggerApi extends XoopsXmlRpcApi
         }
     }
 
+    /**
+     * @return void
+     */
     public function setTemplate()
     {
         if (!$this->_checkUser($this->params[2], $this->params[3])) {

@@ -15,8 +15,11 @@
  * @author              Maxime Cointin (AKA Kraven30)
  * @package             system
  */
+
 /* @var XoopsUser $xoopsUser */
+
 /* @var XoopsModule $xoopsModule */
+
 use Xmf\Request;
 
 require dirname(dirname(dirname(dirname(__DIR__)))) . '/mainfile.php';
@@ -35,7 +38,6 @@ if (isset($_REQUEST['op'])) {
 }
 
 switch ($op) {
-
     // Display post
     case 'display_post':
         global $xoopsDB;
@@ -48,18 +50,28 @@ switch ($op) {
 
         $tables = array();
         // Count comments (approved only: com_status == XOOPS_COMMENT_ACTIVE)
-        $tables[] = array('table_name' => 'xoopscomments', 'uid_column' => 'com_uid', 'criteria' => new Criteria('com_status', XOOPS_COMMENT_ACTIVE));
+        $tables[] = array(
+            'table_name' => 'xoopscomments',
+            'uid_column' => 'com_uid',
+            'criteria'   => new Criteria('com_status', XOOPS_COMMENT_ACTIVE),
+        );
         // Count forum posts
         if (XoopsModule::getByDirname('newbb')) {
             // Added support for NewBB 5.0 new table naming convention
             $tableTest = new \Xmf\Database\Tables();
-            if($tableTest->useTable('newbb_posts')) {
-                $tables[] = array('table_name' => 'newbb_posts', 'uid_column' => 'uid');
+            if ($tableTest->useTable('newbb_posts')) {
+                $tables[] = array(
+                    'table_name' => 'newbb_posts',
+                    'uid_column' => 'uid',
+                );
             } else {
-                $tables[] = array('table_name' => 'bb_posts', 'uid_column' => 'uid');
+                $tables[] = array(
+                    'table_name' => 'bb_posts',
+                    'uid_column' => 'uid',
+                );
             }
         }
-        $uid         = Request::getInt('uid', 0);
+        $uid = Request::getInt('uid', 0);
         $total_posts = 0;
         foreach ($tables as $table) {
             $criteria = new CriteriaCompo();

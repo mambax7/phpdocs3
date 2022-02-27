@@ -26,7 +26,7 @@
  * @author           DuGris (aka L. JEN) <dugris@frxoops.org>
  **/
 
-require_once './include/common.inc.php';
+require_once __DIR__ . '/include/common.inc.php';
 defined('XOOPS_INSTALL') || die('XOOPS Installation wizard die');
 
 $pageHasForm = false;
@@ -50,60 +50,61 @@ $writeFiles = array(
 $writeCheck = checkFileWriteablity($writeFiles);
 if (true === $writeCheck) {
     $rewrite = array(
-        'GROUP_ADMIN' => 1,
-        'GROUP_USERS' => 2,
-        'GROUP_ANONYMOUS' => 3);
+        'GROUP_ADMIN'     => 1,
+        'GROUP_USERS'     => 2,
+        'GROUP_ANONYMOUS' => 3,
+    );
     $rewrite = array_merge($rewrite, $vars);
 
-    $result = writeConfigurationFile($rewrite, $vars['VAR_PATH'] . '/data', 'secure.dist.php', 'secure.php');
+    $result           = writeConfigurationFile($rewrite, $vars['VAR_PATH'] . '/data', 'secure.dist.php', 'secure.php');
     $GLOBALS['error'] = ($result !== true);
     if ($result === true) {
-        $result = copyConfigDistFiles($vars);
+        $result           = copyConfigDistFiles($vars);
         $GLOBALS['error'] = ($result !== true);
     }
     if ($result === true) {
-        $result = writeConfigurationFile($rewrite, $vars['ROOT_PATH'], 'mainfile.dist.php', 'mainfile.php');
+        $result           = writeConfigurationFile($rewrite, $vars['ROOT_PATH'], 'mainfile.dist.php', 'mainfile.php');
         $GLOBALS['error'] = ($result !== true);
     }
 
     $_SESSION['settings']['authorized'] = false;
 
     if ($result === true) {
-        $_SESSION['UserLogin'] = true;
+        $_SESSION['UserLogin']              = true;
         $_SESSION['settings']['authorized'] = true;
         ob_start();
         ?>
 
         <div class="alert alert-success"><span class="fa fa-check text-success"></span> <?php echo SAVED_MAINFILE; ?></div>
         <div class='well'><?php echo SAVED_MAINFILE_MSG; ?>
-        <ul class='diags'>
-            <?php
-            foreach ($vars as $k => $v) {
-                if ($k === 'authorized') {
-                    continue;
+            <ul class='diags'>
+                <?php
+                foreach ($vars as $k => $v) {
+                    if ($k === 'authorized') {
+                        continue;
+                    }
+                    echo "<li><strong>XOOPS_{$k}</strong> " . IS_VALOR . " {$v}</li>";
                 }
-                echo "<li><strong>XOOPS_{$k}</strong> " . IS_VALOR . " {$v}</li>";
-            }
-            ?>
-        </ul>
+                ?>
+            </ul>
         </div>
         <?php
         $content = ob_get_contents();
         ob_end_clean();
     } else {
         $GLOBALS['error'] = true;
-        $pageHasForm = true; // will redirect to same page
-        $content = '<div class="alert alert-danger"><span class="fa fa-ban text-danger"></span> ' . $result . '</div>';
+        $pageHasForm      = true; // will redirect to same page
+        $content          = '<div class="alert alert-danger"><span class="fa fa-ban text-danger"></span> ' . $result . '</div>';
     }
 } else {
     $content = '';
     foreach ($writeCheck as $errorMsg) {
         $GLOBALS['error'] = true;
-        $pageHasForm = true; // will redirect to same page
-        $content .= '<div class="alert alert-danger"><span class="fa fa-ban text-danger"></span> ' . $errorMsg . '</div>' . "\n";
+        $pageHasForm      = true; // will redirect to same page
+        $content          .= '<div class="alert alert-danger"><span class="fa fa-ban text-danger"></span> ' . $errorMsg . '</div>' . "\n";
     }
 }
-include './include/install_tpl.php';
+include __DIR__ . '/include/install_tpl.php';
 
 /**
  * Copy a configuration file from template, then rewrite with actual configuration values
@@ -115,9 +116,12 @@ include './include/install_tpl.php';
  *
  * @return true|string true on success, error message on failure
  */
-function writeConfigurationFile($vars, $path, $sourceName, $fileName)
+function writeConfigurationFile(array $vars, $path, $sourceName, $fileName)
 {
-    $path .= '/';
+    $path       = (string)$path;
+    $sourceName = (string)$sourceName;
+    $fileName   = (string)$fileName;
+    $path       .= '/';
     if (!@copy($path . $sourceName, $path . $fileName)) {
         return sprintf(ERR_COPY_MAINFILE, $fileName);
     } else {
@@ -150,7 +154,6 @@ function writeConfigurationFile($vars, $path, $sourceName, $fileName)
     return true;
 }
 
-
 /**
  * Get file stats
  *
@@ -160,7 +163,8 @@ function writeConfigurationFile($vars, $path, $sourceName, $fileName)
  */
 function getStats($filename)
 {
-    $stat = stat($filename);
+    $filename = (string)$filename;
+    $stat     = stat($filename);
     if (false === $stat) {
         return false;
     }
@@ -193,23 +197,23 @@ function getTmpStats()
  *
  * @return array selected information gleaned from $stat
  */
-function prepStats($stat)
+function prepStats(array $stat)
 {
-    $subSet = array();
-    $mode = $stat['mode'];
+    $subSet         = array();
+    $mode           = $stat['mode'];
     $subSet['mode'] = $mode;
-    $subSet['uid'] = $stat['uid'];
-    $subSet['gid'] = $stat['gid'];
+    $subSet['uid']  = $stat['uid'];
+    $subSet['gid']  = $stat['gid'];
 
-    $subSet['user']['read']   = (bool) ($mode & 0400);
-    $subSet['user']['write']  = (bool) ($mode & 0200);
-    $subSet['user']['exec']   = (bool) ($mode & 0100);
-    $subSet['group']['read']  = (bool) ($mode & 040);
-    $subSet['group']['write'] = (bool) ($mode & 020);
-    $subSet['group']['exec']  = (bool) ($mode & 010);
-    $subSet['other']['read']  = (bool) ($mode & 04);
-    $subSet['other']['write'] = (bool) ($mode & 02);
-    $subSet['other']['exec']  = (bool) ($mode & 01);
+    $subSet['user']['read']   = (bool)($mode & 0400);
+    $subSet['user']['write']  = (bool)($mode & 0200);
+    $subSet['user']['exec']   = (bool)($mode & 0100);
+    $subSet['group']['read']  = (bool)($mode & 040);
+    $subSet['group']['write'] = (bool)($mode & 020);
+    $subSet['group']['exec']  = (bool)($mode & 010);
+    $subSet['other']['read']  = (bool)($mode & 04);
+    $subSet['other']['write'] = (bool)($mode & 02);
+    $subSet['other']['exec']  = (bool)($mode & 01);
 
     return $subSet;
 }
@@ -221,7 +225,7 @@ function prepStats($stat)
  *
  * @return string[]|true true if no issues found, array
  */
-function checkFileWriteablity($files)
+function checkFileWriteablity(array $files)
 {
     if (isset($_POST['op']) && $_POST['op'] === 'proceed') {
         return true; // user said skip this
@@ -234,33 +238,37 @@ function checkFileWriteablity($files)
     $message = array();
 
     foreach ($files as $file) {
-        $dirName = dirname($file);
+        $dirName  = dirname($file);
         $fileName = basename($file);
-        $dirStat = getStats($dirName);
+        $dirStat  = getStats($dirName);
         if (false !== $dirStat) {
             $uid = $tmpStats['uid'];
             $gid = $tmpStats['gid'];
             if (!(($uid === $dirStat['uid'] && $dirStat['user']['write'])
-                || ($gid === $dirStat['gid'] && $dirStat['group']['write'])
-                || (file_exists($file) && is_writable($file))
-                || (false !== stripos(PHP_OS, 'WIN'))
+                  || ($gid === $dirStat['gid'] && $dirStat['group']['write'])
+                  || (file_exists($file) && is_writable($file))
+                  || (false !== stripos(PHP_OS, 'WIN'))
             )
             ) {
-                $uidStr = (string) $uid;
-                $dUidStr = (string) $dirStat['uid'];
-                $gidStr = (string) $gid;
-                $dGidStr = (string) $dirStat['gid'];
+                $uidStr  = (string)$uid;
+                $dUidStr = (string)$dirStat['uid'];
+                $gidStr  = (string)$gid;
+                $dGidStr = (string)$dirStat['gid'];
                 if (function_exists('posix_getpwuid')) {
+                    /** @var array $tempUsr */
                     $tempUsr = posix_getpwuid($uid);
-                    $uidStr = isset($tempUsr['name']) ? $tempUsr['name'] : (string) $uid;
+                    $uidStr  = isset($tempUsr['name']) ? $tempUsr['name'] : (string)$uid;
+                    /** @var array $tempUsr */
                     $tempUsr = posix_getpwuid($dirStat['uid']);
-                    $dUidStr = isset($tempUsr['name']) ? $tempUsr['name'] : (string) $dirStat['uid'];
+                    $dUidStr = isset($tempUsr['name']) ? $tempUsr['name'] : (string)$dirStat['uid'];
                 }
                 if (function_exists('posix_getgrgid')) {
+                    /** @var array $tempGrp */
                     $tempGrp = posix_getgrgid($gid);
-                    $gidStr = isset($tempGrp['name']) ? $tempGrp['name'] : (string) $gid;
+                    $gidStr  = isset($tempGrp['name']) ? $tempGrp['name'] : (string)$gid;
+                    /** @var array $tempGrp */
                     $tempGrp = posix_getgrgid($dirStat['gid']);
-                    $dGidStr = isset($tempGrp['name']) ? $tempGrp['name'] : (string) $dirStat['gid'];
+                    $dGidStr = isset($tempGrp['name']) ? $tempGrp['name'] : (string)$dirStat['gid'];
                 }
                 $message[] = sprintf(
                     CHMOD_CHGRP_ERROR,
@@ -280,24 +288,24 @@ function checkFileWriteablity($files)
 /**
  * Install working versions of various *.dist.php files to xoops_data/configs/
  *
- * @param $vars array of system variables, we care about ROOT_PATH and VAR_PATH keys
+ * @param array $vars of system variables, we care about ROOT_PATH and VAR_PATH keys
  *
  * @return true|string true if all files were copied, otherwise error message
  */
-function copyConfigDistFiles($vars)
+function copyConfigDistFiles(array $vars)
 {
     $copied = 0;
     $failed = 0;
-    $logs = array();
+    $logs   = array();
 
     /* xoopsconfig.php */
-    $source = $vars['VAR_PATH'] . '/configs/xoopsconfig.dist.php';
+    $source      = $vars['VAR_PATH'] . '/configs/xoopsconfig.dist.php';
     $destination = $vars['VAR_PATH'] . '/configs/xoopsconfig.php';
     if (!file_exists($destination)) { // don't overwrite anything
         $result = copy($source, $destination);
         $result ? ++$copied : ++$failed;
         if (false === $result) {
-            $logs[] = sprintf(ERR_COPY_CONFIG_FILE,  'configs/' . basename($destination));
+            $logs[] = sprintf(ERR_COPY_CONFIG_FILE, 'configs/' . basename($destination));
         }
     }
 
@@ -317,7 +325,7 @@ function copyConfigDistFiles($vars)
             $result ? ++$copied : ++$failed;
             if (false === $result) {
                 $logs[] = sprintf('captcha config file copy to %s failed', $destination);
-                $logs[] = sprintf(ERR_COPY_CONFIG_FILE,  'captcha/' . $destination);
+                $logs[] = sprintf(ERR_COPY_CONFIG_FILE, 'captcha/' . $destination);
             }
         }
     }

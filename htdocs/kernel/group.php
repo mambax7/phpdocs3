@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -40,7 +41,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable groupid
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -50,7 +51,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable groupid
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function groupid($format = '')
@@ -60,7 +61,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable name
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function name($format = '')
@@ -70,7 +71,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable description
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function description($format = '')
@@ -80,7 +81,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable group_type
-     * @param  string $format
+     * @param string $format
      * @return mixed
      */
     public function group_type($format = '')
@@ -118,7 +119,7 @@ class XoopsGroupHandler extends XoopsObjectHandler
     /**
      * create a new {@link XoopsGroup} object
      *
-     * @param  bool $isNew mark the new object as "new"?
+     * @param bool $isNew mark the new object as "new"?
      * @return XoopsGroup XoopsGroup reference to the new object
      *
      */
@@ -135,13 +136,13 @@ class XoopsGroupHandler extends XoopsObjectHandler
     /**
      * retrieve a specific group
      *
-     * @param  int $id ID of the group to get
-     * @return XoopsGroup|false XoopsGroup reference to the group object, FALSE if failed
+     * @param int $id ID of the group to get
+     * @return false|\XoopsGroup XoopsGroup reference to the group object, FALSE if failed
      */
     public function get($id)
     {
-        $id    = (int)$id;
-        $group = false;
+        $id = (int)$id;
+        $group  = false;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('groups') . ' WHERE groupid=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -149,7 +150,7 @@ class XoopsGroupHandler extends XoopsObjectHandler
             }
             $numrows = $this->db->getRowsNum($result);
             if ($numrows == 1) {
-                $group = new XoopsGroup();
+                $group = new \XoopsGroup();
                 $group->assignVars($this->db->fetchArray($result));
             }
         }
@@ -220,9 +221,9 @@ class XoopsGroupHandler extends XoopsObjectHandler
     /**
      * retrieve groups from the database
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the groups
-     * @param  bool            $id_as_key should the groups' IDs be used as keys for the associative array?
-     * @return mixed           Array of groups
+     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the groups
+     * @param bool                          $id_as_key should the groups' IDs be used as keys for the associative array?
+     * @return array           Array of groups
      */
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
     {
@@ -230,7 +231,7 @@ class XoopsGroupHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('groups');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -303,8 +304,8 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * create a new membership
      *
-     * @param  bool $isNew should the new object be set to "new"?
-     * @return XoopsMembership XoopsMembership
+     * @param bool $isNew should the new object be set to "new"?
+     * @return XoopsMembership
      */
     public function create($isNew = true)
     {
@@ -319,13 +320,13 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * retrieve a membership
      *
-     * @param  int $id ID of the membership to get
-     * @return mixed reference to the object if successful, else FALSE
+     * @param int $id ID of the membership to get
+     * @return false|\XoopsMembership reference to the object if successful, else FALSE
      */
     public function get($id)
     {
-        $id    = (int)$id;
-        $mship = false;
+        $id = (int)$id;
+        $mship  = false;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('groups_users_link') . ' WHERE linkid=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -344,7 +345,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * inserts a membership in the database
      *
-     * @param  XoopsObject|XoopsMembership $mship a XoopsMembership object
+     * @param XoopsObject|XoopsMembership $mship a XoopsMembership object
      *
      * @return bool true on success, otherwise false
      */
@@ -383,7 +384,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * delete a membership from the database
      *
-     * @param  XoopsObject|XoopsMembership $mship a XoopsMembership object
+     * @param XoopsObject|XoopsMembership $mship a XoopsMembership object
      *
      * @return bool true on success, otherwise false
      */
@@ -405,8 +406,8 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * retrieve memberships from the database
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} conditions to meet
-     * @param  bool            $id_as_key should the ID be used as the array's key?
+     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} conditions to meet
+     * @param bool                          $id_as_key should the ID be used as the array's key?
      * @return array           array of references
      */
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -415,7 +416,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('groups_users_link');
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql .= ' ' . $criteria->renderWhere();
+            $sql   .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -440,7 +441,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * count how many memberships meet the conditions
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} conditions to meet
+     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} conditions to meet
      * @return int
      */
     public function getCount(CriteriaElement $criteria = null)
@@ -461,7 +462,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * delete all memberships meeting the conditions
      *
-     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} with conditions to meet
+     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} with conditions to meet
      * @return bool
      */
     public function deleteAll(CriteriaElement $criteria = null)
@@ -507,7 +508,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
      * @param int $groupid    ID of the group
      * @param int $limit      number of entries to return
      * @param int $start      offset of first entry to return
-     * @internal param bool $asobject return users as {@link XoopsUser} objects? objects?
+     * @internal              param bool $asobject return users as {@link XoopsUser} objects? objects?
      *                        FALSE will return arrays
      * @return array array of users belonging to the group
      */

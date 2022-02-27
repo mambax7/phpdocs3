@@ -47,10 +47,11 @@ class XoopsLocalAbstract
         return $str;
     }
     // Each local language should define its own equalient utf8_encode
+
     /**
      * XoopsLocalAbstract::utf8_encode()
      *
-     * @param  mixed $text
+     * @param mixed $text
      * @return string
      */
     public static function utf8_encode($text)
@@ -67,9 +68,9 @@ class XoopsLocalAbstract
     /**
      * XoopsLocalAbstract::convert_encoding()
      *
-     * @param  mixed  $text
-     * @param  string $to
-     * @param  string $from
+     * @param mixed  $text
+     * @param string $to
+     * @param string $from
      * @return mixed|string
      */
     public static function convert_encoding($text, $to = 'utf-8', $from = '')
@@ -99,7 +100,7 @@ class XoopsLocalAbstract
     /**
      * XoopsLocalAbstract::trim()
      *
-     * @param  mixed $text
+     * @param mixed $text
      * @return string
      */
     public static function trim($text)
@@ -111,6 +112,7 @@ class XoopsLocalAbstract
 
     /**
      * Get description for setting time format
+     * @return string
      */
     public static function getTimeFormatDesc()
     {
@@ -121,9 +123,9 @@ class XoopsLocalAbstract
      * Function to display formatted times in user timezone
      *
      * Setting $timeoffset to null (by default) will skip timezone calculation for user, using default timezone instead, which is a MUST for cached contents
-     * @param        $time
-     * @param string $format
-     * @param string|null    $timeoffset
+     * @param             $time
+     * @param string      $format
+     * @param string|null $timeoffset
      * @return string
      */
     public static function formatTimestamp($time, $format = 'l', $timeoffset = null)
@@ -222,7 +224,7 @@ class XoopsLocalAbstract
     /**
      * XoopsLocalAbstract::number_format()
      *
-     * @param  mixed $number
+     * @param mixed $number
      * @return mixed
      */
     public function number_format($number)
@@ -233,8 +235,8 @@ class XoopsLocalAbstract
     /**
      * XoopsLocalAbstract::money_format()
      *
-     * @param  mixed $format
-     * @param  mixed $number
+     * @param mixed $format
+     * @param mixed $number
      * @return mixed
      */
     public function money_format($format, $number)
@@ -245,8 +247,8 @@ class XoopsLocalAbstract
     /**
      * XoopsLocalAbstract::__call()
      *
-     * @param  mixed $name
-     * @param  mixed $args
+     * @param mixed $name
+     * @param mixed $args
      * @return mixed
      */
     public function __call($name, $args)

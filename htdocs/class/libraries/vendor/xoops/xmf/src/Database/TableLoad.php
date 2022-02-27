@@ -27,7 +27,6 @@ use Xmf\Yaml;
  */
 class TableLoad
 {
-
     /**
      * loadTableFromArray
      *
@@ -44,21 +43,21 @@ class TableLoad
         $db = \XoopsDatabaseFactory::getDatabaseConnection();
 
         $prefixedTable = $db->prefix($table);
-        $count = 0;
+        $count         = 0;
 
         foreach ($data as $row) {
-            $insertInto = 'INSERT INTO ' . $prefixedTable . ' (';
+            $insertInto  = 'INSERT INTO ' . $prefixedTable . ' (';
             $valueClause = ' VALUES (';
-            $first = true;
+            $first       = true;
             foreach ($row as $column => $value) {
                 if ($first) {
                     $first = false;
                 } else {
-                    $insertInto .= ', ';
+                    $insertInto  .= ', ';
                     $valueClause .= ', ';
                 }
 
-                $insertInto .= '`' . $column . '`';
+                $insertInto  .= '`' . $column . '`';
                 $valueClause .= $db->quote($value);
             }
 
@@ -106,8 +105,8 @@ class TableLoad
         $db = \XoopsDatabaseFactory::getDatabaseConnection();
 
         $prefixedTable = $db->prefix($table);
-        $sql = 'TRUNCATE TABLE ' . $prefixedTable;
-        $result = $db->queryF($sql);
+        $sql           = 'TRUNCATE TABLE ' . $prefixedTable;
+        $result        = $db->queryF($sql);
         if (false !== $result) {
             $result = $db->getAffectedRows();
         }
@@ -117,8 +116,8 @@ class TableLoad
     /**
      * countRows - get count of rows in a table
      *
-     * @param string           $table    name of table to count
-     * @param \CriteriaElement $criteria optional criteria
+     * @param string                $table    name of table to count
+     * @param \CriteriaElement|null $criteria optional criteria
      *
      * @return int number of rows
      */
@@ -128,14 +127,14 @@ class TableLoad
         $db = \XoopsDatabaseFactory::getDatabaseConnection();
 
         $prefixedTable = $db->prefix($table);
-        $sql = 'SELECT COUNT(*) as `count` FROM ' . $prefixedTable . ' ';
+        $sql           = 'SELECT COUNT(*) as `count` FROM ' . $prefixedTable . ' ';
         if (isset($criteria) && is_subclass_of($criteria, '\CriteriaElement')) {
             /* @var  \CriteriaCompo $criteria */
             $sql .= $criteria->renderWhere();
         }
         $result = $db->query($sql);
-        $row = $db->fetchArray($result);
-        $count = $row['count'];
+        $row    = $db->fetchArray($result);
+        $count  = $row['count'];
         $db->freeRecordSet($result);
         return (int)$count;
     }
@@ -143,9 +142,9 @@ class TableLoad
     /**
      * extractRows - get rows, all or a subset, from a table as an array
      *
-     * @param string           $table       name of table to count
-     * @param \CriteriaElement $criteria    optional criteria
-     * @param string[]         $skipColumns do not include columns in this list
+     * @param string                $table       name of table to count
+     * @param \CriteriaElement|null $criteria    optional criteria
+     * @param string[]              $skipColumns do not include columns in this list
      *
      * @return array of table rows
      */
@@ -155,12 +154,12 @@ class TableLoad
         $db = \XoopsDatabaseFactory::getDatabaseConnection();
 
         $prefixedTable = $db->prefix($table);
-        $sql = 'SELECT * FROM ' . $prefixedTable . ' ';
+        $sql           = 'SELECT * FROM ' . $prefixedTable . ' ';
         if (isset($criteria) && is_subclass_of($criteria, '\CriteriaElement')) {
             /* @var  \CriteriaCompo $criteria */
             $sql .= $criteria->renderWhere();
         }
-        $rows = array();
+        $rows   = array();
         $result = $db->query($sql);
         if ($result) {
             while (false !== ($row = $db->fetchArray($result))) {
@@ -184,10 +183,10 @@ class TableLoad
     /**
      * Save table data to a YAML file
      *
-     * @param string           $table name of table to load without prefix
-     * @param string           $yamlFile name of file containing data dump in YAML format
-     * @param \CriteriaElement $criteria optional criteria
-     * @param string[]         $skipColumns do not include columns in this list
+     * @param string                $table       name of table to load without prefix
+     * @param string                $yamlFile    name of file containing data dump in YAML format
+     * @param \CriteriaElement|null $criteria    optional criteria
+     * @param string[]              $skipColumns do not include columns in this list
      *
      * @return bool true on success, false on error
      */

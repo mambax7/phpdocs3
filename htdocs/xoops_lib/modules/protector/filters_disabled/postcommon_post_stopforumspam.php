@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Check post attempts for "spaminess" on stopforumspam.com
  * Please see http://www.stopforumspam.com/usage before enabling for restrictions and conditions
@@ -15,7 +16,6 @@ class Protector_postcommon_post_stopforumspam extends ProtectorFilterAbstract
 {
     /** @var int after this number of posts by the user, skip this filter */
     protected $minPosts = 5;
-
     /** @var float $minimumConfidence
      * This is a percentage confidence as reported by stopforumspam api.
      * When the reported confidence for any entry is above this, the post will be denied.
@@ -40,10 +40,10 @@ class Protector_postcommon_post_stopforumspam extends ProtectorFilterAbstract
             return true;
         }
 
-        $report = array();
+        $report          = array();
         $report['email'] = $xoopsUser->email();
-        $report['ip'] = $_SERVER['REMOTE_ADDR'];
-        $result = $this->protector->stopForumSpamLookup($report['email'], $report['ip'], null);
+        $report['ip']    = $_SERVER['REMOTE_ADDR'];
+        $result          = $this->protector->stopForumSpamLookup($report['email'], $report['ip'], null);
         if (false === $result || isset($result['http_code'])) {
             return true;
         }
@@ -54,14 +54,14 @@ class Protector_postcommon_post_stopforumspam extends ProtectorFilterAbstract
             return true;
         }
         foreach ($result as $entry) {
-            if (isset($entry['confidence']) && ((float) $entry['confidence'] > $this->minimumConfidence)) {
-                $report['result'] = $result;
+            if (isset($entry['confidence']) && ((float)$entry['confidence'] > $this->minimumConfidence)) {
+                $report['result']         = $result;
                 $this->protector->message = json_encode($report);
                 $this->protector->output_log('SFS SPAMMER Check', $xoopsUser->uid());
                 $this->protector->deactivateCurrentUser();
                 // write any message as you like
                 echo 'Your post has been denied. '
-                    . 'If you feel this is in error, please contact the site administrator.';
+                     . 'If you feel this is in error, please contact the site administrator.';
                 exit;
             }
         }

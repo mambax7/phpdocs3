@@ -65,7 +65,7 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
      * Mark a message as read
      *
      * @param PmMessage $pm {@link PmMessage} object
-     * @param int    $val
+     * @param int       $val
      *
      * @return bool
      */
@@ -76,8 +76,8 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
 
     /**
      * Mark a message as from_delete = 1 or removes it if the recipient has also deleted it
-     * @param  PmMessage $pm {@link PmMessage} object
-     * @param  int    $val
+     * @param PmMessage $pm {@link PmMessage} object
+     * @param int       $val
      * @return bool
      */
     public function setFromdelete(PmMessage $pm, $val = 1)
@@ -91,8 +91,8 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
 
     /**
      * Mark a message as to_delete = 1 or removes it if the sender has also deleted it or sent by anonymous
-     * @param  PmMessage $pm {@link PmMessage} object
-     * @param  int    $val
+     * @param PmMessage $pm {@link PmMessage} object
+     * @param int       $val
      * @return bool
      */
     public function setTodelete(PmMessage $pm, $val = 1)
@@ -111,8 +111,8 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
 
     /**
      * Mark a message as from_save = 1
-     * @param  PmMessage $pm {@link PmMessage} object
-     * @param  int    $val
+     * @param PmMessage $pm {@link PmMessage} object
+     * @param int       $val
      * @return bool
      */
     public function setFromsave(PmMessage $pm, $val = 1)
@@ -122,8 +122,8 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
 
     /**
      * Mark a message as to_save = 1
-     * @param  PmMessage $pm {@link PmMessage} object
-     * @param  int    $val
+     * @param PmMessage $pm {@link PmMessage} object
+     * @param int       $val
      * @return bool
      */
     public function setTosave(PmMessage $pm, $val = 1)
@@ -133,9 +133,9 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
 
     /**
      * get user's message count in savebox
-     * @param  XoopsUser $user
+     * @param \XoopsUser|null $user
      * @return int
-     **/
+     */
     public function getSavecount(XoopsUser $user = null)
     {
         if (!is_object($user)) {
@@ -155,8 +155,8 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
 
     /**
      * Send a message to user's email
-     * @param  PmMessage $pm   message object
-     * @param  XoopsUser $user user object
+     * @param PmMessage $pm   message object
+     * @param XoopsUser $user user object
      * @return bool
      **/
     public function sendEmail(PmMessage $pm, XoopsUser $user)
@@ -166,21 +166,21 @@ class PmMessageHandler extends XoopsPersistableObjectHandler
         if (!is_object($user)) {
             $user =& $GLOBALS['xoopsUser'];
         }
-        $msg = sprintf(_PM_EMAIL_DESC, $user->getVar('uname'));
-        $msg .= "\n\n";
-        $msg .= formatTimestamp($pm->getVar('msg_time'));
-        $msg .= "\n";
+        $msg  = sprintf(_PM_EMAIL_DESC, $user->getVar('uname'));
+        $msg  .= "\n\n";
+        $msg  .= formatTimestamp($pm->getVar('msg_time'));
+        $msg  .= "\n";
         $from = new XoopsUser($pm->getVar('from_userid'));
         $to   = new XoopsUser($pm->getVar('to_userid'));
-        $msg .= sprintf(_PM_EMAIL_FROM, $from->getVar('uname') . ' (' . XOOPS_URL . '/userinfo.php?uid=' . $pm->getVar('from_userid') . ')');
-        $msg .= "\n";
-        $msg .= sprintf(_PM_EMAIL_TO, $to->getVar('uname') . ' (' . XOOPS_URL . '/userinfo.php?uid=' . $pm->getVar('to_userid') . ')');
-        $msg .= "\n";
-        $msg .= _PM_EMAIL_MESSAGE . ":\n";
-        $msg .= "\n" . $pm->getVar('subject') . "\n";
+        $msg  .= sprintf(_PM_EMAIL_FROM, $from->getVar('uname') . ' (' . XOOPS_URL . '/userinfo.php?uid=' . $pm->getVar('from_userid') . ')');
+        $msg  .= "\n";
+        $msg  .= sprintf(_PM_EMAIL_TO, $to->getVar('uname') . ' (' . XOOPS_URL . '/userinfo.php?uid=' . $pm->getVar('to_userid') . ')');
+        $msg  .= "\n";
+        $msg  .= _PM_EMAIL_MESSAGE . ":\n";
+        $msg  .= "\n" . $pm->getVar('subject') . "\n";
         $msg .= "\n" . strip_tags(str_replace(array('<p>', '</p>', '<br>', '<br>'), "\n", $pm->getVar('msg_text'))) . "\n\n";
-        $msg .= "--------------\n";
-        $msg .= $xoopsConfig['sitename'] . ': ' . XOOPS_URL . "\n";
+        $msg  .= "--------------\n";
+        $msg  .= $xoopsConfig['sitename'] . ': ' . XOOPS_URL . "\n";
 
         $xoopsMailer = xoops_getMailer();
         $xoopsMailer->useMail();

@@ -19,7 +19,7 @@ class Upgrade_2511 extends XoopsUpgrade
     public function __construct()
     {
         parent::__construct(basename(__DIR__));
-        $this->tasks = array(
+        $this->tasks        = array(
             'bannerintsize',
             'captchadata',
             'qmail',
@@ -27,7 +27,7 @@ class Upgrade_2511 extends XoopsUpgrade
             'textsanitizer',
             'xoopsconfig',
         );
-        $this->usedFiles = array();
+        $this->usedFiles    = array();
         $this->pathsToCheck = array(
             XOOPS_ROOT_PATH . '/cache',
             XOOPS_ROOT_PATH . '/class',
@@ -52,16 +52,15 @@ class Upgrade_2511 extends XoopsUpgrade
         );
     }
 
-
     /**
      * Determine if columns are declared mediumint, and if
      * so, queue ddl to alter to int.
      *
-     * @param $migrate           \Xmf\Database\Tables
-     * @param $bannerTableName   string
-     * @param $bannerColumnNames string[] array of columns to check
+     * @param \Xmf\Database\Tables $migrate
+     * @param string               $bannerTableName
+     * @param string[]             $bannerColumnNames array of columns to check
      *
-     * @return integer count of queue items added
+     * @return int count of queue items added
      */
     protected function fromMediumToInt(Tables $migrate, $bannerTableName, $bannerColumnNames)
     {
@@ -77,8 +76,17 @@ class Upgrade_2511 extends XoopsUpgrade
         return $count;
     }
 
+    /**
+     * @var string
+     */
     private $bannerTableName = 'banner';
-    private $bannerColumnNames = array('impmade', 'clicks');
+    /**
+     * @var array
+     */
+    private $bannerColumnNames = array(
+        'impmade',
+        'clicks',
+    );
 
     /**
      * Increase count columns from mediumint to int
@@ -88,9 +96,9 @@ class Upgrade_2511 extends XoopsUpgrade
     public function check_bannerintsize()
     {
         $migrate = new Tables();
-        $count = $this->fromMediumToInt($migrate, $this->bannerTableName, $this->bannerColumnNames);
+        $count   = $this->fromMediumToInt($migrate, $this->bannerTableName, $this->bannerColumnNames);
 
-        return $count==0;
+        return $count == 0;
     }
 
     /**
@@ -106,7 +114,8 @@ class Upgrade_2511 extends XoopsUpgrade
 
         $result = $migrate->executeQueue(true);
         if (false === $result) {
-            $this->logs[] = sprintf('Migration of %s table failed. Error: %s - %s' .
+            $this->logs[] = sprintf(
+                'Migration of %s table failed. Error: %s - %s' .
                 $this->bannerTableName,
                 $migrate->getLastErrNo(),
                 $migrate->getLastError()
@@ -114,7 +123,7 @@ class Upgrade_2511 extends XoopsUpgrade
             return false;
         }
 
-        return $count!==0;
+        return $count !== 0;
     }
 
     /**
@@ -130,7 +139,7 @@ class Upgrade_2511 extends XoopsUpgrade
         $table = $db->prefix('configoption');
 
         $sql = sprintf(
-            'SELECT count(*) FROM `%s` '
+            'SELECT COUNT(*) FROM `%s` '
             . "WHERE `conf_id` = 64 AND `confop_name` = 'qmail'",
             $db->escape($table)
         );
@@ -141,7 +150,7 @@ class Upgrade_2511 extends XoopsUpgrade
             $row = $db->fetchRow($result);
             if ($row) {
                 $count = $row[0];
-                return (0 === (int) $count) ? false : true;
+                return (0 === (int)$count) ? false : true;
             }
         }
         return false;
@@ -161,7 +170,11 @@ class Upgrade_2511 extends XoopsUpgrade
         $migrate->useTable('configoption');
         $migrate->insert(
             'configoption',
-            array('confop_name' => 'qmail', 'confop_value' => 'qmail', 'conf_id' => 64)
+            array(
+                'confop_name'  => 'qmail',
+                'confop_value' => 'qmail',
+                'conf_id'      => 64,
+            )
         );
         return $migrate->executeQueue(true);
     }
@@ -179,7 +192,7 @@ class Upgrade_2511 extends XoopsUpgrade
 
     /**
      * Attempt to make the supplied path
-     * @param $newPath string
+     * @param string $newPath
      *
      * @return bool
      */
@@ -195,8 +208,8 @@ class Upgrade_2511 extends XoopsUpgrade
     /**
      * Copy file $source to $destination
      *
-     * @param $source      string
-     * @param $destination string
+     * @param string $source
+     * @param string $destination
      *
      * @return bool true if successful, false on error
      */
@@ -219,8 +232,8 @@ class Upgrade_2511 extends XoopsUpgrade
      */
     public function apply_captchadata()
     {
-        $returnResult = false;
-        $sourcePath = XOOPS_ROOT_PATH . '/class/captcha/';
+        $returnResult    = false;
+        $sourcePath      = XOOPS_ROOT_PATH . '/class/captcha/';
         $destinationPath = XOOPS_VAR_PATH . '/configs/captcha/';
 
         if (!file_exists($destinationPath)) {
@@ -233,9 +246,10 @@ class Upgrade_2511 extends XoopsUpgrade
         }
         while (false !== ($entry = $directory->read())) {
             if (false === strpos($entry, '.dist.')
-                && strpos($entry, 'config.') === 0 && '.php' === substr($entry, -4)) {
-                $src = $sourcePath . $entry;
-                $dest = $destinationPath . $entry;
+                && strpos($entry, 'config.') === 0
+                && '.php' === substr($entry, -4)) {
+                $src    = $sourcePath . $entry;
+                $dest   = $destinationPath . $entry;
                 $status = $this->copyFile($src, $dest);
                 if (false === $status) {
                     $returnResult = false;
@@ -265,7 +279,7 @@ class Upgrade_2511 extends XoopsUpgrade
      */
     public function apply_xoopsconfig()
     {
-        $source = XOOPS_VAR_PATH . '/configs/xoopsconfig.dist.php';
+        $source      = XOOPS_VAR_PATH . '/configs/xoopsconfig.dist.php';
         $destination = XOOPS_VAR_PATH . '/configs/xoopsconfig.php';
         if (!file_exists($destination)) { // don't overwrite anything
             $result = copy($source, $destination);
@@ -286,23 +300,23 @@ class Upgrade_2511 extends XoopsUpgrade
      * @var string[]
      */
     protected $textsanitizerConfigFiles = array(
-        'config.php' => 'config.php',
-        'censor/config.php' => 'config.censor.php',
-        'flash/config.php' => 'config.flash.php',
-        'image/config.php' => 'config.image.php',
-        'mms/config.php' => 'config.mms.php',
-        'rtsp/config.php' => 'config.rtsp.php',
+        'config.php'                 => 'config.php',
+        'censor/config.php'          => 'config.censor.php',
+        'flash/config.php'           => 'config.flash.php',
+        'image/config.php'           => 'config.image.php',
+        'mms/config.php'             => 'config.mms.php',
+        'rtsp/config.php'            => 'config.rtsp.php',
         'syntaxhighlight/config.php' => 'config.syntaxhighlight.php',
-        'textfilter/config.php' => 'config.textfilter.php',
-        'wiki/config.php' => 'config.wiki.php',
-        'wmp/config.php' => 'config.wmp.php',
+        'textfilter/config.php'      => 'config.textfilter.php',
+        'wiki/config.php'            => 'config.wiki.php',
+        'wmp/config.php'             => 'config.wmp.php',
     );
 
     /**
      * Build a list of config files using the existing textsanitizer/config.php
      * This should prevent some issues with customized systems.
      *
-     * @return string[] array of existing ts and extension config files
+     * @return void array of existing ts and extension config files
      *                  each as source name => destination name
      */
     protected function buildListTSConfigs()
@@ -316,13 +330,13 @@ class Upgrade_2511 extends XoopsUpgrade
                 foreach ($config['extentions'] as $module => $enabled) {
                     $source = "{$module}/config.php";
                     if (file_exists(XOOPS_ROOT_PATH . '/class/textsanitizer/' . $source)) {
-                        $destination = "{$module}/config.{$module}.php";
+                        $destination                             = "{$module}/config.{$module}.php";
                         $this->textsanitizerConfigFiles[$source] = $destination;
                     }
                 }
             }
         }
-        return;
+//        return ''; //mb TODO the return was set to void
     }
 
     /**
@@ -359,7 +373,7 @@ class Upgrade_2511 extends XoopsUpgrade
                 $result = copy($src, $dest);
                 if (false === $result) {
                     $this->logs[] = sprintf('textsanitizer file copy to %s failed', $destination);
-                    $return = false;
+                    $return       = false;
                 }
             }
         }
@@ -392,7 +406,7 @@ class Upgrade_2511 extends XoopsUpgrade
          * @return bool  true to continue, false to stop scan
          */
         $stopIfFound = function ($name) {
-            $ok = is_writable($name);
+            $ok   = is_writable($name);
             return !($ok);
         };
 
@@ -422,7 +436,6 @@ class Upgrade_2511 extends XoopsUpgrade
             }
             return true;
         };
-
 
         return $this->dirWalker($unlinkByName);
     }
@@ -463,13 +476,13 @@ class Upgrade_2511 extends XoopsUpgrade
         if (!is_dir($startingPath)) {
             return 0;
         }
-        $i = 0;
+        $i   = 0;
         $rdi = new \RecursiveDirectoryIterator($startingPath);
         $rii = new \RecursiveIteratorIterator($rdi);
         /** @var \SplFileInfo $fileinfo */
         foreach ($rii as $fileinfo) {
             if ($fileinfo->isFile() && 'index.html' === $fileinfo->getFilename() && 60 > $fileinfo->getSize()) {
-                $path = $fileinfo->getPath();
+                $path         = $fileinfo->getPath();
                 $testFilename = $path . '/index.php';
                 if (file_exists($testFilename)) {
                     $unlinkName = $path . '/' . $fileinfo->getFilename();

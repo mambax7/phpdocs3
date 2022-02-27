@@ -1,4 +1,5 @@
 <?php
+
 // start hack by Trabis
 if (!class_exists('ProtectorRegistry')) {
     exit('Registry not found');
@@ -22,7 +23,7 @@ $constpref = '_MI_' . strtoupper($mydirname);
 
 $modversion['name']           = constant($constpref . '_NAME');
 $modversion['description']    = constant($constpref . '_DESC');
-$modversion['version']        = (float) file_get_contents(__DIR__ . '/include/version.txt');
+$modversion['version']        = (float)file_get_contents(__DIR__ . '/include/version.txt');
 $modversion['credits']        = 'PEAK Corp.';
 $modversion['author']         = 'GIJ=CHECKMATE PEAK Corp.(http://www.peak.ne.jp/)';
 $modversion['help']           = 'page=help';
@@ -302,7 +303,12 @@ $modversion['config'][] = array(
     'formtype'    => 'select',
     'valuetype'   => 'int',
     'default'     => 1,
-    'options'     => array('xmlrpc' => 1, 'xmlrpc + 2.0.9.2 bugs' => 1025, '_NONE' => 0));
+    'options'     => array(
+        'xmlrpc'                => 1,
+        'xmlrpc + 2.0.9.2 bugs' => 1025,
+        '_NONE'                 => 0,
+    ),
+);
 $modversion['config'][] = array(
     'name'        => 'enable_dblayertrap',
     'title'       => $constpref . '_DBLAYERTRAP',

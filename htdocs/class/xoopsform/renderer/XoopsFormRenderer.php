@@ -21,12 +21,10 @@
 final class XoopsFormRenderer
 {
     const NOT_PERMITTED = 'Not supported for Singleton';
-
     /**
      * @var XoopsFormRenderer The reference to *Singleton* instance of this class
      */
     private static $instance;
-
     /**
      * @var XoopsFormRendererInterface The reference to *Singleton* instance of this class
      */

@@ -16,10 +16,12 @@
  * @author              Skalpa Keo <skalpa@xoops.org>
  * @author              Taiwen Jiang <phppp@users.sourceforge.net>
  */
+
 /* @var  XoopsUser $xoopsUser */
 
-function fatalPhpErrorHandler($e = null) {
-    $messageFormat = '<br><div>Fatal %s %s file: %s : %d </div>';
+function fatalPhpErrorHandler($e = null)
+{
+    $messageFormat  = '<br><div>Fatal %s %s file: %s : %d </div>';
     $exceptionClass = '\Exception';
     $throwableClass = '\Throwable';
     if ($e === null) {
@@ -33,6 +35,7 @@ function fatalPhpErrorHandler($e = null) {
         printf($messageFormat, get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
     }
 }
+
 register_shutdown_function('fatalPhpErrorHandler');
 set_exception_handler('fatalPhpErrorHandler');
 
@@ -67,7 +70,7 @@ require './class/abstract.php';
 require './class/patchstatus.php';
 require './class/control.php';
 
-$GLOBALS['error'] = false;
+$GLOBALS['error']          = false;
 $GLOBALS['upgradeControl'] = new UpgradeControl();
 
 $upgradeControl->storeMainfileCheck($needMainfileRewrite, $mainfileKeys);
@@ -89,8 +92,8 @@ if (!$xoopsUser || !$xoopsUser->isAdmin()) {
     } else {
         if (!empty($upgradeControl->needWriteFiles)) {
             echo '<div class="panel panel-danger">'
-                . '<div class="panel-heading">' . _SET_FILES_WRITABLE . '</div>'
-                . '<div class="panel-body"><ul class="fa-ul">';
+                 . '<div class="panel-heading">' . _SET_FILES_WRITABLE . '</div>'
+                 . '<div class="panel-body"><ul class="fa-ul">';
             foreach ($upgradeControl->needWriteFiles as $file) {
                 echo '<li><i class="fa-li fa fa-ban text-danger"></i>' . $file . '</li>';
                 $GLOBALS['error'] = true;
@@ -101,8 +104,8 @@ if (!$xoopsUser || !$xoopsUser->isAdmin()) {
             printf('<h2>' . _PERFORMING_UPGRADE . '</h2>', $next);
             /** @var XoopsUpgrade $upgrader */
             $upgradeClass = $upgradeControl->upgradeQueue[$next]->patchClass;
-            $upgrader = new $upgradeClass();
-            $res = $upgrader->apply();
+            $upgrader     = new $upgradeClass();
+            $res          = $upgrader->apply();
             if ($message = $upgrader->message()) {
                 echo '<div class="well">' . $message . '</div>';
             }
@@ -113,10 +116,10 @@ if (!$xoopsUser || !$xoopsUser->isAdmin()) {
         }
     }
     if (0 === $upgradeControl->countUpgradeQueue()) {
-            echo $upgradeControl->oneButtonContinueForm(
-                XOOPS_URL . '/modules/system/admin.php?fct=modulesadmin&amp;op=update&amp;module=system',
-                array()
-            );
+        echo $upgradeControl->oneButtonContinueForm(
+            XOOPS_URL . '/modules/system/admin.php?fct=modulesadmin&amp;op=update&amp;module=system',
+            array()
+        );
     } else {
         echo $upgradeControl->oneButtonContinueForm();
     }

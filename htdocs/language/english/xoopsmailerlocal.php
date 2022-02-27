@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  *  Xoops Language
  *
@@ -52,7 +53,6 @@ class XoopsMailerLocal extends XoopsMailer
         // $text = "=?{$this->charSet}?B?".base64_encode($text)."?=";
         return $text;
     }
-
 
     /**
      * Multibyte languages are encouraged to make their proper method for encoding Subject

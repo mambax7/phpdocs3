@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS form element of button
  *
@@ -47,7 +48,6 @@ class XoopsFormButton extends XoopsFormElement
      * @access    private
      */
     public $_value;
-
     /**
      * Type of the button. This could be either "button", "submit", or "reset"
      * @var string
@@ -74,7 +74,7 @@ class XoopsFormButton extends XoopsFormElement
     /**
      * Get the initial value
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string
      */
     public function getValue($encode = false)
@@ -87,7 +87,7 @@ class XoopsFormButton extends XoopsFormElement
      *
      * @param $value
      *
-     * @return string
+     * @return void
      */
     public function setValue($value)
     {
@@ -101,7 +101,11 @@ class XoopsFormButton extends XoopsFormElement
      */
     public function getType()
     {
-        return in_array(strtolower($this->_type), array('button', 'submit', 'reset')) ? $this->_type : 'button';
+        return in_array(strtolower($this->_type), array(
+            'button',
+            'submit',
+            'reset',
+        )) ? $this->_type : 'button';
     }
 
     /**
@@ -111,6 +115,8 @@ class XoopsFormButton extends XoopsFormElement
      */
     public function render()
     {
-        return XoopsFormRenderer::getInstance()->get()->renderFormButton($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormButton($this);
     }
 }

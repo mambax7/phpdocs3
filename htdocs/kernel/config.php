@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XOOPS Kernel Class
  *
@@ -39,7 +40,6 @@ class XoopsConfigHandler
      * @access    private
      */
     public $_cHandler;
-
     /**
      * holds reference to config option handler(DAO) class
      *
@@ -47,7 +47,6 @@ class XoopsConfigHandler
      * @access    private
      */
     public $_oHandler;
-
     /**
      * holds an array of cached references to config value arrays,
      *  indexed on module id and category id
@@ -71,8 +70,8 @@ class XoopsConfigHandler
     /**
      * Create a config
      *
-     * @see     XoopsConfigItem
      * @return XoopsConfigItem reference to the new {@link XoopsConfigItem}
+     * @see     XoopsConfigItem
      */
     public function createConfig()
     {
@@ -84,8 +83,8 @@ class XoopsConfigHandler
     /**
      * Get a config
      *
-     * @param  int  $id          ID of the config
-     * @param  bool $withoptions load the config's options now?
+     * @param int  $id          ID of the config
+     * @param bool $withoptions load the config's options now?
      * @return object reference to the {@link XoopsConfig}
      */
     public function getConfig($id, $withoptions = false)
@@ -161,9 +160,9 @@ class XoopsConfigHandler
     /**
      * get one or more Configs
      *
-     * @param CriteriaElement $criteria     {@link CriteriaElement}
-     * @param bool            $id_as_key    Use the configs' ID as keys?
-     * @param bool            $with_options get the options now?
+     * @param \CriteriaElement|null $criteria     {@link CriteriaElement}
+     * @param bool                  $id_as_key    Use the configs' ID as keys?
+     * @param bool                  $with_options get the options now?
      *
      * @return array Array of {@link XoopsConfigItem} objects
      */
@@ -175,7 +174,7 @@ class XoopsConfigHandler
     /**
      * Count some configs
      *
-     * @param CriteriaElement $criteria {@link CriteriaElement}
+     * @param \CriteriaElement|null $criteria {@link CriteriaElement}
      *
      * @return int
      */
@@ -244,8 +243,8 @@ class XoopsConfigHandler
     /**
      * Get one or more {@link XoopsConfigOption}s
      *
-     * @param CriteriaElement $criteria  {@link CriteriaElement}
-     * @param bool            $id_as_key Use IDs as keys in the array?
+     * @param \CriteriaElement|null $criteria  {@link CriteriaElement}
+     * @param bool                  $id_as_key Use IDs as keys in the array?
      *
      * @return array Array of {@link XoopsConfigOption}s
      */
@@ -257,7 +256,7 @@ class XoopsConfigHandler
     /**
      * Count some {@link XoopsConfigOption}s
      *
-     * @param CriteriaElement $criteria {@link CriteriaElement}
+     * @param \CriteriaElement|null $criteria {@link CriteriaElement}
      *
      * @return int Count of {@link XoopsConfigOption}s matching $criteria
      */
@@ -296,8 +295,11 @@ class XoopsConfigHandler
     }
 
     /**#@+
-     * @deprecated
      * @param $criteria
+     * @return bool
+     * @deprecated
+     */
+    /**
      * @return bool
      */
     public function deleteConfigOption(&$criteria)

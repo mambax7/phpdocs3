@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Maintenance main page
  *
@@ -14,6 +15,7 @@
  * @author              Cointin Maxime (AKA Kraven30)
  * @package             system
  */
+
 use Xmf\Request;
 
 require_once XOOPS_ROOT_PATH . '/modules/system/class/maintenance.php';
@@ -39,7 +41,6 @@ $xoTheme->addStylesheet(XOOPS_URL . '/modules/system/css/admin.css');
 $xoTheme->addScript('browse.php?Frameworks/jquery/jquery.js');
 $xoTheme->addScript('modules/system/js/admin.js');
 switch ($op) {
-
     case 'list':
     default:
         // Define Breadcrumb and tips
@@ -54,13 +55,16 @@ switch ($op) {
         $form_maintenance = new XoopsThemeForm(_AM_SYSTEM_MAINTENANCE, 'maintenance_save', 'admin.php?fct=maintenance', 'post', true);
 
         $cache = new XoopsFormSelect(_AM_SYSTEM_MAINTENANCE_CACHE, 'cache', '', 3, true);
-        $cache->setDescription(XOOPS_VAR_PATH . '/caches/smarty_cache/<br>'
+        $cache->setDescription(
+            XOOPS_VAR_PATH . '/caches/smarty_cache/<br>'
             . XOOPS_VAR_PATH . '/caches/smarty_compile/<br>'
-            . XOOPS_VAR_PATH . '/caches/xoops_cache/');
+            . XOOPS_VAR_PATH . '/caches/xoops_cache/'
+        );
         $cache_arr = array(
             1 => 'smarty_cache',
             2 => 'smarty_compile',
-            3 => 'xoops_cache');
+            3 => 'xoops_cache',
+        );
         $cache->addOptionArray($cache_arr);
         $form_maintenance->addElement($cache);
 
@@ -77,7 +81,8 @@ switch ($op) {
             '1' => _AM_SYSTEM_MAINTENANCE_CHOICE1,
             '2' => _AM_SYSTEM_MAINTENANCE_CHOICE2,
             '3' => _AM_SYSTEM_MAINTENANCE_CHOICE3,
-            '4' => _AM_SYSTEM_MAINTENANCE_CHOICE4);
+            '4' => _AM_SYSTEM_MAINTENANCE_CHOICE4,
+        );
         $choice->addOptionArray($options);
         $tables_tray->addElement($choice, false);
         $form_maintenance->addElement($tables_tray);
@@ -96,8 +101,8 @@ switch ($op) {
         $dump_tray->addElement($select_tables1, false);
 
         $dump_tray->addElement(new xoopsFormLabel('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . _AM_SYSTEM_MAINTENANCE_DUMP_OR . '&nbsp;'));
-        $ele            = new XoopsFormSelect('&nbsp;&nbsp;', 'dump_modules', '', 7, true);
-    /* @var XoopsModuleHandler $module_handler */
+        $ele = new XoopsFormSelect('&nbsp;&nbsp;', 'dump_modules', '', 7, true);
+        /* @var XoopsModuleHandler $module_handler */
         $module_handler = xoops_getHandler('module');
         $criteria       = new CriteriaCompo(new Criteria('hasmain', 1));
         $criteria->add(new Criteria('isactive', 1));

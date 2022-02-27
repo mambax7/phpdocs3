@@ -114,8 +114,8 @@ class SystemAvatarHandler extends XoopsAvatarHandler
     /**
      * Create new Object
      *
-     * @param  bool $isNew
-     * @return object
+     * @param bool $isNew
+     * @return SystemAvatar
      */
     public function create($isNew = true)
     {
@@ -130,13 +130,13 @@ class SystemAvatarHandler extends XoopsAvatarHandler
     /**
      * Egt Object
      *
-     * @param  int $id
-     * @return object
+     * @param int $id
+     * @return SystemAvatar|false
      */
     public function get($id)
     {
         $avatar = false;
-        $id     = (int)$id;
+        $id = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('avatar') . ' WHERE avatar_id=' . $id;
             if (!$result = $this->db->query($sql)) {

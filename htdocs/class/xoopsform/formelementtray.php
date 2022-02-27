@@ -31,16 +31,14 @@ class XoopsFormElementTray extends XoopsFormElement
      * @access private
      */
     private $_elements = array();
-
     /**
      * required elements
      *
      * @var array
      */
     public $_required = array();
-
     /**
-     * HTML to seperate the elements
+     * HTML to separate the elements
      *
      * @var string
      * @access private
@@ -119,7 +117,7 @@ class XoopsFormElementTray extends XoopsFormElement
     /**
      * Get an array of the elements in this group
      *
-     * @param  bool $recurse get elements recursively?
+     * @param bool $recurse get elements recursively?
      * @return XoopsFormElement[]  Array of {@link XoopsFormElement} objects.
      */
     public function &getElements($recurse = false)
@@ -149,7 +147,7 @@ class XoopsFormElementTray extends XoopsFormElement
     /**
      * Get the delimiter of this group
      *
-     * @param  bool $encode To sanitizer the text?
+     * @param bool $encode To sanitizer the text?
      * @return string The delimiter
      */
     public function getDelimeter($encode = false)
@@ -164,6 +162,8 @@ class XoopsFormElementTray extends XoopsFormElement
      */
     public function render()
     {
-        return XoopsFormRenderer::getInstance()->get()->renderFormElementTray($this);
+        return XoopsFormRenderer::getInstance()
+                                ->get()
+                                ->renderFormElementTray($this);
     }
 }

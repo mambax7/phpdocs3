@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Xoops Logger renderer
  *
@@ -38,12 +39,12 @@ if ($mode === 'popup') {
         <input class="formButton" value="' . _CLOSE . '" type="button" onclick="window.close();" />
     </div>
 ';
-    $ret .= '
+    $ret     .= '
 <script type="text/javascript">
     debug_window = openWithSelfMain("about:blank", "popup", 680, 450, true);
     debug_window.document.clear();
 ';
-    $lines = preg_split("/(\r\n|\r|\n)( *)/", $content);
+    $lines   = preg_split("/(\r\n|\r|\n)( *)/", $content);
     foreach ($lines as $line) {
         $ret .= "\n" . 'debug_window.document.writeln("' . str_replace(array('"', '</'), array('\"', '<\/'), $line) . '");';
     }
@@ -73,17 +74,23 @@ if ($memory) {
 }
 
 if (empty($mode)) {
-    $views = array('errors', 'deprecated', 'queries', 'blocks', 'extra');
-    $ret .= "\n<div id=\"xo-logger-output\">\n<div id='xo-logger-tabs'>\n";
-    $ret .= "<a href='javascript:xoSetLoggerView(\"none\")'>" . _LOGGER_NONE . "</a>\n";
-    $ret .= "<a href='javascript:xoSetLoggerView(\"\")'>" . _LOGGER_ALL . "</a>\n";
+    $views = array(
+        'errors',
+        'deprecated',
+        'queries',
+        'blocks',
+        'extra',
+    );
+    $ret   .= "\n<div id=\"xo-logger-output\">\n<div id='xo-logger-tabs'>\n";
+    $ret   .= "<a href='javascript:xoSetLoggerView(\"none\")'>" . _LOGGER_NONE . "</a>\n";
+    $ret   .= "<a href='javascript:xoSetLoggerView(\"\")'>" . _LOGGER_ALL . "</a>\n";
     foreach ($views as $view) {
         $count = count($this->$view);
-        $ret .= "<a href='javascript:xoSetLoggerView(\"$view\")'>" . constant('_LOGGER_' . strtoupper($view)) . " ($count)</a>\n";
+        $ret   .= "<a href='javascript:xoSetLoggerView(\"$view\")'>" . constant('_LOGGER_' . strtoupper($view)) . " ($count)</a>\n";
     }
     $count = count($this->logstart);
-    $ret .= "<a href='javascript:xoSetLoggerView(\"timers\")'>" . _LOGGER_TIMERS . "($count)</a>\n";
-    $ret .= "</div>\n";
+    $ret   .= "<a href='javascript:xoSetLoggerView(\"timers\")'>" . _LOGGER_TIMERS . "($count)</a>\n";
+    $ret   .= "</div>\n";
 }
 
 if (empty($mode) || $mode === 'errors') {
@@ -94,13 +101,13 @@ if (empty($mode) || $mode === 'errors') {
         E_NOTICE       => _LOGGER_E_NOTICE,
         E_WARNING      => _LOGGER_E_WARNING,/*E_STRICT       => _LOGGER_E_STRICT*/);
     $class = 'even';
-    $ret .= '<table id="xo-logger-errors" class="outer"><tr><th>' . _LOGGER_ERRORS . '</th></tr>';
+    $ret   .= '<table id="xo-logger-errors" class="outer"><tr><th>' . _LOGGER_ERRORS . '</th></tr>';
     foreach ($this->errors as $error) {
-        $ret .= "\n<tr><td class='$class'>";
-        $ret .= isset($types[$error['errno']]) ? $types[$error['errno']] : _LOGGER_UNKNOWN;
-        $ret .= ': ';
-        $ret .= sprintf(_LOGGER_FILELINE, $this->sanitizePath($error['errstr']), $this->sanitizePath($error['errfile']), $error['errline']);
-        $ret .= "<br>\n</td></tr>";
+        $ret   .= "\n<tr><td class='$class'>";
+        $ret   .= isset($types[$error['errno']]) ? $types[$error['errno']] : _LOGGER_UNKNOWN;
+        $ret   .= ': ';
+        $ret   .= sprintf(_LOGGER_FILELINE, $this->sanitizePath($error['errstr']), $this->sanitizePath($error['errfile']), $error['errline']);
+        $ret   .= "<br>\n</td></tr>";
         $class = ($class === 'odd') ? 'even' : 'odd';
     }
     $ret .= "\n</table>\n";
@@ -108,19 +115,19 @@ if (empty($mode) || $mode === 'errors') {
 
 if (empty($mode) || $mode === 'deprecated') {
     $class = 'even';
-    $ret .= '<table id="xo-logger-deprecated" class="outer"><tr><th>' . _LOGGER_DEPRECATED . '</th></tr>';
+    $ret   .= '<table id="xo-logger-deprecated" class="outer"><tr><th>' . _LOGGER_DEPRECATED . '</th></tr>';
     foreach ($this->deprecated as $message) {
-        $ret .= "\n<tr><td class='$class'>";
-        $ret .= $message;
-        $ret .= "<br>\n</td></tr>";
+        $ret   .= "\n<tr><td class='$class'>";
+        $ret   .= $message;
+        $ret   .= "<br>\n</td></tr>";
         $class = ($class === 'odd') ? 'even' : 'odd';
     }
     $ret .= "\n</table>\n";
 }
 
 if (empty($mode) || $mode === 'queries') {
-    $class = 'even';
-    $ret .= '<table id="xo-logger-queries" class="outer"><tr><th>' . _LOGGER_QUERIES . '</th></tr>';
+    $class   = 'even';
+    $ret     .= '<table id="xo-logger-queries" class="outer"><tr><th>' . _LOGGER_QUERIES . '</th></tr>';
     $xoopsDB = XoopsDatabaseFactory::getDatabaseConnection();
     $pattern = '/\b' . preg_quote($xoopsDB->prefix()) . '\_/i';
 
@@ -140,7 +147,7 @@ if (empty($mode) || $mode === 'queries') {
 }
 if (empty($mode) || $mode === 'blocks') {
     $class = 'even';
-    $ret .= '<table id="xo-logger-blocks" class="outer"><tr><th colspan="2">' . _LOGGER_BLOCKS . '</th></tr>';
+    $ret   .= '<table id="xo-logger-blocks" class="outer"><tr><th colspan="2">' . _LOGGER_BLOCKS . '</th></tr>';
     foreach ($this->blocks as $b) {
         if ($b['cached']) {
             $ret .= '<tr><td class="' . $class . '"><strong>' . $b['name'] . ':</strong> ' . sprintf(_LOGGER_CACHED, (int)$b['cachetime']) . '</td></tr>';
@@ -153,22 +160,22 @@ if (empty($mode) || $mode === 'blocks') {
 }
 if (empty($mode) || $mode === 'extra') {
     $class = 'even';
-    $ret .= '<table id="xo-logger-extra" class="outer"><tr><th colspan="2">' . _LOGGER_EXTRA . '</th></tr>';
+    $ret   .= '<table id="xo-logger-extra" class="outer"><tr><th colspan="2">' . _LOGGER_EXTRA . '</th></tr>';
     foreach ($this->extra as $ex) {
-        $ret .= '<tr><td class="' . $class . '"><strong>';
-        $ret .= htmlspecialchars($ex['name']) . ':</strong> ' . htmlspecialchars($ex['msg']);
-        $ret .= '</td></tr>';
+        $ret   .= '<tr><td class="' . $class . '"><strong>';
+        $ret   .= htmlspecialchars($ex['name']) . ':</strong> ' . htmlspecialchars($ex['msg']);
+        $ret   .= '</td></tr>';
         $class = ($class === 'odd') ? 'even' : 'odd';
     }
     $ret .= '</table>';
 }
 if (empty($mode) || $mode === 'timers') {
     $class = 'even';
-    $ret .= '<table id="xo-logger-timers" class="outer"><tr><th colspan="2">' . _LOGGER_TIMERS . '</th></tr>';
+    $ret   .= '<table id="xo-logger-timers" class="outer"><tr><th colspan="2">' . _LOGGER_TIMERS . '</th></tr>';
     foreach ($this->logstart as $k => $v) {
-        $ret .= '<tr><td class="' . $class . '"><strong>';
-        $ret .= sprintf(_LOGGER_TIMETOLOAD, htmlspecialchars($k) . '</strong>', '<span style="color:#ff0000;">' . sprintf('%.03f', $this->dumpTime($k)) . '</span>');
-        $ret .= '</td></tr>';
+        $ret   .= '<tr><td class="' . $class . '"><strong>';
+        $ret   .= sprintf(_LOGGER_TIMETOLOAD, htmlspecialchars($k) . '</strong>', '<span style="color:#ff0000;">' . sprintf('%.03f', $this->dumpTime($k)) . '</span>');
+        $ret   .= '</td></tr>';
         $class = ($class === 'odd') ? 'even' : 'odd';
     }
     $ret .= '</table>';
