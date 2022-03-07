@@ -1,6 +1,5 @@
 <?php
 // 
-
 /*******************************************************************************
  * Location: <strong>xml/XmlTagHandler</strong><br>
  * <br>
@@ -10,6 +9,7 @@
  * <br>
  * @author Ken Egervari, Remi Michalski<br>
  *******************************************************************************/
+
 class XmlTagHandler
 {
     public function __construct()
@@ -26,7 +26,7 @@ class XmlTagHandler
 
     /**
      * @param SaxParser $parser
-     * @param array     $attributes
+     * @param array $attributes
      */
     public function handleBeginElement($parser, &$attributes)
     {
@@ -41,9 +41,9 @@ class XmlTagHandler
 
     /**
      * @param SaxParser $parser
-     * @param string    $data
+     * @param  string $data
      */
-    public function handleCharacterData($parser, $data)
+    public function handleCharacterData($parser, &$data)
     {
     }
 }

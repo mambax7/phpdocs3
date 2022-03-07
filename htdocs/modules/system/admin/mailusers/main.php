@@ -16,9 +16,7 @@
  * @since
  * @author       XOOPS Development Team, Kazumi Ono (AKA onokazu)
  */
-
 use Xmf\Request;
-
 // Check users rights
 if (!is_object($xoopsUser) || !is_object($xoopsModule) || !$xoopsUser->isAdmin($xoopsModule->mid())) {
     exit(_NOPERM);
@@ -42,6 +40,7 @@ $xoTheme->addScript('browse.php?Frameworks/jquery/jquery.js');
 $xoTheme->addScript('modules/system/js/admin.js');
 
 switch ($op) {
+
     case 'list':
     default:
         // Define Breadcrumb and tips
@@ -212,7 +211,7 @@ switch ($op) {
                     $crit->prefix = 'u';
                     $criteria_object->add($crit, 'AND');
                 }
-                /* @var XoopsMemberHandler $member_handler */
+                /** @var XoopsMemberHandler $member_handler */
                 $member_handler = xoops_getHandler('member');
                 $groups         = empty($_POST['mail_to_group']) ? array() : array_map('intval', $_POST['mail_to_group']);
                 $getusers       = $member_handler->getUsersByGroupLink($groups, $criteria_object, true);

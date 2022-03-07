@@ -17,6 +17,7 @@
  * @author       XOOPS Development Team, Kazumi Ono (AKA onokazu)
  */
 
+
 /**
  * Class XoopsXmlRpcApi
  */
@@ -27,21 +28,26 @@ class XoopsXmlRpcApi
      * @var array
      */
     public $params = array();
+
     // reference to xmlrpc document class object
     /**
      * @var \XoopsXmlRpcResponse
      */
     public $response;
+
     // reference to module class object
     /**
      * @var \XoopsModule
      */
     public $module;
+
     // map between xoops tags and blogger specific tags
     /**
      * @var array
      */
     public $xoopsTagMap = array();
+
+
     /**
      * @var \XoopsUser $user user class object
      */
@@ -52,11 +58,11 @@ class XoopsXmlRpcApi
     public $isadmin = false;
 
     /**
-     * @param array                $params
+     * @param array $params
      * @param \XoopsXmlRpcResponse $response
-     * @param \XoopsModule         $module
+     * @param \XoopsModule $module
      */
-    public function __construct(array &$params, XoopsXmlRpcResponse $response, XoopsModule $module)
+    public function __construct(&$params, $response, $module)
     {
         $this->params   =& $params;
         $this->response = $response;
@@ -87,7 +93,7 @@ class XoopsXmlRpcApi
         if (is_object($this->user) && $this->user instanceof \XoopsUser) {
             return true;
         }
-        /* @var XoopsMemberHandler $member_handler */
+        /** @var XoopsMemberHandler $member_handler */
         $member_handler = xoops_getHandler('member');
         $this->user     = $member_handler->loginUser(addslashes($username), addslashes($password));
         if (!is_object($this->user)) {
@@ -95,7 +101,7 @@ class XoopsXmlRpcApi
 
             return false;
         }
-        /* @var  XoopsGroupPermHandler $moduleperm_handler */
+        /** @var XoopsGroupPermHandler $moduleperm_handler */
         $moduleperm_handler = xoops_getHandler('groupperm');
         if (!$moduleperm_handler->checkRight('module_read', $this->module->getVar('mid'), $this->user->getGroups())) {
             unset($this->user);
@@ -118,6 +124,7 @@ class XoopsXmlRpcApi
         if (!is_object($this->user) || !$this->user instanceof \XoopsUser) {
             return false;
         }
+
         if (!$this->user->isAdmin($this->module->getVar('mid'))) {
             return false;
         }
@@ -135,25 +142,10 @@ class XoopsXmlRpcApi
     public function &_getPostFields($post_id = null, $blog_id = null)
     {
         $ret               = array();
-        $ret['title']      = array(
-            'required'   => true,
-            'form_type'  => 'textbox',
-            'value_type' => 'text',
-        );
-        $ret['hometext']   = array(
-            'required'  => false,
-            'form_type' => 'textarea',
-            'data_type' => 'textarea',
-        );
-        $ret['moretext']   = array(
-            'required'  => false,
-            'form_type' => 'textarea',
-            'data_type' => 'textarea',
-        );
-        $ret['categories'] = array('required'  => false,
-                                   'form_type' => 'select_multi',
-                                   'data_type' => 'array',
-        );
+        $ret['title']      = array('required' => true, 'form_type' => 'textbox', 'value_type' => 'text');
+        $ret['hometext']   = array('required' => false, 'form_type' => 'textarea', 'data_type' => 'textarea');
+        $ret['moretext']   = array('required' => false, 'form_type' => 'textarea', 'data_type' => 'textarea');
+        $ret['categories'] = array('required' => false, 'form_type' => 'select_multi', 'data_type' => 'array');
 
         /*
         if (!isset($blog_id)) {
@@ -186,7 +178,7 @@ class XoopsXmlRpcApi
     /**
      * @param string $xoopstag
      *
-     * @return string
+     * @return mixed
      */
     public function _getXoopsTagMap($xoopstag)
     {

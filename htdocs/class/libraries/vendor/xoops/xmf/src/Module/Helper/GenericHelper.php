@@ -35,10 +35,12 @@ abstract class GenericHelper extends AbstractHelper
      * @deprecated - use $module -- will be removed
      */
     protected $object;
+
     /**
      * @var array of XoopsObjectHandler|XoopsPersistableObjectHandler
      */
     protected $handlers;
+
     /**
      * @var array config items
      */
@@ -75,7 +77,7 @@ abstract class GenericHelper extends AbstractHelper
      * get a module config item
      *
      * @param string|null $name    name of config item, or blank for all items
-     * @param mixed       $default default value to return if config $name is not set
+     * @param mixed  $default default value to return if config $name is not set
      *
      * @return mixed string config item, array of config items,
      *                or null if config not found
@@ -110,7 +112,7 @@ abstract class GenericHelper extends AbstractHelper
      */
     public function getHandler($name)
     {
-        $ret  = false;
+        $ret = false;
         $name = strtolower($name);
         if (!isset($this->handlers[$name])) {
             $this->initHandler($name);
@@ -139,9 +141,9 @@ abstract class GenericHelper extends AbstractHelper
         ) {
             $this->module = $xoopsModule;
         } else {
-            /* @var \XoopsModuleHandler $module_handler */
+            /** @var \XoopsModuleHandler $module_handler */
             $module_handler = xoops_getHandler('module');
-            $this->module   = $module_handler->getByDirname($this->dirname);
+            $this->module = $module_handler->getByDirname($this->dirname);
         }
         $this->addLog('INIT MODULE OBJECT');
     }
@@ -161,7 +163,7 @@ abstract class GenericHelper extends AbstractHelper
             global $xoopsModuleConfig;
             $this->configs = $xoopsModuleConfig;
         } else {
-            /* @var \XoopsConfigHandler $config_handler */
+            /** @var \XoopsConfigHandler $config_handler */
             $config_handler = xoops_getHandler('config');
             $this->configs  = $config_handler->getConfigsByCat(
                 0, $this->getModule()
@@ -187,9 +189,9 @@ abstract class GenericHelper extends AbstractHelper
                 include_once $hnd_file;
             }
             $class = ucfirst(strtolower($this->dirname))
-                     . ucfirst(strtolower($name)) . 'Handler';
+                . ucfirst(strtolower($name)) . 'Handler';
             if (class_exists($class)) {
-                $db                    = \XoopsDatabaseFactory::getDatabaseConnection();
+                $db = \XoopsDatabaseFactory::getDatabaseConnection();
                 $this->handlers[$name] = new $class($db);
                 $this->addLog("Loading class '{$class}'");
             } else {

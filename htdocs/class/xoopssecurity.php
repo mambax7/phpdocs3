@@ -9,13 +9,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @author        Kazumi Ono <onokazu@xoops.org>
- * @author        Jan Pedersen <mithrandir@xoops.org>
- * @author        John Neill <catzwolf@xoops.org>
+ * @author    Kazumi Ono <onokazu@xoops.org>
+ * @author    Jan Pedersen <mithrandir@xoops.org>
+ * @author    John Neill <catzwolf@xoops.org>
  * @copyright (c) 2000-2016 XOOPS Project (www.xoops.org)
- * @license       GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
- * @package       kernel
- * @since         2.0.0
+ * @license   GNU GPL 2 (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @package   kernel
+ * @since     2.0.0
  */
 
 defined('XOOPS_ROOT_PATH') || exit('Restricted access');
@@ -47,8 +47,8 @@ class XoopsSecurity
     /**
      * Create a token in the user's session
      *
-     * @param int|string $timeout time in seconds the token should be valid
-     * @param string     $name    name of session variable
+     * @param int|string    $timeout time in seconds the token should be valid
+     * @param string $name    name of session variable
      *
      * @return string token value
      */
@@ -59,12 +59,12 @@ class XoopsSecurity
             $expire  = @ini_get('session.gc_maxlifetime');
             $timeout = ($expire > 0) ? $expire : 900;
         }
-        $token_id = md5(uniqid(mt_rand(), true));
+        $token_id = md5(uniqid((string)mt_rand(), true));
         // save token data on the server
         if (!isset($_SESSION[$name . '_SESSION'])) {
             $_SESSION[$name . '_SESSION'] = array();
         }
-        $token_data                     = array(
+        $token_data = array(
             'id'     => $token_id,
             'expire' => time() + (int)$timeout,
         );
@@ -134,7 +134,7 @@ class XoopsSecurity
     /**
      * Check whether a token value is expired or not
      *
-     * @param string $token token
+     * @param array $token token
      *
      * @return bool
      */
@@ -189,31 +189,31 @@ class XoopsSecurity
     {
         foreach (
             array(
-                'GLOBALS',
-                '_SESSION',
-                'HTTP_SESSION_VARS',
-                '_GET',
-                'HTTP_GET_VARS',
-                '_POST',
-                'HTTP_POST_VARS',
-                '_COOKIE',
-                'HTTP_COOKIE_VARS',
-                '_REQUEST',
-                '_SERVER',
-                'HTTP_SERVER_VARS',
-                '_ENV',
-                'HTTP_ENV_VARS',
-                '_FILES',
-                'HTTP_POST_FILES',
-                'xoopsDB',
-                'xoopsUser',
-                'xoopsUserId',
-                'xoopsUserGroups',
-                'xoopsUserIsAdmin',
-                'xoopsConfig',
-                'xoopsOption',
-                'xoopsModule',
-                'xoopsModuleConfig',
+                     'GLOBALS',
+                     '_SESSION',
+                     'HTTP_SESSION_VARS',
+                     '_GET',
+                     'HTTP_GET_VARS',
+                     '_POST',
+                     'HTTP_POST_VARS',
+                     '_COOKIE',
+                     'HTTP_COOKIE_VARS',
+                     '_REQUEST',
+                     '_SERVER',
+                     'HTTP_SERVER_VARS',
+                     '_ENV',
+                     'HTTP_ENV_VARS',
+                     '_FILES',
+                     'HTTP_POST_FILES',
+                     'xoopsDB',
+                     'xoopsUser',
+                     'xoopsUserId',
+                     'xoopsUserGroups',
+                     'xoopsUserIsAdmin',
+                     'xoopsConfig',
+                     'xoopsOption',
+                     'xoopsModule',
+                     'xoopsModuleConfig',
                 'xoopsRequestUri',
             ) as $bad_global
         ) {

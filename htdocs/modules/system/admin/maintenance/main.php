@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Maintenance main page
  *
@@ -15,7 +14,6 @@
  * @author              Cointin Maxime (AKA Kraven30)
  * @package             system
  */
-
 use Xmf\Request;
 
 require_once XOOPS_ROOT_PATH . '/modules/system/class/maintenance.php';
@@ -41,6 +39,7 @@ $xoTheme->addStylesheet(XOOPS_URL . '/modules/system/css/admin.css');
 $xoTheme->addScript('browse.php?Frameworks/jquery/jquery.js');
 $xoTheme->addScript('modules/system/js/admin.js');
 switch ($op) {
+
     case 'list':
     default:
         // Define Breadcrumb and tips
@@ -101,8 +100,8 @@ switch ($op) {
         $dump_tray->addElement($select_tables1, false);
 
         $dump_tray->addElement(new xoopsFormLabel('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . _AM_SYSTEM_MAINTENANCE_DUMP_OR . '&nbsp;'));
-        $ele = new XoopsFormSelect('&nbsp;&nbsp;', 'dump_modules', '', 7, true);
-        /* @var XoopsModuleHandler $module_handler */
+        $ele            = new XoopsFormSelect('&nbsp;&nbsp;', 'dump_modules', '', 7, true);
+    /** @var XoopsModuleHandler $module_handler */
         $module_handler = xoops_getHandler('module');
         $criteria       = new CriteriaCompo(new Criteria('hasmain', 1));
         $criteria->add(new Criteria('isactive', 1));

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * XOOPS Kernel Class
  *
@@ -65,7 +64,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -75,7 +74,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_id($format = '')
@@ -85,7 +84,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_modid
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_modid($format = '')
@@ -95,7 +94,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_catid
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_catid($format = '')
@@ -105,7 +104,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_name
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_name($format = '')
@@ -115,7 +114,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_title
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_title($format = '')
@@ -125,7 +124,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_value
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_value($format = '')
@@ -135,7 +134,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_desc
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_desc($format = '')
@@ -145,7 +144,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_formtype
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_formtype($format = '')
@@ -155,7 +154,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_valuetype
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_valuetype($format = '')
@@ -165,7 +164,7 @@ class XoopsConfigItem extends XoopsObject
 
     /**
      * Returns Class Base Variable conf_order
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function conf_order($format = '')
@@ -200,7 +199,7 @@ class XoopsConfigItem extends XoopsObject
      * Set a config value
      *
      * @param mixed &$value Value
-     * @param bool   $force_slash
+     * @param bool  $force_slash
      */
     public function setConfValueForInput(&$value, $force_slash = false)
     {
@@ -275,7 +274,7 @@ class XoopsConfigItemHandler extends XoopsObjectHandler
      * Create a new {@link XoopsConfigItem}
      *
      * @see     XoopsConfigItem
-     * @param bool $isNew Flag the config as "new"?
+     * @param  bool $isNew Flag the config as "new"?
      * @return XoopsConfigItem reference to the new config
      */
     public function create($isNew = true)
@@ -334,16 +333,16 @@ class XoopsConfigItemHandler extends XoopsObjectHandler
             return false;
         }
 
-        $conf_id        = $config->getVar('conf_id', 'n');
-        $conf_modid     = $config->getVar('conf_modid', 'n');
-        $conf_catid     = $config->getVar('conf_catid', 'n');
-        $conf_name      = $config->getVar('conf_name', 'n');
-        $conf_title     = $config->getVar('conf_title', 'n');
-        $conf_value     = $config->getVar('conf_value', 'n');
-        $conf_desc      = $config->getVar('conf_desc', 'n');
-        $conf_formtype  = $config->getVar('conf_formtype', 'n');
+        $conf_id = $config->getVar('conf_id', 'n');
+        $conf_modid = $config->getVar('conf_modid', 'n');
+        $conf_catid = $config->getVar('conf_catid', 'n');
+        $conf_name = $config->getVar('conf_name', 'n');
+        $conf_title = $config->getVar('conf_title', 'n');
+        $conf_value = $config->getVar('conf_value', 'n');
+        $conf_desc = $config->getVar('conf_desc', 'n');
+        $conf_formtype = $config->getVar('conf_formtype', 'n');
         $conf_valuetype = $config->getVar('conf_valuetype', 'n');
-        $conf_order     = $config->getVar('conf_order', 'n');
+        $conf_order = $config->getVar('conf_order', 'n');
 
         if ($config->isNew()) {
             $conf_id = $this->db->genId('config_conf_id_seq');
@@ -386,8 +385,8 @@ class XoopsConfigItemHandler extends XoopsObjectHandler
     /**
      * Get configs from the database
      *
-     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param bool                          $id_as_key return the config's id as key?
+     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
+     * @param  bool            $id_as_key return the config's id as key?
      * @return array|false           Array of {@link XoopsConfigItem} objects
      */
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -395,9 +394,9 @@ class XoopsConfigItemHandler extends XoopsObjectHandler
         $ret   = array();
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('config');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql   .= ' ' . $criteria->renderWhere();
-            $sql   .= ' ORDER BY conf_order ASC';
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
+            $sql .= ' ' . $criteria->renderWhere();
+            $sql .= ' ORDER BY conf_order ASC';
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -422,13 +421,13 @@ class XoopsConfigItemHandler extends XoopsObjectHandler
     /**
      * Count configs
      *
-     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
+     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
      * @return int|false             Count of configs matching $criteria
      */
     public function getCount(CriteriaElement $criteria = null)
     {
-        $sql = 'SELECT * FROM ' . $this->db->prefix('config');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        $sql   = 'SELECT * FROM ' . $this->db->prefix('config');
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);

@@ -16,9 +16,8 @@
  * @since
  * @author       XOOPS Development Team, Kazumi Ono (AKA onokazu)
  */
-/* @var XoopsUser $xoopsUser */
-
-/* @var XoopsModule $xoopsModule */
+/** @var XoopsUser $xoopsUser */
+/** @var XoopsModule $xoopsModule */
 
 use Xmf\Request;
 
@@ -38,7 +37,7 @@ $op = Request::getString('op', 'list');
 $image_id = Request::getInt('image_id', 0);
 $imgcat_id = Request::getInt('imgcat_id', 0);
 
-/* @var  XoopsGroupPermHandler $gperm_handler */
+/** @var  XoopsGroupPermHandler $gperm_handler */
 $gperm_handler = xoops_getHandler('groupperm');
 $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
 
@@ -87,11 +86,12 @@ switch ($op) {
         $xoBreadCrumb->addTips(_AM_SYSTEM_IMAGES_TIPS);
         $xoBreadCrumb->render();
 
+        /** @var \XoopsImageCategoryHandler $imgcat_handler */
         $imgcat_handler = xoops_getHandler('imagecategory');
         $imagecategorys = $imgcat_handler->getObjects();
 
         $catcount      = count($imagecategorys);
-        /* @var  XoopsImageHandler $image_handler */
+        /** @var XoopsImageHandler $image_handler */
         $image_handler = xoops_getHandler('image');
 
         foreach (array_keys($imagecategorys) as $i) {
@@ -163,10 +163,12 @@ switch ($op) {
 
     case 'display_cat':
         // Get Image Category handler
+        /** @var \XoopsImageCategoryHandler $imgcat_handler */
         $imgcat_handler = xoops_getHandler('imagecategory');
         // Get category id
 		$imgcat_id = Request::getInt('imgcat_id', 0);
         if ($imgcat_id > 0) {
+            /** @var \XoopsImageCategory $imgcat */
             $imgcat = $imgcat_handler->get($imgcat_id);
             $old    = $imgcat->getVar('imgcat_display');
             $imgcat->setVar('imgcat_display', !$old);
@@ -185,13 +187,15 @@ switch ($op) {
         // Get rights
         $imgcat_write = $gperm_handler->checkRight('imgcat_write', $imgcat_id, $groups, $xoopsModule->mid());
         // Get category handler
+        /** @var \XoopsImageCategoryHandler $imgcat_handler */
         $imgcat_handler = xoops_getHandler('imagecategory');
-
+        /** @var \XoopsImageCategory $imagecategory */
         $imagecategory = $imgcat_handler->get($imgcat_id);
         if (!is_object($imagecategory)) {
             redirect_header('admin.php?fct=images', 1);
         }
         // Get image handler
+        /** @var \XoopsImageHandler $image_handler */
         $image_handler = xoops_getHandler('image');
         // Define main template
         $GLOBALS['xoopsOption']['template_main'] = 'system_images.tpl';
@@ -509,7 +513,7 @@ switch ($op) {
             exit();
         }
         $newid                     = $imagecategory->getVar('imgcat_id');
-        /* @var  XoopsGroupPermHandler $imagecategoryperm_handler */
+        /** @var XoopsGroupPermHandler $imagecategoryperm_handler */
         $imagecategoryperm_handler = xoops_getHandler('groupperm');
         if (!isset($readgroup)) {
             $readgroup = array();
@@ -687,7 +691,7 @@ switch ($op) {
             xoops_cp_footer();
             exit();
         }
-        /* @var  XoopsImageHandler $image_handler */
+        /** @var XoopsImageHandler $image_handler */
         $image_handler = xoops_getHandler('image');
         $images        = $image_handler->getObjects(new Criteria('imgcat_id', $imgcat_id), true, false);
         $errors        = array();

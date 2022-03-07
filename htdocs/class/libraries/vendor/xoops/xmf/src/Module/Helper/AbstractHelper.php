@@ -29,10 +29,12 @@ abstract class AbstractHelper
      * @var string module directory name
      */
     protected $dirname;
+
     /**
      * @var XoopsModule
      */
     protected $module;
+
     /**
      * @var bool true if debug is enabled
      */
@@ -65,7 +67,7 @@ abstract class AbstractHelper
             if (isset($xoops)) {
                 $moduleHandler = $xoops->getHandlerModule();
             } else {
-                /* @var \XoopsModuleHandler $moduleHandler */
+                /** @var \XoopsModuleHandler $moduleHandler */
                 $moduleHandler = xoops_getHandler('module');
             }
             $this->module = $moduleHandler->getByDirname($dirname);
@@ -104,7 +106,7 @@ abstract class AbstractHelper
      */
     public function setDebug($bool = true)
     {
-        $this->debug = (bool)$bool;
+        $this->debug = (bool) $bool;
     }
 
     /**
@@ -143,6 +145,6 @@ abstract class AbstractHelper
         if (!is_string($value)) {
             $value = json_encode($value);
         }
-        return (string)$value;
+        return (string) $value;
     }
 }

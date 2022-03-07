@@ -21,7 +21,7 @@ require_once $path . '/include' . '/cp_header.php';
 
 /**
  * @param \XoopsModule $module
- * @param int|null         $oldversion
+ * @param int|null $oldversion
  * @return bool
  */
 function xoops_module_update_profile(XoopsModule $module, $oldversion = null)
@@ -31,6 +31,7 @@ function xoops_module_update_profile(XoopsModule $module, $oldversion = null)
     }
 
     if ($oldversion < 100) {
+
         // Drop old category table
         $sql = 'DROP TABLE ' . $GLOBALS['xoopsDB']->prefix('profile_category');
         $GLOBALS['xoopsDB']->queryF($sql);
@@ -44,7 +45,7 @@ function xoops_module_update_profile(XoopsModule $module, $oldversion = null)
 
         include_once __DIR__ . '/install.php';
         xoops_module_install_profile($module);
-        /* @var XoopsGroupPermHandler $goupperm_handler */
+        /** @var XoopsGroupPermHandler $goupperm_handler */
         $goupperm_handler = xoops_getHandler('groupperm');
 
         $field_handler = xoops_getModuleHandler('field', $module->getVar('dirname', 'n'));
@@ -123,7 +124,7 @@ function xoops_module_update_profile(XoopsModule $module, $oldversion = null)
         $folderHandler   = XoopsFile::getHandler('folder', $imagesDirectory);
         $folderHandler->delete($imagesDirectory);
         //delete /templates/style.css file
-        $cssFile = XOOPS_ROOT_PATH . '/modules/' . $module->getVar('dirname', 'n') . '/templates/style.css';
+        $cssFile       = XOOPS_ROOT_PATH . '/modules/' . $module->getVar('dirname', 'n') . '/templates/style.css';
         $folderHandler = XoopsFile::getHandler('file', $cssFile);
         $folderHandler->delete($cssFile);
         //delete .html entries from the tpl table

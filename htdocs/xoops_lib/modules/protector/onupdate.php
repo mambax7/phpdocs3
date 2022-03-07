@@ -1,11 +1,16 @@
 <?php
 
+use XoopsModules\Protector;
+use XoopsModules\Protector\Registry;
+
+require_once __DIR__ . '/preloads/autoloader.php';
+
 // start hack by Trabis
-if (!class_exists('ProtectorRegistry')) {
+if (!class_exists('XoopsModules\Protector\Registry')) {
     exit('Registry not found');
 }
 
-$registry  = ProtectorRegistry::getInstance();
+$registry  = Registry::getInstance();
 $mydirname = $registry->getEntry('mydirname');
 $mydirpath = $registry->getEntry('mydirpath');
 $language  = $registry->getEntry('language');
@@ -14,9 +19,10 @@ $language  = $registry->getEntry('language');
 eval(' function xoops_module_update_' . $mydirname . '( $module ) { return protector_onupdate_base( $module , "' . $mydirname . '" ) ; } ');
 
 if (!function_exists('protector_onupdate_base')) {
+
     /**
-     * @param $module
-     * @param $mydirname
+     * @param \XoopsModule $module
+     * @param string $mydirname
      *
      * @return bool
      */
@@ -27,15 +33,15 @@ if (!function_exists('protector_onupdate_base')) {
         global $msgs; // TODO :-D
 
         // for Cube 2.1
-        if (defined('XOOPS_CUBE_LEGACY')) {
-            $root =& XCube_Root::getSingleton();
-            $root->mDelegateManager->add('Legacy.Admin.Event.ModuleUpdate.' . ucfirst($mydirname) . '.Success', 'protector_message_append_onupdate');
-            $msgs = array();
-        } else {
+//        if (defined('XOOPS_CUBE_LEGACY')) {
+//            $root =& XCube_Root::getSingleton();
+//            $root->mDelegateManager->add('Legacy.Admin.Event.ModuleUpdate.' . ucfirst($mydirname) . '.Success', 'protector_message_append_onupdate');
+//            $msgs = array();
+//        } else {
             if (!is_array($msgs)) {
                 $msgs = array();
             }
-        }
+//        }
 
         $db  = XoopsDatabaseFactory::getDatabaseConnection();
         $mid = $module->getVar('mid');
@@ -44,7 +50,7 @@ if (!function_exists('protector_onupdate_base')) {
 
         // configs (Though I know it is not a recommended way...)
         $check_sql = 'SHOW COLUMNS FROM ' . $db->prefix('config') . " LIKE 'conf_title'";
-        if (($result = $db->query($check_sql)) && ($myrow = $db->fetchArray($result)) && @$myrow['Type'] === 'varchar(30)') {
+        if (($result = $db->query($check_sql)) && ($myrow = $db->fetchArray($result)) && 'varchar(30)' === @$myrow['Type']) {
             $db->queryF('ALTER TABLE ' . $db->prefix('config') . " MODIFY `conf_title` varchar(255) NOT NULL default '', MODIFY `conf_desc` varchar(255) NOT NULL default ''");
         }
         list(, $create_string) = $db->fetchRow($db->query('SHOW CREATE TABLE ' . $db->prefix('config')));
@@ -62,11 +68,12 @@ if (!function_exists('protector_onupdate_base')) {
         }
 
         // TEMPLATES (all templates have been already removed by modulesadmin)
-        $tplfile_handler = xoops_getHandler('tplfile');
-        $tpl_path        = __DIR__ . '/templates';
+        /** @var \XoopsTplfileHandler $tplfileHandler */
+        $tplfileHandler = xoops_getHandler('tplfile');
+        $tpl_path       = __DIR__ . '/templates';
         if ($handler = @opendir($tpl_path . '/')) {
-            while (($file = readdir($handler)) !== false) {
-                if (substr($file, 0, 1) === '.') {
+            while (false !== ($file = readdir($handler))) {
+                if ('.' === substr($file, 0, 1)) {
                     continue;
                 }
                 $file_path = $tpl_path . '/' . $file;
@@ -77,7 +84,7 @@ if (!function_exists('protector_onupdate_base')) {
                         '.js',
                     ))) {
                     $mtime   = (int)(@filemtime($file_path));
-                    $tplfile = $tplfile_handler->create();
+                    $tplfile = $tplfileHandler->create();
                     $tplfile->setVar('tpl_source', file_get_contents($file_path), true);
                     $tplfile->setVar('tpl_refid', $mid);
                     $tplfile->setVar('tpl_tplset', 'default');
@@ -87,42 +94,43 @@ if (!function_exists('protector_onupdate_base')) {
                     $tplfile->setVar('tpl_lastmodified', $mtime);
                     $tplfile->setVar('tpl_lastimported', 0);
                     $tplfile->setVar('tpl_type', 'module');
-                    if (!$tplfile_handler->insert($tplfile)) {
-                        $msgs[] = '<span style="color:#ff0000;">ERROR: Could not insert template <b>' . htmlspecialchars($mydirname . '_' . $file) . '</b> to the database.</span>';
+                    if (!$tplfileHandler->insert($tplfile)) {
+                        $msgs[] = '<span style="color:#ff0000;">ERROR: Could not insert template <b>' . htmlspecialchars($mydirname . '_' . $file, ENT_QUOTES | ENT_HTML5) . '</b> to the database.</span>';
                     } else {
                         $tplid  = $tplfile->getVar('tpl_id');
-                        $msgs[] = 'Template <b>' . htmlspecialchars($mydirname . '_' . $file) . '</b> added to the database. (ID: <b>' . $tplid . '</b>)';
+                        $msgs[] = 'Template <b>' . htmlspecialchars($mydirname . '_' . $file, ENT_QUOTES | ENT_HTML5) . '</b> added to the database. (ID: <b>' . $tplid . '</b>)';
                         // generate compiled file
-                        include_once XOOPS_ROOT_PATH . '/class/xoopsblock.php';
-                        include_once XOOPS_ROOT_PATH . '/class/template.php';
+                        require_once XOOPS_ROOT_PATH . '/class/xoopsblock.php';
+                        require_once XOOPS_ROOT_PATH . '/class/template.php';
                         if (!xoops_template_touch($tplid)) {
-                            $msgs[] = '<span style="color:#ff0000;">ERROR: Failed compiling template <b>' . htmlspecialchars($mydirname . '_' . $file) . '</b>.</span>';
+                            $msgs[] = '<span style="color:#ff0000;">ERROR: Failed compiling template <b>' . htmlspecialchars($mydirname . '_' . $file, ENT_QUOTES | ENT_HTML5) . '</b>.</span>';
                         } else {
-                            $msgs[] = 'Template <b>' . htmlspecialchars($mydirname . '_' . $file) . '</b> compiled.</span>';
+                            $msgs[] = 'Template <b>' . htmlspecialchars($mydirname . '_' . $file, ENT_QUOTES | ENT_HTML5) . '</b> compiled.</span>';
                         }
                     }
                 }
             }
             closedir($handler);
         }
-        include_once XOOPS_ROOT_PATH . '/class/xoopsblock.php';
-        include_once XOOPS_ROOT_PATH . '/class/template.php';
+        require_once XOOPS_ROOT_PATH . '/class/xoopsblock.php';
+        require_once XOOPS_ROOT_PATH . '/class/template.php';
         xoops_template_clear_module_cache($mid);
 
         return true;
     }
 
-    /**
-     * @param $module_obj
-     * @param $log
-     */
-    function protector_message_append_onupdate(&$module_obj, $log)
-    {
-        if (is_array(@$GLOBALS['msgs'])) {
-            foreach ($GLOBALS['msgs'] as $message) {
-                $log->add(strip_tags($message));
-            }
-        }
-        // use mLog->addWarning() or mLog->addError() if necessary
-    }
+//    /**
+//     * @param \XoopsModule $module_obj
+//     * @param object $log
+//     */
+//    function protector_message_append_onupdate(&$module_obj, $log)
+//    {
+//        if (is_array(@$GLOBALS['msgs'])) {
+//            foreach ($GLOBALS['msgs'] as $message) {
+//                $log->add(strip_tags($message));
+//            }
+//        }
+//
+//        // use mLog->addWarning() or mLog->addError() if necessary
+//    }
 }

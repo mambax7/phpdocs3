@@ -56,7 +56,7 @@ class XoopsTpl extends Smarty
         );
         if ($xoopsConfig['debug_mode']) {
             $this->debugging_ctrl = 'URL';
-            $this->debug_tpl      = XOOPS_ROOT_PATH . '/class/smarty/xoops_tpl/debug.tpl';
+            $this->debug_tpl = XOOPS_ROOT_PATH . '/class/smarty/xoops_tpl/debug.tpl';
             if ($xoopsConfig['debug_mode'] == 3) {
                 $this->debugging = true;
             }
@@ -106,7 +106,7 @@ class XoopsTpl extends Smarty
     /**
      * XoopsTpl::touch
      *
-     * @param mixed $resourceName
+     * @param  mixed $resourceName
      * @return bool
      */
     public function touch($resourceName)
@@ -141,20 +141,20 @@ class XoopsTpl extends Smarty
     /**
      * XoopsTpl::setCompileId()
      *
-     * @param mixed $module_dirname
-     * @param mixed $theme_set
-     * @param mixed $template_set
+     * @param  mixed $module_dirname
+     * @param  mixed $theme_set
+     * @param  mixed $template_set
      * @return void
      */
     public function setCompileId($module_dirname = null, $theme_set = null, $template_set = null)
     {
         global $xoopsConfig;
 
-        $template_set = empty($template_set) ? $xoopsConfig['template_set'] : $template_set;
-        $theme_set    = empty($theme_set) ? $xoopsConfig['theme_set'] : $theme_set;
+        $template_set      = empty($template_set) ? $xoopsConfig['template_set'] : $template_set;
+        $theme_set         = empty($theme_set) ? $xoopsConfig['theme_set'] : $theme_set;
         if (class_exists('XoopsSystemCpanel', false)) {
-            $cPrefix   = 'cp-';
-            $theme_set = isset($xoopsConfig['cpanel']) ? $cPrefix . $xoopsConfig['cpanel'] : $cPrefix . 'default';
+            $cPrefix = 'cp-';
+            $theme_set =  isset($xoopsConfig['cpanel']) ? $cPrefix .$xoopsConfig['cpanel'] : $cPrefix . 'default';
         }
         $module_dirname    = empty($module_dirname) ? (empty($GLOBALS['xoopsModule']) ? 'system' : $GLOBALS['xoopsModule']->getVar('dirname', 'n')) : $module_dirname;
         $this->compile_id  = substr(md5(XOOPS_URL), 0, 8) . '-' . $module_dirname . '-' . $theme_set . '-' . $template_set;
@@ -164,9 +164,9 @@ class XoopsTpl extends Smarty
     /**
      * XoopsTpl::clearCache()
      *
-     * @param mixed $module_dirname
-     * @param mixed $theme_set
-     * @param mixed $template_set
+     * @param  mixed $module_dirname
+     * @param  mixed $theme_set
+     * @param  mixed $template_set
      * @return bool
      */
     public function clearCache($module_dirname = null, $theme_set = null, $template_set = null)
@@ -287,12 +287,13 @@ class XoopsTpl extends Smarty
 /**
  * function to update compiled template file in templates_c folder
  *
- * @param string $tpl_id
- * @param bool   $clear_old
+ * @param  int  $tpl_id
+ * @param  bool $clear_old
  * @return bool
  */
 function xoops_template_touch($tpl_id, $clear_old = true)
 {
+    /** @var \XoopsTplfileHandler $tplfile_handler */
     $tplfile_handler = xoops_getHandler('tplfile');
     $tplfile         = $tplfile_handler->get($tpl_id);
 
@@ -309,7 +310,7 @@ function xoops_template_touch($tpl_id, $clear_old = true)
 /**
  * Clear the module cache
  *
- * @param int $mid Module ID
+ * @param  int $mid Module ID
  * @return void
  */
 function xoops_template_clear_module_cache($mid)

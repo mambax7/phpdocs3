@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Extended User Profile
  *
@@ -27,7 +26,7 @@ echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderButton('right', '');
 
 $op = isset($_REQUEST['op']) ? $_REQUEST['op'] : (isset($_REQUEST['id']) ? 'edit' : 'list');
-/* @var XoopsModuleHandler $profilefield_handler */
+/** @var XoopsModuleHandler $profilefield_handler */
 $profilefield_handler = xoops_getModuleHandler('field');
 
 switch ($op) {
@@ -35,11 +34,11 @@ switch ($op) {
     case 'list':
         $fields = $profilefield_handler->getObjects(null, true, false);
 
-        /* @var XoopsModuleHandler $module_handler */
+    /** @var XoopsModuleHandler $module_handler */
         $module_handler = xoops_getHandler('module');
         $modules        = $module_handler->getObjects(null, true);
 
-        /* @var XoopsModuleHandler $cat_handler */
+    /** @var XoopsModuleHandler $cat_handler */
         $cat_handler = xoops_getModuleHandler('category');
         $criteria    = new CriteriaCompo();
         $criteria->setSort('cat_weight');
@@ -125,7 +124,7 @@ switch ($op) {
 
     case 'edit-option-strings':
         /** @var ProfileField $obj */
-        $obj          = $profilefield_handler->get($_REQUEST['id']);
+        $obj = $profilefield_handler->get($_REQUEST['id']);
         $fieldOptions = $obj->getVar('field_options');
         if (empty($fieldOptions)) { //If no option strings exist
             redirect_header('field.php', 2, _PROFILE_AM_FIELDNOTCONFIGURABLE);
@@ -154,7 +153,7 @@ switch ($op) {
             if (count($ids) > 0) {
                 $errors = array();
                 //if there are changed fields, fetch the fieldcategory objects
-                /* @var XoopsModuleHandler $field_handler */
+                /** @var XoopsModuleHandler $field_handler */
                 $field_handler = xoops_getModuleHandler('field');
                 $fields        = $field_handler->getObjects(new Criteria('field_id', '(' . implode(',', $ids) . ')', 'IN'), true);
                 foreach ($ids as $i) {
@@ -248,7 +247,7 @@ switch ($op) {
             $obj->setVar('step_id', $_REQUEST['step_id']);
         }
         if ($profilefield_handler->insert($obj)) {
-            /* @var XoopsGroupPermHandler $groupperm_handler */
+            /** @var XoopsGroupPermHandler $groupperm_handler */
             $groupperm_handler = xoops_getHandler('groupperm');
 
             $perm_arr = array();
@@ -313,7 +312,7 @@ switch ($op) {
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header('field.php', 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        $obj          = $profilefield_handler->get($_REQUEST['id']);
+        $obj = $profilefield_handler->get($_REQUEST['id']);
         $fieldOptions = \Xmf\Request::getArray('field_options');
         if (empty($fieldOptions)) { //If no option strings exist
             redirect_header('field.php', 2, _PROFILE_AM_FIELDNOTCONFIGURABLE);
@@ -372,7 +371,7 @@ function profile_visible_toggle($field_id, $field_required)
     $field_required = ($field_required == 1) ? 0 : 1;
     $this_handler   = xoops_getModuleHandler('field', 'profile');
     /** @var ProfileField $obj */
-    $obj = $this_handler->get($field_id);
+    $obj            = $this_handler->get($field_id);
     $obj->setVar('field_required', $field_required);
     if ($this_handler->insert($obj, true)) {
         redirect_header('field.php', 1, _PROFILE_AM_REQUIRED_TOGGLE_SUCCESS);

@@ -16,7 +16,6 @@
  * @since
  * @author       XOOPS Development Team, Kazumi Ono (AKA onokazu)
  */
-
 use Xmf\Request;
 
 // Check users rights
@@ -57,8 +56,8 @@ switch ($op) {
 
         $form = new XoopsThemeForm(_AM_SYSTEM_TEMPLATES_GENERATE, 'form', 'admin.php?fct=tplsets', 'post', true);
 
-        $ele = new XoopsFormSelect(_AM_SYSTEM_TEMPLATES_SET, 'tplset', $GLOBALS['xoopsConfig']['template_set']);
-        /* @var  XoopsTplsetHandler $tplset_handler */
+        $ele            = new XoopsFormSelect(_AM_SYSTEM_TEMPLATES_SET, 'tplset', $GLOBALS['xoopsConfig']['template_set']);
+        /** @var XoopsTplsetHandler $tplset_handler */
         $tplset_handler = xoops_getHandler('tplset');
         $tplsetlist     = $tplset_handler->getList();
         asort($tplsetlist);
@@ -69,8 +68,8 @@ switch ($op) {
         $form->addElement(new XoopsFormSelectTheme(_AM_SYSTEM_TEMPLATES_SELECT_THEME, 'select_theme', 1, 5), true);
         $form->addElement(new XoopsFormRadioYN(_AM_SYSTEM_TEMPLATES_FORCE_GENERATED, 'force_generated', 0, _YES, _NO), true);
 
-        $modules = new XoopsFormSelect(_AM_SYSTEM_TEMPLATES_SELECT_MODULES, 'select_modules');
-        /* @var XoopsModuleHandler $module_handler */
+        $modules        = new XoopsFormSelect(_AM_SYSTEM_TEMPLATES_SELECT_MODULES, 'select_modules');
+        /** @var XoopsModuleHandler $module_handler */
         $module_handler = xoops_getHandler('module');
         $criteria       = new CriteriaCompo(new Criteria('isactive', 1));
         $moduleslist    = $module_handler->getList($criteria, true);
@@ -117,11 +116,11 @@ switch ($op) {
                 $tplset = Request::getString('tplset', 'default');
 
                 //on crée uniquement les templates qui n'existent pas
-                /* @var XoopsModuleHandler $module_handler */
+                /** @var XoopsModuleHandler $module_handler */
                 $module_handler = xoops_getHandler('module');
-                /* @var  XoopsTplsetHandler $tplset_handler */
+                /** @var XoopsTplsetHandler $tplset_handler */
                 $tplset_handler = xoops_getHandler('tplset');
-                /* @var  XoopsTplfileHandler $tpltpl_handler */
+                /** @var XoopsTplfileHandler $tpltpl_handler */
                 $tpltpl_handler = xoops_getHandler('tplfile');
 
                 $criteria = new CriteriaCompo();
@@ -159,7 +158,7 @@ switch ($op) {
                                     }
 
                                     $class = 'odd';
-                                    $text  .= '<table cellspacing="1" class="outer"><tr><th colspan="3" align="center">' . _AM_SYSTEM_TEMPLATES_MODULES . ucfirst($module->getVar('dirname')) . '</th></tr><tr><th align="center">' . _AM_SYSTEM_TEMPLATES_TYPES . '</th><th  align="center">' . _AM_SYSTEM_TEMPLATES_FILES . '</th><th>' . _AM_SYSTEM_TEMPLATES_STATUS . '</th></tr>';
+                                    $text .= '<table cellspacing="1" class="outer"><tr><th colspan="3" align="center">' . _AM_SYSTEM_TEMPLATES_MODULES . ucfirst($module->getVar('dirname')) . '</th></tr><tr><th align="center">' . _AM_SYSTEM_TEMPLATES_TYPES . '</th><th  align="center">' . _AM_SYSTEM_TEMPLATES_FILES . '</th><th>' . _AM_SYSTEM_TEMPLATES_STATUS . '</th></tr>';
 
                                     // create template
                                     $templates      = $tpltpl_handler->find($tplsetname, 'module', null, $moddir);
@@ -248,8 +247,8 @@ switch ($op) {
                                     copy($indexFile, $theme_surcharge . '/' . $module->getVar('dirname') . '/blocks' . '/index.html');
                                 }
 
-                                $class                    = 'odd';
-                                $text                     .= '<table cellspacing="1" class="outer"><tr><th colspan="3" align="center">' . _AM_SYSTEM_TEMPLATES_MODULES . ucfirst($module->getVar('dirname')) . '</th></tr><tr><th align="center">' . _AM_SYSTEM_TEMPLATES_TYPES . '</th><th  align="center">' . _AM_SYSTEM_TEMPLATES_FILES . '</th><th>' . _AM_SYSTEM_TEMPLATES_STATUS . '</th></tr>';
+                                $class = 'odd';
+                                $text .= '<table cellspacing="1" class="outer"><tr><th colspan="3" align="center">' . _AM_SYSTEM_TEMPLATES_MODULES . ucfirst($module->getVar('dirname')) . '</th></tr><tr><th align="center">' . _AM_SYSTEM_TEMPLATES_TYPES . '</th><th  align="center">' . _AM_SYSTEM_TEMPLATES_FILES . '</th><th>' . _AM_SYSTEM_TEMPLATES_STATUS . '</th></tr>';
                                 $select_templates_modules = $_REQUEST['select_templates_modules'];
                                 $tempCount                = count($_REQUEST['select_templates_modules']);
                                 for ($l = 0; $l < $tempCount; ++$l) {
@@ -361,9 +360,9 @@ switch ($op) {
         XoopsLoad::load('XoopsRequest');
         $clean_path_file = XoopsRequest::getString('path_file', '');
         if (!empty($clean_path_file)) {
-            $path_file = realpath(XOOPS_ROOT_PATH . '/themes' . trim($clean_path_file));
-            $path_file = str_replace('\\', '/', $path_file);
-            $pathInfo  = pathinfo($path_file);
+            $path_file = realpath(XOOPS_ROOT_PATH.'/themes'.trim($clean_path_file));
+            $path_file = str_replace('\\','/',$path_file);
+            $pathInfo = pathinfo($path_file);
             if (!in_array($pathInfo['extension'], array(
                 'css',
                 'html',

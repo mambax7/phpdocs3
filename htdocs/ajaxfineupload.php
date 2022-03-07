@@ -91,7 +91,7 @@ if ($claims === false) {
 XoopsLoad::load('fineuploadhandler', 'system');
 
 $handler = (property_exists($claims, 'handler')) ? $claims->handler : '';
-$moddir  = (property_exists($claims, 'moddir')) ? $claims->moddir : '';
+$moddir  = (property_exists($claims, 'moddir'))  ? $claims->moddir  : '';
 
 if ($handler === '' || $moddir === '') {
     header("HTTP/1.0 400 Bad Request");
@@ -108,7 +108,7 @@ if (false === strpos($handler, '\\')) {
     XoopsLoad::load($handler, $moddir);
     $className = $moddir . $handler;
 }
-/* @var SystemFineUploadHandler $uploader */
+/** @var SystemFineUploadHandler $uploader */
 $uploader = new $className($claims);
 
 $method = get_request_method();

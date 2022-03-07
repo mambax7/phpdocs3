@@ -1,5 +1,11 @@
 <?php
 
+
+use XoopsModules\Protector;
+use XoopsModules\Protector\Guardian;
+
+require_once dirname(__DIR__) . '/preloads/autoloader.php';
+
 /**
  * @return bool|null
  */
@@ -9,23 +15,25 @@ function protector_postcommon()
 
     // patch for 2.2.x from xoops.org (I know this is not so beautiful...)
     if (substr(@XOOPS_VERSION, 6, 3) > 2.0 && false !== stripos(@$_SERVER['REQUEST_URI'], 'modules/system/admin.php?fct=preferences')) {
-        /* @var XoopsModuleHandler $module_handler */
-        $module_handler = xoops_getHandler('module');
-        $module         = $module_handler->get((int)(@$_GET['mod']));
+        /** @var \XoopsModuleHandler $moduleHandler */
+        $moduleHandler = xoops_getHandler('module');
+        /** @var \XoopsModule $module */
+        $module = $moduleHandler->get((int)(@$_GET['mod']));
         if (is_object($module)) {
             $module->getInfo();
         }
     }
 
     // configs writable check
-    if (@$_SERVER['REQUEST_URI'] === '/admin.php' && !is_writable(dirname(__DIR__) . '/configs')) {
+    if ('/admin.php' === @$_SERVER['REQUEST_URI'] && !is_writable(dirname(__DIR__) . '/configs')) {
         trigger_error('You should turn the directory ' . dirname(__DIR__) . '/configs writable', E_USER_WARNING);
     }
 
     // Protector object
-    require_once dirname(__DIR__) . '/class/protector.php';
+//    require_once dirname(__DIR__) . '/class/protector.php';
+    /** @var \XoopsMySQLDatabase $db */
     $db        = XoopsDatabaseFactory::getDatabaseConnection();
-    $protector = Protector::getInstance();
+    $protector = Guardian::getInstance();
     $protector->setConn($db->conn);
     $protector->updateConfFromDb();
     $conf = $protector->getConf();
@@ -40,10 +48,10 @@ function protector_postcommon()
         'XOOPS 2.0.13',
         'XOOPS 2.2.4',
     ))) {
-        /* @var XoopsConfigHandler $config_handler */
-        $config_handler    = xoops_getHandler('config');
-        $xoopsMailerConfig = $config_handler->getConfigsByCat(XOOPS_CONF_MAILER);
-        if ($xoopsMailerConfig['mailmethod'] === 'sendmail' && md5_file(XOOPS_ROOT_PATH . '/class/mail/phpmailer/class.phpmailer.php') === 'ee1c09a8e579631f0511972f929fe36a') {
+        /** @var \XoopsConfigHandler $configHandler */
+        $configHandler    = xoops_getHandler('config');
+        $xoopsMailerConfig = $configHandler->getConfigsByCat(XOOPS_CONF_MAILER);
+        if ('sendmail' === $xoopsMailerConfig['mailmethod'] && 'ee1c09a8e579631f0511972f929fe36a' === md5_file(XOOPS_ROOT_PATH . '/class/mail/phpmailer/class.phpmailer.php')) {
             echo '<strong>phpmailer security hole! Change the preferences of mail from "sendmail" to another, or upgrade the core right now! (message by protector)</strong>';
         }
     }
@@ -54,6 +62,7 @@ function protector_postcommon()
     }
 
     // group1_ips (groupid=1)
+    /** @var \XoopsUser $xoopsUser */
     if (is_object($xoopsUser) && in_array(1, $xoopsUser->getGroups())) {
         $group1_ips = $protector->get_group1_ips(true);
         if (implode('', array_keys($group1_ips))) {
@@ -76,7 +85,7 @@ function protector_postcommon()
 
     // user information (uid and can be banned)
     if (is_object(@$xoopsUser)) {
-        $uid     = $xoopsUser->getVar('uid');
+        $uid     = (int)$xoopsUser->getVar('uid');
         $can_ban = count(@array_intersect($xoopsUser->getGroups(), @unserialize(@$conf['bip_except']))) ? false : true;
     } else {
         // login failed check
@@ -87,7 +96,7 @@ function protector_postcommon()
         $can_ban = true;
     }
     // CHECK for spammers IPS/EMAILS during POST Actions
-    if (@$conf['stopforumspam_action'] !== 'none') {
+    if ('none' !== @$conf['stopforumspam_action']) {
         $protector->stopforumspam($uid);
     }
 
@@ -110,7 +119,7 @@ function protector_postcommon()
         }
     } else {
         foreach ($skip_dirnames as $skip_dirname) {
-            if ($skip_dirname && false !== strpos(getcwd(), $skip_dirname)) {
+            if ($skip_dirname && false !== strpos((string)getcwd(), $skip_dirname)) {
                 $dos_skipping = true;
                 break;
             }
@@ -128,14 +137,14 @@ function protector_postcommon()
     }
 
     // check session hi-jacking
-    $masks     = @$conf['session_fixed_topbit'];
+    $masks = @$conf['session_fixed_topbit'];
     $maskArray = explode('/', $masks);
-    $ipv4Mask  = empty($maskArray[0]) ? 24 : $maskArray[0];
-    $ipv6Mask  = (!isset($maskArray[1])) ? 56 : $maskArray[1];
-    $ip        = \Xmf\IPAddress::fromRequest();
+    $ipv4Mask = empty($maskArray[0]) ? 24 : $maskArray[0];
+    $ipv6Mask = (!isset($maskArray[1])) ? 56 : $maskArray[1];
+    $ip = \Xmf\IPAddress::fromRequest();
     $maskCheck = true;
     if (isset($_SESSION['protector_last_ip'])) {
-        $maskCheck = $ip->sameSubnet($_SESSION['protector_last_ip'], $ipv4Mask, $ipv6Mask);
+        $maskCheck = $ip->sameSubnet($_SESSION['protector_last_ip'], (int)$ipv4Mask, (int)$ipv6Mask);
     }
     if (!$maskCheck) {
         if (is_object($xoopsUser) && count(array_intersect($xoopsUser->getGroups(), unserialize($conf['groups_denyipmove'])))) {
@@ -145,7 +154,7 @@ function protector_postcommon()
     $_SESSION['protector_last_ip'] = $ip->asReadable();
 
     // SQL Injection "Isolated /*"
-    if (!$protector->check_sql_isolatedcommentin(@$conf['isocom_action'] & 1)) {
+    if (!$protector->check_sql_isolatedcommentin((bool)(@$conf['isocom_action'] & 1))) {
         if (($conf['isocom_action'] & 8) && $can_ban) {
             $protector->register_bad_ips();
         } elseif (($conf['isocom_action'] & 4) && $can_ban) {
@@ -158,7 +167,7 @@ function protector_postcommon()
     }
 
     // SQL Injection "UNION"
-    if (!$protector->check_sql_union(@$conf['union_action'] & 1)) {
+    if (!$protector->check_sql_union((bool)(@$conf['union_action'] & 1))) {
         if (($conf['union_action'] & 8) && $can_ban) {
             $protector->register_bad_ips();
         } elseif (($conf['union_action'] & 4) && $can_ban) {
@@ -174,20 +183,20 @@ function protector_postcommon()
         // SPAM Check
         if (is_object($xoopsUser)) {
             if (!$xoopsUser->isAdmin() && $conf['spamcount_uri4user']) {
-                $protector->spam_check((int)$conf['spamcount_uri4user'], $xoopsUser->getVar('uid'));
+                $protector->spam_check((int)$conf['spamcount_uri4user'], (int)$xoopsUser->getVar('uid'));
             }
         } elseif ($conf['spamcount_uri4guest']) {
             $protector->spam_check((int)$conf['spamcount_uri4guest'], 0);
         }
 
         // filter plugins for POST on postcommon stage
-        $protector->call_filter('postcommon_post');
+        $protector->call_filter('PostcommonPost');
     }
 
     // register.php Protection - both core and profile module have a register.php
     // There should be an event to trigger this check instead of filename sniffing.
-    if (basename($_SERVER['SCRIPT_FILENAME']) == 'register.php') {
-        $protector->call_filter('postcommon_register');
+    if ('register.php' === basename($_SERVER['SCRIPT_FILENAME'])) {
+        $protector->call_filter('PostcommonRegister');
     }
     return null;
 }

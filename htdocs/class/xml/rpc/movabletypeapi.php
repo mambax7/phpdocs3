@@ -26,9 +26,9 @@ require_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpcapi.php';
 class MovableTypeApi extends XoopsXmlRpcApi
 {
     /**
-     * @param array                $params
+     * @param array $params
      * @param \XoopsXmlRpcResponse $response
-     * @param \XoopsModule         $module
+     * @param \XoopsModule $module
      */
     public function __construct(&$params, $response, $module)
     {
@@ -43,8 +43,7 @@ class MovableTypeApi extends XoopsXmlRpcApi
         if (!$this->_checkUser($this->params[1], $this->params[2])) {
             $this->response->add(new XoopsXmlRpcFault(104));
         } else {
-            /** @var XoopsApi $xoopsapi */
-            $xoopsapi = $this->_getXoopsApi($this->params);
+            $xoopsapi =& $this->_getXoopsApi($this->params);
             $xoopsapi->_setUser($this->user, $this->isadmin);
             $ret =& $xoopsapi->getCategories(false);
             if (is_array($ret)) {

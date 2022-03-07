@@ -41,7 +41,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable groupid
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -51,7 +51,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable groupid
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function groupid($format = '')
@@ -61,7 +61,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable name
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function name($format = '')
@@ -71,7 +71,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable description
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function description($format = '')
@@ -81,7 +81,7 @@ class XoopsGroup extends XoopsObject
 
     /**
      * Returns Class Base Variable group_type
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function group_type($format = '')
@@ -119,7 +119,7 @@ class XoopsGroupHandler extends XoopsObjectHandler
     /**
      * create a new {@link XoopsGroup} object
      *
-     * @param bool $isNew mark the new object as "new"?
+     * @param  bool $isNew mark the new object as "new"?
      * @return XoopsGroup XoopsGroup reference to the new object
      *
      */
@@ -142,7 +142,7 @@ class XoopsGroupHandler extends XoopsObjectHandler
     public function get($id)
     {
         $id = (int)$id;
-        $group  = false;
+        $group = false;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('groups') . ' WHERE groupid=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -221,8 +221,8 @@ class XoopsGroupHandler extends XoopsObjectHandler
     /**
      * retrieve groups from the database
      *
-     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the groups
-     * @param bool                          $id_as_key should the groups' IDs be used as keys for the associative array?
+     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the groups
+     * @param  bool            $id_as_key should the groups' IDs be used as keys for the associative array?
      * @return array           Array of groups
      */
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -230,8 +230,8 @@ class XoopsGroupHandler extends XoopsObjectHandler
         $ret   = array();
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('groups');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql   .= ' ' . $criteria->renderWhere();
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
+            $sql .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -304,7 +304,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * create a new membership
      *
-     * @param bool $isNew should the new object be set to "new"?
+     * @param  bool $isNew should the new object be set to "new"?
      * @return XoopsMembership
      */
     public function create($isNew = true)
@@ -326,7 +326,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     public function get($id)
     {
         $id = (int)$id;
-        $mship  = false;
+        $mship = false;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('groups_users_link') . ' WHERE linkid=' . $id;
             if (!$result = $this->db->query($sql)) {
@@ -345,7 +345,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * inserts a membership in the database
      *
-     * @param XoopsObject|XoopsMembership $mship a XoopsMembership object
+     * @param  XoopsObject|XoopsMembership $mship a XoopsMembership object
      *
      * @return bool true on success, otherwise false
      */
@@ -384,7 +384,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * delete a membership from the database
      *
-     * @param XoopsObject|XoopsMembership $mship a XoopsMembership object
+     * @param  XoopsObject|XoopsMembership $mship a XoopsMembership object
      *
      * @return bool true on success, otherwise false
      */
@@ -406,8 +406,8 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * retrieve memberships from the database
      *
-     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} conditions to meet
-     * @param bool                          $id_as_key should the ID be used as the array's key?
+     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} conditions to meet
+     * @param  bool            $id_as_key should the ID be used as the array's key?
      * @return array           array of references
      */
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -415,8 +415,8 @@ class XoopsMembershipHandler extends XoopsObjectHandler
         $ret   = array();
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('groups_users_link');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql   .= ' ' . $criteria->renderWhere();
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
+            $sql .= ' ' . $criteria->renderWhere();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -441,13 +441,13 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * count how many memberships meet the conditions
      *
-     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} conditions to meet
+     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} conditions to meet
      * @return int
      */
     public function getCount(CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('groups_users_link');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -462,13 +462,13 @@ class XoopsMembershipHandler extends XoopsObjectHandler
     /**
      * delete all memberships meeting the conditions
      *
-     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} with conditions to meet
+     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} with conditions to meet
      * @return bool
      */
     public function deleteAll(CriteriaElement $criteria = null)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('groups_users_link');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -508,7 +508,7 @@ class XoopsMembershipHandler extends XoopsObjectHandler
      * @param int $groupid    ID of the group
      * @param int $limit      number of entries to return
      * @param int $start      offset of first entry to return
-     * @internal              param bool $asobject return users as {@link XoopsUser} objects? objects?
+     * @internal param bool $asobject return users as {@link XoopsUser} objects? objects?
      *                        FALSE will return arrays
      * @return array array of users belonging to the group
      */

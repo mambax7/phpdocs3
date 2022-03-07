@@ -34,8 +34,8 @@ include_once XOOPS_ROOT_PATH . '/class/database/sqlutility.php';
  * database manager for XOOPS installer
  *
  * @copyright (c) 2000-2016 XOOPS Project (www.xoops.org)
- * @license       GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
- * @author        Haruki Setoyama  <haruki@planewave.org>
+ * @license   GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @author    Haruki Setoyama  <haruki@planewave.org>
  **/
 class Db_manager
 {
@@ -48,7 +48,7 @@ class Db_manager
      */
     public $f_tables = array();
     /**
-     * @var XoopsDatabase
+     * @var XoopsMySQLDatabase
      */
     public $db;
 
@@ -57,7 +57,9 @@ class Db_manager
      */
     public function __construct()
     {
-        $this->db = XoopsDatabaseFactory::getDatabase();
+        /** @var XoopsMySQLDatabase $db */
+        $db           = XoopsDatabaseFactory::getDatabase();
+        $this->db     = $db;
         $this->db->setPrefix(XOOPS_DB_PREFIX);
         $this->db->setLogger(XoopsLogger::getInstance());
     }
@@ -67,6 +69,7 @@ class Db_manager
      */
     public function isConnectable()
     {
+        /** @property XoopsMySQLDatabase $db */
         $isConnected = ($this->db->connect(false) !== false);
         if (!$isConnected) {
             $_SESSION['error'] = '(' . $this->db->conn->connect_errno . ') ' . $this->db->conn->connect_error;
@@ -223,21 +226,22 @@ class Db_manager
     }
 
     /**
-     * @param $sql
+     * @param string $sql
      *
-     * @return mixed
+     * @return bool|\mysqli_result //mb TODO originally mixed
      */
     public function query($sql)
     {
+        /** @property XoopsMySQLDatabase $db */
         $this->db->connect();
 
         return $this->db->query($sql);
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
-     * @return mixed
+     * @return string //mb TODO originally mixed
      */
     public function prefix($table)
     {
@@ -247,9 +251,9 @@ class Db_manager
     }
 
     /**
-     * @param $ret
+     * @param mysqli_result $ret
      *
-     * @return mixed
+     * @return array|false //mb TODO originally mixed
      */
     public function fetchArray($ret)
     {
@@ -259,10 +263,10 @@ class Db_manager
     }
 
     /**
-     * @param $table
-     * @param $query
+     * @param string $table
+     * @param string $query
      *
-     * @return bool
+     * @return int|string|bool
      */
     public function insert($table, $query)
     {
@@ -293,11 +297,11 @@ class Db_manager
      */
     public function isError()
     {
-        return isset($this->f_tables) ? true : false;
+        return ($this->f_tables) ? true : false;
     }
 
     /**
-     * @param $tables
+     * @param array $tables
      *
      * @return array
      */
@@ -307,7 +311,7 @@ class Db_manager
         $this->db->connect();
         foreach ($tables as $key => $val) {
             if (!$this->db->query('DROP TABLE ' . $this->db->prefix($key))) {
-                $deleted[] = $ct;
+                $deleted[] = $key;
             }
         }
 
@@ -315,7 +319,7 @@ class Db_manager
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
      * @return bool
      */

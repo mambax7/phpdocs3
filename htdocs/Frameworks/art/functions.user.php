@@ -1,5 +1,4 @@
 <?php
-
 /**
  * user/member handlers
  *
@@ -18,7 +17,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_USER')):
     /**
      * @param bool $asString
      *
-     * @return mixed
+     * @return false|int|string //mb TODO originally mixed
      */
     function mod_getIP($asString = false)
     {
@@ -29,8 +28,8 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_USER')):
 
     /**
      * @param mixed $uid
-     * @param bool  $usereal
-     * @param bool  $linked
+     * @param bool $usereal
+     * @param bool $linked
      *
      * @return array
      */
@@ -44,12 +43,12 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_USER')):
 
     /**
      * @param mixed $uid
-     * @param int   $usereal
-     * @param bool  $linked
+     * @param bool  $usereal
+     * @param bool $linked
      *
      * @return string
      */
-    function mod_getUnameFromId($uid, $usereal = 0, $linked = false)
+    function mod_getUnameFromId($uid, $usereal = false, $linked = false)
     {
         $GLOBALS['xoopsLogger']->addDeprecated("Deprecated function '" . __FUNCTION__ . "', user XoopsUserUtility directly.");
 

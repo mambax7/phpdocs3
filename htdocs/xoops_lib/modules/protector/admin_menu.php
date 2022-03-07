@@ -1,20 +1,27 @@
 <?php
+
+use Xmf\Module\Admin;
+use XoopsModules\Protector;
+use XoopsModules\Protector\Registry;
+
+require_once __DIR__ . '/preloads/autoloader.php';
+
 // start hack by Trabis
-if (!class_exists('ProtectorRegistry')) {
+if (!class_exists('XoopsModules\Protector\Registry')) {
     exit('Registry not found');
 }
 
-$registry  = ProtectorRegistry::getInstance();
+$registry  = Registry::getInstance();
 $mydirname = $registry->getEntry('mydirname');
 $mydirpath = $registry->getEntry('mydirpath');
 $language  = $registry->getEntry('language');
 // end hack by Trabis
 
-/* @var XoopsModuleHandler $module_handler */
-$module_handler = xoops_getHandler('module');
+/** @var \XoopsModuleHandler $moduleHandler */
+$moduleHandler = xoops_getHandler('module');
 $xoopsModule    = XoopsModule::getByDirname($mydirname);
-$moduleInfo     = $module_handler->get($xoopsModule->getVar('mid'));
-$pathIcon32     = $moduleInfo->getInfo('icons32');
+$moduleInfo     = $moduleHandler->get($xoopsModule->getVar('mid'));
+$pathIcon32 = Admin::menuIconPath('');
 
 $constpref = '_MI_' . strtoupper($mydirname);
 
@@ -22,30 +29,30 @@ $adminmenu = array(
     array(
         'title' => constant($constpref . '_ADMINHOME'),
         'link'  => 'admin/index.php',
-        'icon'  => '../../' . $pathIcon32 . '/home.png'),
+        'icon'  => $pathIcon32 . '/home.png'),
     array(
         'title' => constant($constpref . '_ADMININDEX'),
         'link'  => 'admin/center.php?page=center',
         //'link' => 'admin/center.php' ,
-        'icon'  => '../../' . $pathIcon32 . '/firewall.png'),
+        'icon'  => $pathIcon32 . '/firewall.png'),
     array(
         'title' => constant($constpref . '_ADMINSTATS'),
         'link'  => 'admin/stats.php',
-        'icon'  => '../../' . $pathIcon32 . '/stats.png'),
+        'icon'  => $pathIcon32 . '/stats.png'),
     array(
         'title' => constant($constpref . '_ADVISORY'),
         //'link' => 'admin/center.php?page=advisory' ,
         'link'  => 'admin/advisory.php',
-        'icon'  => '../../' . $pathIcon32 . '/security.png'),
+        'icon'  => $pathIcon32 . '/security.png'),
     array(
         'title' => constant($constpref . '_PREFIXMANAGER'),
         //'link' => 'admin/center.php?page=prefix_manager' ,
         'link'  => 'admin/prefix_manager.php',
-        'icon'  => '../../' . $pathIcon32 . '/manage.png'),
+        'icon'  => $pathIcon32 . '/manage.png'),
     array(
         'title' => constant($constpref . '_ADMINABOUT'),
         'link'  => 'admin/about.php',
-        'icon'  => '../../' . $pathIcon32 . '/about.png'));
+        'icon'  => $pathIcon32 . '/about.png'));
 
 $adminmenu4altsys = array(
     array(

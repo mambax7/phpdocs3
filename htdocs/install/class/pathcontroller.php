@@ -50,12 +50,12 @@ class PathStuffController
     /**
      * @var array
      */
-    public $path_lookup       = array(
+    public $path_lookup = array(
         'root' => 'ROOT_PATH',
         'data' => 'VAR_PATH',
         'lib'  => 'PATH',
     );
-    public $xoopsUrl          = '';
+    public $xoopsUrl = '';
     public $xoopsCookieDomain = '';
     /**
      * @var array
@@ -91,7 +91,7 @@ class PathStuffController
                 $this->xoopsPath[$req] = $_SESSION['settings'][$sess];
             }
         } else {
-            $path = str_replace("\\", '/', realpath('../'));
+            $path = str_replace("\\", '/', realpath(dirname(dirname(__DIR__)) . '/'));
             if (substr($path, -1) === '/') {
                 $path = substr($path, 0, -1);
             }
@@ -132,7 +132,7 @@ class PathStuffController
             foreach ($this->path_lookup as $req => $sess) {
                 $_SESSION['settings'][$sess] = $this->xoopsPath[$req];
             }
-            $_SESSION['settings']['URL']           = $this->xoopsUrl;
+            $_SESSION['settings']['URL'] = $this->xoopsUrl;
             $_SESSION['settings']['COOKIE_DOMAIN'] = $this->xoopsCookieDomain;
             if ($valid) {
                 $GLOBALS['wizard']->redirectToPage('+1');
@@ -164,12 +164,12 @@ class PathStuffController
             }
             if (isset($request['COOKIE_DOMAIN'])) {
                 $tempCookieDomain = trim($request['COOKIE_DOMAIN']);
-                $tempParts        = parse_url($tempCookieDomain);
+                $tempParts = parse_url($tempCookieDomain);
                 if (!empty($tempParts['host'])) {
                     $tempCookieDomain = $tempParts['host'];
                 }
                 $request['COOKIE_DOMAIN'] = $tempCookieDomain;
-                $this->xoopsCookieDomain  = $tempCookieDomain;
+                $this->xoopsCookieDomain = $tempCookieDomain;
             }
         }
     }

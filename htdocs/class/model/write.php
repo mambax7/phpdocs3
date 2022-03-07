@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Object write handler class.
  *
@@ -273,8 +272,8 @@ class XoopsModelWrite extends XoopsModelAbstract
     /**
      * insert an object into the database
      *
-     * @param object $object {@link XoopsObject} reference to object
-     * @param bool   $force  flag to force the query execution despite security settings
+     * @param  object $object {@link XoopsObject} reference to object
+     * @param  bool   $force  flag to force the query execution despite security settings
      * @return mixed  object ID
      */
     public function insert($object, $force = true)
@@ -296,7 +295,7 @@ class XoopsModelWrite extends XoopsModelAbstract
             if (!empty($object->cleanVars)) {
                 $keys = array_keys($object->cleanVars);
                 $vals = array_values($object->cleanVars);
-                $sql  .= ' (`' . implode('`, `', $keys) . '`) VALUES (' . implode(',', $vals) . ')';
+                $sql .= ' (`' . implode('`, `', $keys) . '`) VALUES (' . implode(',', $vals) . ')';
             } else {
                 trigger_error("Data entry is not inserted - no variable is changed in object of '" . get_class($object) . "'", E_USER_NOTICE);
 
@@ -325,14 +324,14 @@ class XoopsModelWrite extends XoopsModelAbstract
     /**
      * delete an object from the database
      *
-     * @param object $object {@link XoopsObject} reference to the object to delete
-     * @param bool   $force
+     * @param  object $object {@link XoopsObject} reference to the object to delete
+     * @param  bool   $force
      * @return bool   FALSE if failed.
      */
     public function delete($object, $force = false)
     {
         if (is_array($this->handler->keyName)) {
-            $clause                  = array();
+            $clause = array();
             $thishandlerkeyNameCount = count($this->handler->keyName);
             for ($i = 0; $i < $thishandlerkeyNameCount; ++$i) {
                 $clause[] = '`' . $this->handler->keyName[$i] . '` = ' . $this->handler->db->quote($object->getVar($this->handler->keyName[$i]));
@@ -352,8 +351,8 @@ class XoopsModelWrite extends XoopsModelAbstract
      * delete all objects matching the conditions
      *
      * @param  \CriteriaElement|CriteriaCompo|null $criteria {@link CriteriaElement} with conditions to meet
-     * @param bool                  $force    force to delete
-     * @param bool                  $asObject delete in object way: instantiate all objects and delete one by one
+     * @param  bool   $force    force to delete
+     * @param  bool   $asObject delete in object way: instantiate all objects and delete one by one
      * @return bool|int
      */
     public function deleteAll(CriteriaElement $criteria = null, $force = true, $asObject = false)
@@ -387,10 +386,10 @@ class XoopsModelWrite extends XoopsModelAbstract
     /**
      * Change a field for objects with a certain criteria
      *
-     * @param string                $fieldname  Name of the field
-     * @param mixed                 $fieldvalue Value to write
+     * @param  string $fieldname  Name of the field
+     * @param  mixed  $fieldvalue Value to write
      * @param  \CriteriaElement|CriteriaCompo|null  $criteria   {@link CriteriaElement}
-     * @param bool                  $force      force to query
+     * @param  bool   $force      force to query
      * @return bool
      */
     public function updateAll($fieldname, $fieldvalue, CriteriaElement $criteria = null, $force = false)
@@ -404,7 +403,7 @@ class XoopsModelWrite extends XoopsModelAbstract
             $set_clause .= $this->handler->db->quote($fieldvalue);
         }
         $sql = 'UPDATE `' . $this->handler->table . '` SET ' . $set_clause;
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $queryFunc = empty($force) ? 'query' : 'queryF';

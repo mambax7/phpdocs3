@@ -26,7 +26,7 @@
 class ProfileProfile extends XoopsObject
 {
     /**
-     * @param $fields
+     * @param array $fields
      */
     public function __construct($fields)
     {
@@ -55,9 +55,10 @@ class ProfileProfile extends XoopsObject
 class ProfileProfileHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * holds reference to {@link profileFieldHandler} object
+     * holds reference to {@link ProfileFieldHandler} object
      */
     public $_fHandler;
+
     /**
      * Array of {@link XoopsProfileField} objects
      * @var array
@@ -120,7 +121,7 @@ class ProfileProfileHandler extends XoopsPersistableObjectHandler
      *
      * @param bool $isNew
      *
-     * @return \ProfileField
+     * @return XoopsObject|
      */
     public function createField($isNew = true)
     {
@@ -160,12 +161,12 @@ class ProfileProfileHandler extends XoopsPersistableObjectHandler
     /**
      * Insert a field in the database
      *
-     * @param ProfileField $field
+     * @param XoopsObject $field
      * @param bool         $force
      *
-     * @return bool
+     * @return mixed
      */
-    public function insertField(ProfileField $field, $force = false)
+    public function insertField(XoopsObject $field, $force = false)
     {
         return $this->_fHandler->insert($field, $force);
     }
@@ -173,12 +174,12 @@ class ProfileProfileHandler extends XoopsPersistableObjectHandler
     /**
      * Delete a field from the database
      *
-     * @param ProfileField $field
+     * @param XoopsObject $field
      * @param bool         $force
      *
-     * @return bool
+     * @return bool|void
      */
-    public function deleteField(ProfileField $field, $force = false)
+    public function deleteField(XoopsObject $field, $force = false)
     {
         return $this->_fHandler->delete($field, $force);
     }
@@ -247,9 +248,9 @@ class ProfileProfileHandler extends XoopsPersistableObjectHandler
      * insert a new object in the database
      *
      * @param XoopsObject|ProfileProfile $object reference to the object
-     * @param bool                       $force  whether to force the query execution despite security settings
+     * @param bool                       $force whether to force the query execution despite security settings
      *
-     * @return bool FALSE if failed, TRUE if already present and unchanged or successful
+     * @return mixed FALSE if failed, TRUE if already present and unchanged or successful
      */
     public function insert(XoopsObject $object, $force = false)
     {
@@ -306,7 +307,7 @@ class ProfileProfileHandler extends XoopsPersistableObjectHandler
         $sql_order  = '';
 
         $limit = $start = 0;
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql_clause .= ' AND ' . $criteria->render();
             if ($criteria->getSort() !== '') {
                 $sql_order = ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -329,13 +330,14 @@ class ProfileProfileHandler extends XoopsPersistableObjectHandler
                 0,
             );
         }
-        $user_handler = xoops_getHandler('user');
-        $uservars     = $this->getUserVars();
-        $users        = array();
-        $profiles     = array();
+        /** @var \XoopsUserHandler $userHandler */
+        $userHandler = xoops_getHandler('user');
+        $uservars    = $this->getUserVars();
+        $users       = array();
+        $profiles    = array();
         while (false !== ($myrow = $this->db->fetchArray($result))) {
             $profile = $this->create(false);
-            $user    = $user_handler->create(false);
+            $user    = $userHandler->create(false);
 
             foreach ($myrow as $name => $value) {
                 if (in_array($name, $uservars)) {

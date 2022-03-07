@@ -15,8 +15,7 @@
  * @since               2.3.0
  * @author              Taiwen Jiang <phppp@users.sourceforge.net>
  */
-
-/* @var  XoopsUser $xoopsUser */
+/** @var  XoopsUser $xoopsUser */
 
 use Xmf\Request;
 
@@ -39,7 +38,7 @@ if ($denied) {
 
 $token         = Request::getString('token', '');
 $name_form     = 'memberslist';
-$multiple      = Request::getInt('multiple', 0);
+$multiple = Request::getInt('multiple', 0);
 $name_userid   = 'uid' . ((0 != $multiple) ? '[]' : '');
 $name_username = 'uname' . ((0 != $multiple) ? '[]' : '');
 
@@ -84,9 +83,9 @@ class XoopsRankHandler extends XoopsObjectHandler
     }
 
     /**
-     * Create Object
+     * Create XoopsRank
      *
-     * @param bool $isNew
+     * @param  bool $isNew
      * @return XoopsRank
      */
     public function create($isNew = true)
@@ -100,10 +99,10 @@ class XoopsRankHandler extends XoopsObjectHandler
     }
 
     /**
-     * Get Object
+     * Get XoopsRank
      *
-     * @param int $id
-     * @return object
+     * @param  int $id
+     * @return XoopsRank|null
      */
     public function get($id = 0)
     {
@@ -125,8 +124,8 @@ class XoopsRankHandler extends XoopsObjectHandler
      * Get List
      *
      * @param \CriteriaElement|null $criteria
-     * @param int             $limit
-     * @param int             $start
+     * @param  int             $limit
+     * @param  int             $start
      * @return array
      */
     public function getList(CriteriaElement $criteria = null, $limit = 0, $start = 0)
@@ -137,7 +136,7 @@ class XoopsRankHandler extends XoopsObjectHandler
         }
 
         $sql = 'SELECT rank_id, rank_title FROM ' . $this->db->prefix('ranks');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
             if ($criteria->getSort() != '') {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -203,7 +202,7 @@ class XoUserHandler extends XoopsObjectHandler
     /**
      * Create
      *
-     * @param bool $isNew
+     * @param  bool $isNew
      * @return XoUser
      */
     public function create($isNew = true)
@@ -220,7 +219,7 @@ class XoUserHandler extends XoopsObjectHandler
      * Get Count
      *
      * @param \CriteriaElement|null $criteria
-     * @param array           $groups
+     * @param  array           $groups
      * @return int
      */
     public function getCount(CriteriaElement $criteria = null, $groups = array())
@@ -235,7 +234,7 @@ class XoUserHandler extends XoopsObjectHandler
         } else {
             $sql = '    SELECT COUNT(DISTINCT u.uid) FROM ' . $this->db->prefix('users') . ' AS u' . '    LEFT JOIN ' . $this->db->prefix('groups_users_link') . ' AS g ON g.uid = u.uid' . '    WHERE g.groupid IN (' . implode(', ', array_map('intval', $groups)) . ')';
         }
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             // Use the direct renderer, assuming no `uid` in criteria
             if ($render = $criteria->render()) {
                 $sql .= ' AND ' . $render;
@@ -251,7 +250,7 @@ class XoUserHandler extends XoopsObjectHandler
      * GetAll
      *
      * @param \CriteriaElement|null $criteria
-     * @param array           $groups
+     * @param  array           $groups
      * @return array of matching objects
      */
     public function getAll(CriteriaElement $criteria = null, $groups = array())
@@ -268,12 +267,12 @@ class XoUserHandler extends XoopsObjectHandler
         } else {
             $sql = '    SELECT u.* FROM ' . $this->db->prefix('users') . ' AS u' . '    LEFT JOIN ' . $this->db->prefix('groups_users_link') . ' AS g ON g.uid = u.uid' . '    WHERE g.groupid IN (' . implode(', ', array_map('intval', $groups)) . ')';
         }
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             if ($render = $criteria->render()) {
                 $sql .= ' AND ' . $render;
             }
             if ($sort = $criteria->getSort()) {
-                $sql      .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
+                $sql .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
                 $orderSet = true;
             }
             $limit = $criteria->getLimit();
@@ -299,9 +298,9 @@ $rank_handler = new XoopsRankHandler($xoopsDB);
 $user_handler = new XoUserHandler($xoopsDB);
 
 $items_match = array(
-    'uname' => _MA_USER_UNAME,
-    'name'  => _MA_USER_REALNAME,
-    'email' => _MA_USER_EMAIL,
+    'uname'     => _MA_USER_UNAME,
+    'name'      => _MA_USER_REALNAME,
+    'email'     => _MA_USER_EMAIL,
 //  'user_icq'  => _MA_USER_ICQ,
 //  'user_aim'  => _MA_USER_AIM,
 //  'user_yim'  => _MA_USER_YIM,
@@ -328,8 +327,8 @@ if (!Request::hasVar('user_submit', 'POST')) {
     $mode = Request::getInt('mode', 0);
     if (FINDUSERS_MODE_ADVANCED == $mode) {
         foreach ($items_match as $var => $title) {
-            $text       = new XoopsFormText('', $var, 30, 100, Request::getString($var, '', 'POST'));
-            $match      = new XoopsFormSelectMatchOption('', "{$var}_match", Request::getInt("{$var}_match", 0));
+            $text = new XoopsFormText('', $var, 30, 100, Request::getString($var, '', 'POST'));
+            $match = new XoopsFormSelectMatchOption('', "{$var}_match", Request::getInt("{$var}_match", 0));
             $match_tray = new XoopsFormElementTray($title, '&nbsp;');
             $match_tray->addElement($match);
             $match_tray->addElement($text);
@@ -342,8 +341,8 @@ if (!Request::hasVar('user_submit', 'POST')) {
         $occupation_text = new XoopsFormText(_MA_USER_OCCUPATION, 'user_occ', 30, 100, Request::getString('user_occ', '', 'POST'));
         $interest_text   = new XoopsFormText(_MA_USER_INTEREST, 'user_intrest', 30, 100, Request::getString('user_intrest', '', 'POST'));
         foreach ($items_range as $var => $title) {
-            $more       = new XoopsFormText('', "{$var}_more", 10, 5, Request::getString("{$var}_more", '', 'POST'));
-            $less       = new XoopsFormText('', "{$var}_less", 10, 5, Request::getString("{$var}_less", '', 'POST'));
+            $more = new XoopsFormText('', "{$var}_more", 10, 5, Request::getString("{$var}_more", '', 'POST'));
+            $less = new XoopsFormText('', "{$var}_less", 10, 5, Request::getString("{$var}_less", '', 'POST'));
             $range_tray = new XoopsFormElementTray($title, '&nbsp;-&nbsp;&nbsp;');
             $range_tray->addElement($less);
             $range_tray->addElement($more);
@@ -351,18 +350,18 @@ if (!Request::hasVar('user_submit', 'POST')) {
             unset($more, $less, $range_tray);
         }
 
-        $mailok_radio = new XoopsFormRadio(_MA_USER_SHOWMAILOK, 'user_mailok', Request::getString('user_mailok', 'both', 'POST'));
+        $mailok_radio = new XoopsFormRadio(_MA_USER_SHOWMAILOK, 'user_mailok',  Request::getString('user_mailok', 'both', 'POST'));
         $mailok_radio->addOptionArray(array(
-                                          'mailok' => _MA_USER_MAILOK,
-                                          'mailng' => _MA_USER_MAILNG,
+            'mailok' => _MA_USER_MAILOK,
+            'mailng' => _MA_USER_MAILNG,
             'both' => _MA_USER_BOTH
-                                      ));
+        ));
         $avatar_radio = new XoopsFormRadio(_MA_USER_HASAVATAR, 'user_avatar', Request::getString('user_avatar', 'both', 'POST'));
         $avatar_radio->addOptionArray(array(
-                                          'y'    => _YES,
-                                          'n'    => _NO,
+            'y' => _YES,
+            'n' => _NO,
             'both' => _MA_USER_BOTH
-                                      ));
+        ));
 
         $level_radio = new XoopsFormRadio(_MA_USER_LEVEL, 'level', @$_POST['level']);
         $levels      = array(
@@ -373,7 +372,7 @@ if (!Request::hasVar('user_submit', 'POST')) {
         );
         $level_radio->addOptionArray($levels);
 
-        /* @var XoopsMemberHandler $member_handler */
+        /** @var XoopsMemberHandler $member_handler */
         $member_handler = xoops_getHandler('member');
         $groups         = $member_handler->getGroupList();
         $groups[0]      = _ALL;
@@ -382,7 +381,7 @@ if (!Request::hasVar('user_submit', 'POST')) {
 
         $ranks       = $rank_handler->getList();
         $ranks[0]    = _ALL;
-        $rank_select = new XoopsFormSelect(_MA_USER_RANK, 'rank', Request::getInt('rank', 0));
+        $rank_select = new XoopsFormSelect(_MA_USER_RANK, 'rank', Request::getInt('rank', 0) );
         $rank_select->addOptionArray($ranks);
         $form->addElement($url_text);
         $form->addElement($location_text);
@@ -408,21 +407,21 @@ if (!Request::hasVar('user_submit', 'POST')) {
 
     $sort_select = new XoopsFormSelect(_MA_USER_SORT, 'user_sort', @$_POST['user_sort']);
     $sort_select->addOptionArray(array(
-                                     'uname'        => _MA_USER_UNAME,
-                                     'last_login'   => _MA_USER_LASTLOGIN,
-                                     'user_regdate' => _MA_USER_REGDATE,
+        'uname' => _MA_USER_UNAME,
+        'last_login' => _MA_USER_LASTLOGIN,
+        'user_regdate' => _MA_USER_REGDATE,
         'posts' => _MA_USER_POSTS
-                                 ));
+    ));
     $order_select = new XoopsFormSelect(_MA_USER_ORDER, 'user_order', @$_POST['user_order']);
     $order_select->addOptionArray(array(
-                                      'ASC'  => _MA_USER_ASC,
+        'ASC' => _MA_USER_ASC,
         'DESC' => _MA_USER_DESC
-                                  ));
+    ));
 
     $form->addElement($sort_select);
     $form->addElement($order_select);
 
-    $form->addElement(new XoopsFormText(_MA_USER_LIMIT, 'limit', 6, 6, Request::getInt('limit', 50, 'POST')));
+    $form->addElement(new XoopsFormText(_MA_USER_LIMIT, 'limit', 6, Request::getInt('limit', 50, 'POST'), ''));
     $form->addElement(new XoopsFormHidden('mode', $mode));
     $form->addElement(new XoopsFormHidden('target', Request::getString('target', '', 'POST')));
     $form->addElement(new XoopsFormHidden('multiple', $multiple));
@@ -488,20 +487,20 @@ if (!Request::hasVar('user_submit', 'POST')) {
     }
     foreach (array('last_login', 'user_regdate') as $var) {
         if (Request::hasVar("{$var}_more", 'POST') && is_numeric($_POST["{$var}_more"])) {
-            $time = time() - (60 * 60 * 24 * Request::getInt("{$var}_more", 0, 'POST'));
+            $time = time() - (60 * 60 * 24 *  Request::getInt("{$var}_more", 0, 'POST'));
             if ($time > 0) {
                 $criteria->add(new Criteria($var, $time, '<='));
             }
         }
         if (Request::hasVar("{$var}_less", 'POST') && is_numeric($_POST["{$var}_less"])) {
-            $time = time() - (60 * 60 * 24 * Request::getInt("{$var}_less", 0, 'POST'));
+            $time = time() - (60 * 60 * 24 *  Request::getInt("{$var}_less", 0, 'POST'));
             if ($time > 0) {
                 $criteria->add(new Criteria($var, $time, '>='));
             }
         }
     }
     if (Request::hasVar('posts_more', 'POST') && is_numeric($_POST['posts_more'])) {
-        $criteria->add(new Criteria('posts', Request::getInt('posts_more', 0, 'POST'), '<='));
+        $criteria->add(new Criteria('posts',  Request::getInt('posts_more', 0, 'POST'), '<='));
     }
     if (Request::hasVar('posts_less', 'POST') && is_numeric($_POST['posts_less'])) {
         $criteria->add(new Criteria('posts', Request::getInt('posts_less', 0, 'POST'), '>='));
@@ -526,7 +525,7 @@ if (!Request::hasVar('user_submit', 'POST')) {
 //            2 => 0,
 //            3 => -1
 //        );
-        $level = Request::getInt('level', 0, 'POST');
+        $level       = Request::getInt('level', 0, 'POST');
         if ($level > 0) {
             $criteria->add(new Criteria('level', $level));
         }
@@ -554,7 +553,7 @@ if (!Request::hasVar('user_submit', 'POST')) {
     );
     $sort      = (!in_array(Request::getString('user_sort', '', 'POST'), $validsort)) ? 'uname' : Request::getString('user_sort', '', 'POST');
     $order     = 'ASC';
-    if (Request::hasVar('user_order', 'POST') && Request::getString('user_order', '', 'POST') === 'DESC') {
+    if (Request::hasVar('user_order', 'POST') && Request::getString('user_order', '', 'POST')  === 'DESC') {
         $order = 'DESC';
     }
     $criteria->setSort($sort);
@@ -607,7 +606,7 @@ if (!Request::hasVar('user_submit', 'POST')) {
                 $hiddenform .= $GLOBALS['xoopsSecurity']->getTokenHTML() . "\n";
             } elseif (is_array($v)) {
                 foreach ($v as $temp) {
-                    $hiddenform .= "<input type='hidden' name='" . htmlspecialchars($k, ENT_QUOTES) . "' value='" . htmlspecialchars($temp, ENT_QUOTES) . "' />\n";
+                    $hiddenform .= "<input type='hidden' name='". htmlspecialchars($k, ENT_QUOTES)."' value='" . htmlspecialchars($temp, ENT_QUOTES) . "' />\n";
                 }
             } else {
                 $hiddenform .= "<input type='hidden' name='" . htmlspecialchars($k, ENT_QUOTES) . "' value='" . htmlspecialchars($v, ENT_QUOTES) . "' />\n";
@@ -634,7 +633,7 @@ if (!Request::hasVar('user_submit', 'POST')) {
             <table width='100%' border='0' cellspacing='1' cellpadding='4' class='outer'>
             <tr>
             <th align='center' width='5px'>";
-            if ($multiple > 0) {
+            if ($multiple > 0 ) {
                 echo "<input type='checkbox' name='memberslist_checkall' id='memberslist_checkall' onclick='xoopsCheckAll(\"{$name_form}\", \"memberslist_checkall\");' />";
             }
             echo "</th>
@@ -676,6 +675,7 @@ if (!Request::hasVar('user_submit', 'POST')) {
                 echo "<select name='fct'><option value='users'>" . _DELETE . "</option><option value='mailusers'>" . _MA_USER_SENDMAIL . '</option>';
                 echo '</select>&nbsp;';
                 echo $GLOBALS['xoopsSecurity']->getTokenHTML() . "<input type='submit' value='" . _SUBMIT . "' />";
+
                 // Add selected users
             } else {
                 echo "<input type='button' value='" . _MA_USER_ADD_SELECTED . "' onclick='addusers();' />";
@@ -691,9 +691,10 @@ if (!Request::hasVar('user_submit', 'POST')) {
                 $hiddenform .= $GLOBALS['xoopsSecurity']->getTokenHTML() . "\n";
             } elseif (is_array($v)) {
                 foreach ($v as $temp) {
-                    $hiddenform .= "<input type='hidden' name='" . htmlspecialchars($k, ENT_QUOTES) . "' value='" . htmlspecialchars($temp, ENT_QUOTES) . "' />\n";
+                    $hiddenform .= "<input type='hidden' name='". htmlspecialchars($k, ENT_QUOTES)."' value='" . htmlspecialchars($temp, ENT_QUOTES) . "' />\n";
                 }
             } else {
+
                 $hiddenform .= "<input type='hidden' name='" . htmlspecialchars($k, ENT_QUOTES) . "' value='" . htmlspecialchars($myts->stripSlashesGPC($v), ENT_QUOTES) . "' />\n";
             }
         }

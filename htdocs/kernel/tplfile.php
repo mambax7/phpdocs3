@@ -50,7 +50,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -60,7 +60,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_id($format = '')
@@ -70,7 +70,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_refid
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_refid($format = '')
@@ -80,7 +80,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_tplset
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_tplset($format = '')
@@ -90,7 +90,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_file
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_file($format = '')
@@ -100,7 +100,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_desc
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_desc($format = '')
@@ -110,7 +110,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_lastmodified
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_lastmodified($format = '')
@@ -120,7 +120,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_lastimported
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_lastimported($format = '')
@@ -130,7 +130,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_module
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_module($format = '')
@@ -140,7 +140,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_type
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_type($format = '')
@@ -150,7 +150,7 @@ class XoopsTplfile extends XoopsObject
 
     /**
      * Returns Class Base Variable tpl_source
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function tpl_source($format = '')
@@ -187,7 +187,7 @@ class XoopsTplfile extends XoopsObject
  *
  * @author  Kazumi Ono <onokazu@xoops.org>
  *
- * @todo    this is not a XoopsPersistableObjectHandler?
+ * @todo this is not a XoopsPersistableObjectHandler?
  */
 class XoopsTplfileHandler extends XoopsObjectHandler
 {
@@ -195,7 +195,7 @@ class XoopsTplfileHandler extends XoopsObjectHandler
      * create a new XoopsTplfile
      *
      * @see \XoopsBlock
-     * @param bool $isNew is the new Tplfile new??
+     * @param  bool $isNew is the new Tplfile new??
      * @return \XoopsTplfile reference to the new XoopsTplfile
      */
     public function create($isNew = true)
@@ -213,7 +213,7 @@ class XoopsTplfileHandler extends XoopsObjectHandler
      *
      * @see \XoopsBlock
      *
-     * @param int $id tpl_id of the block to retrieve
+     * @param int  $id tpl_id of the block to retrieve
      * @param bool $getsource
      *
      * @return \XoopsTplfile|false reference to the Tplfile
@@ -221,7 +221,7 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     public function get($id, $getsource = false)
     {
         $tplfile = false;
-        $id  = (int)$id;
+        $id      = (int)$id;
         if ($id > 0) {
             if (!$getsource) {
                 $sql = 'SELECT * FROM ' . $this->db->prefix('tplfile') . ' WHERE tpl_id=' . $id;
@@ -270,7 +270,7 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     /**
      * write a new Tplfile into the database
      *
-     * @param XoopsObject|XoopsTplfile $tplfile a XoopsTplfile object
+     * @param  XoopsObject|XoopsTplfile $tplfile a XoopsTplfile object
      *
      * @return bool true on success, otherwise false
      */
@@ -326,7 +326,7 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     /**
      * Update XoopsTplfile, even if a safe transaction (i.e. http get)
      *
-     * @param XoopsTplfile $tplfile
+     * @param  XoopsTplfile $tplfile
      * @return bool true on success, otherwise false
      */
     public function forceUpdate(XoopsTplfile $tplfile)
@@ -365,7 +365,7 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     /**
      * delete a block from the database
      *
-     * @param XoopsObject|XoopsTplfile $tplfile a XoopsTplfile object
+     * @param  XoopsObject|XoopsTplfile $tplfile a XoopsTplfile object
      *
      * @return bool true on success, otherwise false
      */
@@ -388,9 +388,9 @@ class XoopsTplfileHandler extends XoopsObjectHandler
 
     /**
      * retrieve array of {@link XoopsBlock}s meeting certain conditions
-     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the blocks
-     * @param bool                          $getsource
-     * @param bool                          $id_as_key should the blocks' bid be the key for the returned array?
+     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} with conditions for the blocks
+     * @param  bool            $getsource
+     * @param  bool            $id_as_key should the blocks' bid be the key for the returned array?
      * @return array           {@link XoopsBlock}s matching the conditions
      */
     public function getObjects(CriteriaElement $criteria = null, $getsource = false, $id_as_key = false)
@@ -402,8 +402,8 @@ class XoopsTplfileHandler extends XoopsObjectHandler
         } else {
             $sql = 'SELECT * FROM ' . $this->db->prefix('tplfile');
         }
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql   .= ' ' . $criteria->renderWhere() . ' ORDER BY tpl_refid';
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
+            $sql .= ' ' . $criteria->renderWhere() . ' ORDER BY tpl_refid';
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -428,13 +428,13 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     /**
      * Get count
      *
-     * @param CriteriaElement|CriteriaCompo $criteria
+     * @param  CriteriaElement|CriteriaCompo $criteria
      * @return int
      */
     public function getCount(CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('tplfile');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -448,7 +448,7 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     /**
      * getModuleTplCount
      *
-     * @param string $tplset
+     * @param  string $tplset
      * @return array
      */
     public function getModuleTplCount($tplset)
@@ -471,12 +471,12 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     /**
      * Find Template File
      *
-     * @param string|null  $tplset
-     * @param string|array|null $type
-     * @param string|null  $refid
-     * @param string|null  $module
-     * @param string|null  $file
-     * @param bool|string  $getsource
+     * @param  string|null       $tplset
+     * @param  string|array|null $type
+     * @param  string|null       $refid
+     * @param  string|null       $module
+     * @param  string|null       $file
+     * @param  bool|string  $getsource
      * @return array
      */
     public function find($tplset = null, $type = null, $refid = null, $module = null, $file = null, $getsource = false)
@@ -512,8 +512,8 @@ class XoopsTplfileHandler extends XoopsObjectHandler
     /**
      * Template Exists
      *
-     * @param string $tplname
-     * @param string $tplset_name
+     * @param  string $tplname
+     * @param  string $tplset_name
      * @return bool true if template exists, otherwise false
      */
     public function templateExists($tplname, $tplset_name)

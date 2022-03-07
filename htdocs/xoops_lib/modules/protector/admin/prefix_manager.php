@@ -1,9 +1,18 @@
 <?php
 
-include '../../../include/cp_header.php';
-include 'admin_header.php';
-require_once dirname(__DIR__) . '/class/gtickets.php';
+use XoopsModules\Protector;
+use XoopsModules\Protector\XoopsGTicket;
+
+require_once __DIR__ . '/admin_header.php';
+
+global $xoopsLogger, $xoopsGTicket;
+
+$xoopsGTicket = new XoopsGTicket();
+
+//require_once dirname(__DIR__) . '/class/gtickets.php';
+/** @var \XoopsMySQLDatabase $db */
 $db = XoopsDatabaseFactory::getDatabaseConnection();
+
 
 // COPY TABLES
 if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
@@ -16,7 +25,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
         redirect_header(XOOPS_URL . '/', 3, $xoopsGTicket->getErrors());
     }
 
-    $new_prefix = empty($_POST['new_prefix']) ? 'x' . substr(md5(time()), -5) : $_POST['new_prefix'];
+    $new_prefix = empty($_POST['new_prefix']) ? 'x' . substr(md5((string)time()), -5) : $_POST['new_prefix'];
     $old_prefix = $_POST['old_prefix'];
 
     $srs = $db->queryF('SHOW TABLE STATUS FROM `' . XOOPS_DB_NAME . '`');
@@ -60,6 +69,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
 
     redirect_header('index.php?page=prefix_manager', 1, _AM_MSG_DBUPDATED);
     exit;
+
     // DUMP INTO A LOCAL FILE
 } elseif (!empty($_POST['backup']) && !empty($_POST['prefix'])) {
     if (preg_match('/[^0-9A-Za-z_-]/', $_POST['prefix'])) {
@@ -80,7 +90,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
     }
 
     $exportString = '';
-    $rowLimit     = 100;
+    $rowLimit = 100;
 
     while (false !== ($row_table = $db->fetchArray($srs))) {
         $table = $row_table['Name'];
@@ -88,34 +98,34 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
             continue;
         }
         $drawCreate = $db->queryF("SHOW CREATE TABLE `$table`");
-        $create     = $db->fetchRow($drawCreate);
+        $create = $db->fetchRow($drawCreate);
         $db->freeRecordSet($drawCreate);
 
         $exportString .= "\nDROP TABLE IF EXISTS `$table`;\n{$create[1]};\n\n";
-        $result       = $db->query("SELECT * FROM `$table`");
-        $fieldCount   = $db->getFieldsNum($result);
+        $result      = $db->query("SELECT * FROM `$table`");
+        $fieldCount  = $db->getFieldsNum($result);
 
         $insertValues = '';
 
-        if ($db->getRowsNum($result) > 0) {
-            $fieldInfo   = array();
+        if ($db->getRowsNum($result)>0) {
+            $fieldInfo = array();
             $insertNames = "INSERT INTO `$table` (";
             for ($j = 0; $j < $fieldCount; ++$j) {
-                $field                   = $result->fetch_field_direct($j);
+                $field = $result->fetch_field_direct($j);
                 $fieldInfo[$field->name] = $field;
-                $insertNames             .= ((0 === $j) ? '' : ', ') . $field->name;
+                $insertNames .= ((0 === $j) ? '' : ', ') . $field->name;
             }
             $insertNames .= ")\nVALUES\n";
 
-            $rowCount     = 0;
+            $rowCount = 0;
             $insertValues = $insertNames;
             while (false !== ($row = $db->fetchArray($result))) {
                 if ($rowCount >= $rowLimit) {
                     $insertValues .= ");\n\n" . $insertNames;
-                    $rowCount     = 0;
+                    $rowCount = 0;
                 }
                 $insertValues .= (0 === $rowCount++) ? '(' : "),\n(";
-                $firstField   = true;
+                $firstField = true;
                 foreach ($fieldInfo as $name => $field) {
                     if (null === $row[$name]) {
                         $value = 'null';
@@ -142,7 +152,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
                         }
                     }
                     $insertValues .= ($firstField ? '' : ', ') . $value;
-                    $firstField   = false;
+                    $firstField = false;
                 }
             }
             $insertValues .= ");\n\n";
@@ -158,6 +168,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
     set_time_limit(0);
     echo $exportString;
     exit;
+
     // DROP TABLES
 } elseif (!empty($_POST['delete']) && !empty($_POST['prefix'])) {
     if (preg_match('/[^0-9A-Za-z_-]/', $_POST['prefix'])) {
@@ -172,7 +183,7 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
     $prefix = $_POST['prefix'];
 
     // check if prefix is working
-    if ($prefix == XOOPS_DB_PREFIX) {
+    if (XOOPS_DB_PREFIX == $prefix) {
         die("You can't drop working tables");
     }
 
@@ -204,21 +215,21 @@ if (!empty($_POST['copy']) && !empty($_POST['old_prefix'])) {
 
 // beggining of Output
 xoops_cp_header();
-include __DIR__ . '/mymenu.php';
+require __DIR__ . '/mymenu.php';
 
 // query
 $srs = $db->queryF('SHOW TABLE STATUS FROM `' . XOOPS_DB_NAME . '`');
 if (!$db->getRowsNum($srs)) {
     die('You are not allowed to copy tables');
-    xoops_cp_footer();
-    exit;
+//    xoops_cp_footer();
+//    exit;
 }
 
 // search prefixes
 $tables   = array();
 $prefixes = array();
 while (false !== ($row_table = $db->fetchArray($srs))) {
-    if (substr($row_table['Name'], -6) === '_users') {
+    if ('_users' === substr($row_table['Name'], -6)) {
         $prefixes[] = array(
             'name'    => substr($row_table['Name'], 0, -6),
             'updated' => $row_table['Update_time'],
@@ -261,11 +272,11 @@ foreach ($prefixes as $prefix) {
     $prefix4disp  = htmlspecialchars($prefix['name'], ENT_QUOTES);
     $ticket_input = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'protector_admin');
 
-    if ($prefix['name'] == XOOPS_DB_PREFIX) {
+    if (XOOPS_DB_PREFIX == $prefix['name']) {
         $del_button   = '';
         $style_append = 'background-color:#FFFFFF';
     } else {
-        $del_button   = "<input type='submit' name='delete' value='delete' onclick='return confirm(\"" . _AM_CONFIRM_DELETE . "\")' />";
+        $del_button   = "<input type='submit' name='delete' value='delete' onclick='return confirm(\"" . _AM_CONFIRM_DELETE . "\")'>";
         $style_append = '';
     }
 
@@ -277,17 +288,17 @@ foreach ($prefixes as $prefix) {
         <td class='odd' style='text-align:center;$style_append;' nowrap='nowrap'>
             <form action='?page=prefix_manager' method='POST' style='margin:0;'>
                 $ticket_input
-                <input type='hidden' name='old_prefix' value='$prefix4disp' />
-                <input type='text' name='new_prefix' size='8' maxlength='16' />
-                <input type='submit' name='copy' value='copy' />
+                <input type='hidden' name='old_prefix' value='$prefix4disp'>
+                <input type='text' name='new_prefix' size='8' maxlength='16'>
+                <input type='submit' name='copy' value='copy'>
             </form>
         </td>
         <td class='odd' style='text-align:center;$style_append;'>
             <form action='?page=prefix_manager' method='POST' style='margin:0;'>
                 $ticket_input
-                <input type='hidden' name='prefix' value='$prefix4disp' />
+                <input type='hidden' name='prefix' value='$prefix4disp'>
                 $del_button
-                <input type='submit' name='backup' value='backup' onclick='this.form.target=\"_blank\"' />
+                <input type='submit' name='backup' value='backup' onclick='this.form.target=\"_blank\"'>
             </form>
         </td>
     </tr>\n";

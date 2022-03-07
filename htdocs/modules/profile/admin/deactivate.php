@@ -1,5 +1,4 @@
 <?php
-
 include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
@@ -11,7 +10,7 @@ $uid = Xmf\Request::getInt('uid', 0);
 if ($uid === 0) {
     redirect_header('index.php', 2, _PROFILE_AM_NOSELECTION);
 }
-/* @var XoopsMemberHandler $member_handler */
+/** @var XoopsMemberHandler $member_handler */
 $member_handler = xoops_getHandler('member');
 $user           = $member_handler->getUser($uid);
 if (!$user || $user->isNew()) {
@@ -22,11 +21,11 @@ if (in_array(XOOPS_GROUP_ADMIN, $user->getGroups())) {
     redirect_header('index.php', 2, _PROFILE_AM_CANNOTDEACTIVATEWEBMASTERS);
 }
 $level = Xmf\Request::getInt('level', 0);
-if ($level === 0) {
+if ($level===0) {
     $user->setVar('level', 0);
     // reset the activation key so it cannot be reused
     // this now gets done at activation, but we do it here also to fix accounts created before the change.
-    $actkey = substr(md5(uniqid(mt_rand(), 1)), 0, 8);
+    $actkey = substr(md5(uniqid((string)mt_rand(), true)), 0, 8);
     $user->setVar('actkey', $actkey);
     $result = $member_handler->insertUser($user);
 } else {

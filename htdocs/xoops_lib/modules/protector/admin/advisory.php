@@ -1,12 +1,15 @@
 <?php
 
-include '../../../include/cp_header.php';
-include 'admin_header.php';
+use XoopsModules\Protector;
+
+require_once __DIR__ . '/admin_header.php';
+
+/** @var \XoopsMySQLDatabase $db */
 $db = XoopsDatabaseFactory::getDatabaseConnection();
 
 // beggining of Output
 xoops_cp_header();
-include __DIR__ . '/mymenu.php';
+require __DIR__ . '/mymenu.php';
 
 // open table for ADVISORY
 echo "<style>dd {margin-left: 32px;}</style>\n";
@@ -24,7 +27,7 @@ $relative_path = str_repeat('../', count($root_paths) - $i) . implode('/', array
 
 // the path of XOOPS_TRUST_PATH accessible check
 echo "<dl><dt>'XOOPS_TRUST_PATH' : ";
-echo "<img src='" . XOOPS_URL . '/' . htmlspecialchars($relative_path) . "/modules/protector/public_check.png' width='40' height='20' alt='' style='border:1px solid black;' /><br><a href='" . XOOPS_URL . '/' . htmlspecialchars($relative_path) . "/modules/protector/public_check.php'>" . _AM_ADV_TRUSTPATHPUBLICLINK . "</a></dt>\n";
+echo "<img src='" . XOOPS_URL . '/' . htmlspecialchars($relative_path, ENT_QUOTES | ENT_HTML5) . "/modules/protector/public_check.png' width='40' height='20' alt='' style='border:1px solid black;'><br><a href='" . XOOPS_URL . '/' . htmlspecialchars($relative_path, ENT_QUOTES | ENT_HTML5) . "/modules/protector/public_check.php'>" . _AM_ADV_TRUSTPATHPUBLICLINK . "</a></dt>\n";
 echo '<dd>' . _AM_ADV_TRUSTPATHPUBLIC . '</b><br><br></dd></dl>';
 
 // register_globals
@@ -55,7 +58,7 @@ echo "</b><br><br></dl>\n";
 
 // register_long_arrays -- enabling deprecated feature opens potential attack surface
 // This option was removed in PHP 5.4, and is no longer supported in XOOPS.
-// Any code still using the the long arrays ($HTTP_GET_VARS, $HTTP_POST_VARS, $HTTP_COOKIE_VARS)
+// Any code still using the the long arrays ($_GET, $_POST, $_COOKIE)
 // should be considered "suspect."
 if (version_compare(PHP_VERSION, '5.4.0', '<')) {
     echo "<dl><dt>'register_long_arrays' : ";
@@ -82,7 +85,7 @@ echo "</b><br><br></dl>\n";
 
 // XOOPS_DB_PREFIX
 echo "<dl><dt>'XOOPS_DB_PREFIX' : ";
-$safe = strtolower(XOOPS_DB_PREFIX) !== 'xoops';
+$safe = 'xoops' !== strtolower(XOOPS_DB_PREFIX);
 if ($safe) {
     echo XOOPS_DB_PREFIX . " &nbsp; <span style='color:green;font-weight:bold;'>OK</span></dt>\n<dd>";
 } else {
@@ -108,7 +111,7 @@ echo "</b><br><br></dl>\n";
 // patch to databasefactory.php
 echo "<dl><dt>'databasefactory.php' : ";
 $db = XoopsDatabaseFactory::getDatabaseConnection();
-if (substr(@XOOPS_VERSION, 6, 3) < 2.4 && strtolower(get_class($db)) !== 'protectormysqldatabase') {
+if (substr(@XOOPS_VERSION, 6, 3) < 2.4 && 'protectormysqldatabase' !== strtolower(get_class($db))) {
     echo "<span style='color:red;font-weight:bold;'>" . _AM_ADV_DBFACTORYUNPATCHED . "</span></dt>\n";
 } else {
     echo _AM_ADV_DBFACTORYPATCHED . "<span style='color:green;font-weight:bold;'> OK</span></dt>\n";

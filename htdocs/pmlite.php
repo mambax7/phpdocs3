@@ -16,6 +16,7 @@
  */
 
 include __DIR__ . '/mainfile.php';
+/** @var XoopsPreload $xoopsPreload */
 $xoopsPreload = XoopsPreload::getInstance();
 $xoopsPreload->triggerEvent('core.pmlite.start');
 
@@ -100,8 +101,8 @@ if (is_object($xoopsUser)) {
             if ($pm->getVar('to_userid') == $xoopsUser->getVar('uid')) {
                 $pm_uname = XoopsUser::getUnameFromId($pm->getVar('from_userid'));
                 $message  = "[quote]\n";
-                $message  .= sprintf(_PM_USERWROTE, $pm_uname);
-                $message  .= "\n" . $pm->getVar('msg_text', 'E') . "\n[/quote]";
+                $message .= sprintf(_PM_USERWROTE, $pm_uname);
+                $message .= "\n" . $pm->getVar('msg_text', 'E') . "\n[/quote]";
             } else {
                 unset($pm);
                 $reply = $send2 = 0;
@@ -128,11 +129,11 @@ if (is_object($xoopsUser)) {
         }
         $pmform->addElement(new XoopsFormText(_PM_SUBJECTC, 'subject', 30, 100, $subject), true);
 
-        $msg_image     = '';
-        $icons_radio   = new XoopsFormRadio(_MESSAGEICON, 'msg_image', $msg_image);
+        $msg_image   = '';
+        $icons_radio = new XoopsFormRadio(_MESSAGEICON, 'msg_image', $msg_image);
         $subjectImages = array();
         foreach ($subject_icons as $name => $value) {
-            $subjectImages[$name] = '<img src="' . XOOPS_URL . '/images/subject/' . $value . '">';
+            $subjectImages[$name] = '<img src="' . XOOPS_URL . '/images/subject/' . $value .'">';
         }
         $icons_radio->addOptionArray($subjectImages);
         $pmform->addElement($icons_radio);
@@ -150,6 +151,7 @@ if (is_object($xoopsUser)) {
         $pmform->addElement($elementTray);
 
         $pmform->display();
+
     }
 } else {
     echo _PM_SORRY . "<br><br><a href='" . XOOPS_URL . "/register.php' title=''>" . _PM_REGISTERNOW . '</a>.';

@@ -28,7 +28,7 @@ $op = isset($_REQUEST['op']) ? $_REQUEST['op'] : 'list';
 if ($op === 'editordelete') {
     $op = isset($_REQUEST['delete']) ? 'delete' : 'edit';
 }
-/* @var XoopsMemberHandler $handler */
+/** @var XoopsMemberHandler $handler */
 $handler = xoops_getHandler('member');
 
 switch ($op) {
@@ -44,7 +44,8 @@ switch ($op) {
         $button_tray->addElement(new XoopsFormButton('', 'delete', _DELETE, 'submit'));
         $form->addElement($button_tray);
         $form->display();
-    // no break;
+     break;
+
     case 'new':
         xoops_loadLanguage('main', $GLOBALS['xoopsModule']->getVar('dirname', 'n'));
         include_once dirname(__DIR__) . '/include/forms.php';
@@ -75,18 +76,19 @@ switch ($op) {
         }
 
         // Dynamic fields
-        /* @var  ProfileProfileHandler $profile_handler */
+        /** @var ProfileProfileHandler $profile_handler */
         $profile_handler = xoops_getModuleHandler('profile');
         // Get fields
         $fields     = $profile_handler->loadFields();
         $userfields = $profile_handler->getUserVars();
         // Get ids of fields that can be edited
-        /* @var  XoopsGroupPermHandler $gperm_handler */
+        /** @var XoopsGroupPermHandler $gperm_handler */
         $gperm_handler   = xoops_getHandler('groupperm');
         $editable_fields = $gperm_handler->getItemIds('profile_edit', $GLOBALS['xoopsUser']->getGroups(), $GLOBALS['xoopsModule']->getVar('mid'));
 
         $uid = empty($_POST['uid']) ? 0 : (int)$_POST['uid'];
         if (!empty($uid)) {
+            /** @var XoopsUser $user */
             $user = $handler->getUser($uid);
             /** @var \ProfileProfile $profile */
             $profile = $profile_handler->get($uid);

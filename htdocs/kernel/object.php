@@ -64,6 +64,7 @@ class XoopsObject
      * @access protected
      */
     public $vars = array();
+
     /**
      * variables cleaned for store in DB
      *
@@ -71,6 +72,7 @@ class XoopsObject
      * @access protected
      */
     public $cleanVars = array();
+
     /**
      * is it a newly created object?
      *
@@ -78,6 +80,7 @@ class XoopsObject
      * @access private
      */
     public $_isNew = false;
+
     /**
      * has any of the values been modified?
      *
@@ -85,6 +88,7 @@ class XoopsObject
      * @access private
      */
     public $_isDirty = false;
+
     /**
      * errors
      *
@@ -92,6 +96,7 @@ class XoopsObject
      * @access private
      */
     public $_errors = array();
+
     /**
      * additional filters registered dynamically by a child class object
      *
@@ -350,8 +355,8 @@ class XoopsObject
      * - avoids polluting of namespace with CGI args
      *
      * @param array|null $var_arr associative array of values to assign
-     * @param string     $pref    prefix (only keys starting with the prefix will be set)
-     * @param bool       $not_gpc
+     * @param string $pref    prefix (only keys starting with the prefix will be set)
+     * @param bool   $not_gpc
      *
      * @return void
      *
@@ -386,9 +391,9 @@ class XoopsObject
     /**
      * Returns the values of the specified variables
      *
-     * @param array|null $keys     An array containing the names of the keys to retrieve, or null to get all of them
-     * @param string $format   Format to use (see getVar)
-     * @param int    $maxDepth Maximum level of recursion to use if some vars are objects themselves
+     * @param  array|null $keys     An array containing the names of the keys to retrieve, or null to get all of them
+     * @param  string $format   Format to use (see getVar)
+     * @param  int    $maxDepth Maximum level of recursion to use if some vars are objects themselves
      * @return array  associative array of key->value pairs
      */
     public function getValues($keys = null, $format = 's', $maxDepth = 1)
@@ -418,8 +423,8 @@ class XoopsObject
      * YOU SHOULD NOT USE ANY OF THE UNICODE TYPES, THEY WILL BE REMOVED
      *
      * @access public
-     * @param string $key    key of the object's variable to be returned
-     * @param string $format format to use for the output
+     * @param  string $key    key of the object's variable to be returned
+     * @param  string $format format to use for the output
      * @return mixed  formatted value of the variable
      */
     public function getVar($key, $format = 's')
@@ -432,7 +437,7 @@ class XoopsObject
         $ts  = MyTextSanitizer::getInstance();
         switch ($this->vars[$key]['data_type']) {
             case XOBJ_DTYPE_INT:
-                $ret = (null === $ret) ? null : (int)$ret;
+                $ret = (null === $ret) ? null : (int) $ret;
                 break;
             case XOBJ_DTYPE_UNICODE_TXTBOX:
             case XOBJ_DTYPE_TXTBOX:
@@ -873,6 +878,7 @@ class XoopsObject
                         break;
                     default:
                         break;
+
                 }
             }
             $this->cleanVars[$k] = str_replace('\\"', '"', $cleanv);
@@ -950,7 +956,7 @@ class XoopsObject
         xoops_load('XoopsCache');
         $class = get_class($this);
         if (!$modules_active = XoopsCache::read('system_modules_active')) {
-            /* @var XoopsModuleHandler $module_handler */
+            /** @var XoopsModuleHandler $module_handler */
             $module_handler = xoops_getHandler('module');
             $modules_obj    = $module_handler->getObjects(new Criteria('isactive', '1'));
             $modules_active = array();
@@ -1086,7 +1092,7 @@ class XoopsObjectHandler
      */
     public function __construct(XoopsDatabase $db)
     {
-        /* @var XoopsMySQLDatabase $db */
+        /** @var XoopsMySQLDatabase $db */
         $this->db = $db;
     }
 
@@ -1166,6 +1172,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * static protected
      */
     public $handler;
+
     /**
      * holds reference to predefined extended object handlers: read, stats, joint, write, sync
      *
@@ -1192,22 +1199,27 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * @var string
      */
     public $table;
+
     /**
      * @var string
      */
     public $keyName;
+
     /**
      * @var string
      */
     public $className;
+
     /**
      * @var string
      */
     public $identifierName;
+
     /**
      * @var string
      */
     public $field_link;
+
     /**
      * @var string
      */
@@ -1216,11 +1228,11 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * Constructor
      *
-     * @param null|XoopsDatabase $db              database connection
-     * @param string             $table           Name of database table
-     * @param string             $className       Name of the XoopsObject class this handler manages
-     * @param string             $keyName         Name of the property holding the key
-     * @param string             $identifierName  Name of the property holding an identifier
+     * @param null|XoopsDatabase $db             database connection
+     * @param string             $table          Name of database table
+     * @param string             $className      Name of the XoopsObject class this handler manages
+     * @param string             $keyName        Name of the property holding the key
+     * @param string             $identifierName Name of the property holding an identifier
      *                                            name (title, name ...), used on getList()
      */
     public function __construct(XoopsDatabase $db = null, $table = '', $className = '', $keyName = '', $identifierName = '')
@@ -1229,8 +1241,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
         $className      = (string)$className;
         $keyName        = (string)$keyName;
         $identifierName = (string)$identifierName;
-        $db             = XoopsDatabaseFactory::getDatabaseConnection();
-        $table          = $db->prefix($table);
+        $db    = XoopsDatabaseFactory::getDatabaseConnection();
+        $table = $db->prefix($table);
         parent::__construct($db);
         $this->table     = $table;
         $this->keyName   = $keyName;
@@ -1243,11 +1255,11 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * PHP 4 style constructor compatibility shim
      *
-     * @param null|XoopsDatabase $db              database connection
-     * @param string             $table           Name of database table
-     * @param string             $className       Name of the XoopsObject class this handler manages
-     * @param string             $keyName         Name of the property holding the key
-     * @param string             $identifierName  Name of the property holding an identifier
+     * @param null|XoopsDatabase $db             database connection
+     * @param string             $table          Name of database table
+     * @param string             $className      Name of the XoopsObject class this handler manages
+     * @param string             $keyName        Name of the property holding the key
+     * @param string             $identifierName Name of the property holding an identifier
      *                                            name (title, name ...), used on getList()
      *
      * @deprecated all callers should be using parent::__construct()
@@ -1264,8 +1276,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      *
      * @access   protected
      * @param string|\XoopsPersistableObjectHandler|null $handler
-     * @param array|null                                 $args
-     * @param string|null                                $path path to class
+     * @param array|null  $args
+     * @param string|null $path path to class
      * @return XoopsPersistableObjectHandler object
      */
     public function setHandler($handler = null, $args = null, $path = null)
@@ -1285,7 +1297,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * Load predefined handler
      *
      * @access protected
-     * @param string $name handler name
+     * @param  string $name handler name
      * @param  mixed  $args args
      * @return XoopsModelAbstract of handler {@link XoopsModelAbstract}
      */
@@ -1301,6 +1313,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
         }
 
         return $handlers[$name];
+
         /**
          * // Following code just kept as placeholder for PHP5
          * if (!isset(self::$handlers[$name])) {
@@ -1320,8 +1333,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * To be enabled in XOOPS 3.0 with PHP 5
      *
      * @access protected
-     * @param string $name method name
-     * @param array  $args arguments
+     * @param  string $name method name
+     * @param  array  $args arguments
      * @return mixed
      */
     public function __call($name, array $args)
@@ -1346,7 +1359,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * create a new object
      *
-     * @param bool $isNew Flag the new objects as new
+     * @param  bool $isNew Flag the new objects as new
      * @return XoopsObject {@link XoopsObject}
      */
     public function create($isNew = true)
@@ -1363,7 +1376,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * Load a {@link XoopsObject} object from the database
      *
      * @access protected
-     * @param mixed      $id     ID
+     * @param  mixed $id     ID
      * @param array|null $fields fields to fetch
      * @return \XoopsObject|null {@link XoopsObject}
      */
@@ -1407,8 +1420,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * insert an object into the database
      *
-     * @param XoopsObject $object {@link XoopsObject} reference to object
-     * @param bool        $force  flag to force the query execution despite security settings
+     * @param  XoopsObject $object {@link XoopsObject} reference to object
+     * @param  bool        $force  flag to force the query execution despite security settings
      * @return mixed       object ID
      */
     public function insert(XoopsObject $object, $force = true)
@@ -1421,8 +1434,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * delete an object from the database
      *
-     * @param XoopsObject $object {@link XoopsObject} reference to the object to delete
-     * @param bool        $force
+     * @param  XoopsObject $object {@link XoopsObject} reference to the object to delete
+     * @param  bool        $force
      * @return bool        FALSE if failed.
      */
     public function delete(XoopsObject $object, $force = false)
@@ -1436,8 +1449,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * delete all objects matching the conditions
      *
      * @param \CriteriaElement|null $criteria {@link CriteriaElement} with conditions to meet
-     * @param bool                  $force    force to delete
-     * @param bool                  $asObject delete in object way: instantiate all objects and delete one by one
+     * @param  bool            $force    force to delete
+     * @param  bool            $asObject delete in object way: instantiate all objects and delete one by one
      * @return bool
      */
     public function deleteAll(CriteriaElement $criteria = null, $force = true, $asObject = false)
@@ -1450,10 +1463,10 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * Change a field for objects with a certain criteria
      *
-     * @param string                $fieldname  Name of the field
-     * @param mixed                 $fieldvalue Value to write
+     * @param  string          $fieldname  Name of the field
+     * @param  mixed           $fieldvalue Value to write
      * @param \CriteriaElement|null $criteria   {@link CriteriaElement}
-     * @param bool                  $force      force to query
+     * @param  bool            $force      force to query
      * @return bool
      */
     public function updateAll($fieldname, $fieldvalue, CriteriaElement $criteria = null, $force = false)
@@ -1474,8 +1487,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * Retrieve objects from the database
      *
      * @param \CriteriaElement|null $criteria  {@link CriteriaElement} conditions to be met
-     * @param bool                  $id_as_key use the ID as key for the array
-     * @param bool                  $as_object return an array of objects
+     * @param  bool            $id_as_key use the ID as key for the array
+     * @param  bool            $as_object return an array of objects
      * @return array
      */
     public function &getObjects(CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
@@ -1491,8 +1504,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      *
      * @param \CriteriaElement|null $criteria  {@link CriteriaElement} to match
      * @param array|null            $fields    variables to fetch
-     * @param bool                  $asObject  flag indicating as object, otherwise as array
-     * @param bool                  $id_as_key use the ID as key for the array
+     * @param  bool            $asObject  flag indicating as object, otherwise as array
+     * @param  bool            $id_as_key use the ID as key for the array
      * @return array           of objects/array {@link XoopsObject}
      */
     public function &getAll(CriteriaElement $criteria = null, $fields = null, $asObject = true, $id_as_key = true)
@@ -1507,8 +1520,8 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * Retrieve a list of objects data
      *
      * @param \CriteriaElement|null $criteria {@link CriteriaElement} conditions to be met
-     * @param int                   $limit    Max number of objects to fetch
-     * @param int                   $start    Which record to start at
+     * @param  int             $limit    Max number of objects to fetch
+     * @param  int             $start    Which record to start at
      * @return array
      */
     public function getList(CriteriaElement $criteria = null, $limit = 0, $start = 0)
@@ -1538,11 +1551,11 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      *
      * {@link CriteriaCompo}
      *
-     * @param int                   $limit    Max number of objects to fetch
-     * @param int                   $start    Which record to start at
+     * @param  int             $limit    Max number of objects to fetch
+     * @param  int             $start    Which record to start at
      * @param \CriteriaElement|null $criteria {@link CriteriaElement} to match
      * @param array|null            $fields   variables to fetch
-     * @param bool                  $asObject flag indicating as object, otherwise as array
+     * @param  bool            $asObject flag indicating as object, otherwise as array
      * @return array           of objects     {@link XoopsObject}
      */
     public function &getByLimit($limit = 0, $start = 0, CriteriaElement $criteria = null, $fields = null, $asObject = true)
@@ -1598,7 +1611,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      *
      * @param \CriteriaElement|null $criteria     {@link CriteriaElement} to match
      * @param array|null            $fields       variables to fetch
-     * @param bool                  $asObject     flag indicating as object, otherwise as array
+     * @param  bool            $asObject     flag indicating as object, otherwise as array
      * @param string|null           $field_link   field of linked object for JOIN
      * @param string|null           $field_object field of current object for JOIN
      * @return array           of objects {@link XoopsObject}
@@ -1642,7 +1655,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * update objects matching a condition against linked objects
      *
-     * @param array                 $data     array of key => value
+     * @param  array           $data     array of key => value
      * @param \CriteriaElement|null $criteria {@link CriteriaElement} to match
      * @return int             count of objects
      */
@@ -1678,9 +1691,9 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
     /**
      * Clean orphan objects against linked objects
      *
-     * @param string $table_link   table of linked object for JOIN
-     * @param string $field_link   field of linked object for JOIN
-     * @param string $field_object field of current object for JOIN
+     * @param  string $table_link   table of linked object for JOIN
+     * @param  string $field_link   field of linked object for JOIN
+     * @param  string $field_object field of current object for JOIN
      * @return bool   true on success
      */
     public function cleanOrphan($table_link = '', $field_link = '', $field_object = '')
@@ -1708,6 +1721,7 @@ class XoopsPersistableObjectHandler extends XoopsObjectHandler
      * @param bool $as_object
      * @return bool
      */
+
     /**#@+
      * @deprecated
      * @param      $result

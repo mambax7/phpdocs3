@@ -32,15 +32,15 @@ function install_acceptUser($hash = '')
     $assertClaims = array(
         'sub' => 'xoopsinstall',
     );
-    $claims               = \Xmf\Jwt\TokenReader::fromCookie('install', 'xo_install_user', $assertClaims);
+    $claims = \Xmf\Jwt\TokenReader::fromCookie('install', 'xo_install_user', $assertClaims);
     if (false === $claims || empty($claims->uname)) {
         return false;
     }
     $uname = $claims->uname;
-    /* @var XoopsMemberHandler $memberHandler */
+    /** @var XoopsMemberHandler $memberHandler */
     $memberHandler = xoops_getHandler('member');
-    $users         = $memberHandler->getUsers(new Criteria('uname', $uname));
-    $user          = array_pop($users);
+    $users = $memberHandler->getUsers(new Criteria('uname', $uname));
+    $user = array_pop($users);
 
     if (is_object($GLOBALS['xoops']) && method_exists($GLOBALS['xoops'], 'acceptUser')) {
         $res = $GLOBALS['xoops']->acceptUser($uname, true, '');
@@ -84,7 +84,7 @@ function xoFormField($name, $value, $label, $help = '')
     if ($help) {
         echo '<div class="xoform-help alert alert-info">' . $help . '</div>';
     }
-    echo '<input type="text" class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '">';
+    echo '<input type="text" class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'">';
     echo '</div>';
 }
 
@@ -105,9 +105,9 @@ function xoPassField($name, $value, $label, $help = '')
         echo '<div class="xoform-help alert alert-info">' . $help . '</div>';
     }
     if ($name === 'adminpass') {
-        echo '<input type="password" class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '"  onkeyup="passwordStrength(this.value)">';
+        echo '<input type="password" class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'"  onkeyup="passwordStrength(this.value)">';
     } else {
-        echo '<input type="password" class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '">';
+        echo '<input type="password" class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'">';
     }
     echo '</div>';
 }
@@ -130,10 +130,10 @@ function xoFormSelect($name, $value, $label, array $options, $help = '', $extra 
     if ($help) {
         echo '<div class="xoform-help alert alert-info">' . $help . '</div>';
     }
-    echo '<select class="form-control" name="' . $name . '" id="' . $name . '" value="' . $value . '" ' . $extra . '>';
+    echo '<select class="form-control" name="'.$name.'" id="'.$name.'" value="'.$value.'" '.$extra.'>';
     foreach ($options as $optionValue => $optionReadable) {
         $selected = ($value === $optionValue) ? ' selected' : '';
-        echo '<option value="' . $optionValue . '"' . $selected . '>' . $optionReadable . '</option>';
+        echo '<option value="'.$optionValue . '"' . $selected . '>' . $optionReadable . '</option>';
     }
     echo '</select>';
     echo '</div>';
@@ -194,15 +194,15 @@ function xoDiag($status = -1, $str = '')
 
 /**
  * @param string $name
- * @param bool   $wanted
- * @param bool   $severe
+ * @param bool $wanted
+ * @param bool $severe
  *
  * @return string
  */
 function xoDiagBoolSetting($name, $wanted = false, $severe = false)
 {
-    $setting = (bool)ini_get($name);
-    if ($setting === (bool)$wanted) {
+    $setting = (bool) ini_get($name);
+    if ($setting === (bool) $wanted) {
         return xoDiag(1, $setting ? 'ON' : 'OFF');
     } else {
         return xoDiag($severe ? -1 : 0, $setting ? 'ON' : 'OFF');
@@ -217,7 +217,7 @@ function xoDiagBoolSetting($name, $wanted = false, $severe = false)
  */
 function xoDiagIfWritable($path)
 {
-    $path  = '../' . $path;
+    $path  = dirname(dirname(__DIR__)) . '/' . $path;
     $error = true;
     if (!is_dir($path)) {
         if (file_exists($path) && !is_writable($path)) {
@@ -375,7 +375,7 @@ function xoFormFieldCollation($name, $value, $label, $help, $link, $charset)
         return '';
     }
 
-    $options = array();
+    $options           = array();
     foreach ($collations as $key => $isDefault) {
         if ($isDefault) {  // 'Yes' or ''
             $options = array($key => $key . ' (Default)') + $options;
@@ -464,8 +464,8 @@ function xoBuildLicenceKey()
         1 => 'md5',
         2 => 'sha1',
     );
-    $type         = mt_rand(1, 2);
-    $func         = $checksums[$type];
+    $type      = mt_rand(1, 2);
+    $func      = $checksums[$type];
 
     error_reporting(0);
 
@@ -518,13 +518,13 @@ function xoStripeKey($xoops_key)
     $length = 30;
     $strip  = floor(strlen($xoops_key) / 6);
     $strlen = strlen($xoops_key);
-    $ret    = '';
+    $ret = '';
     for ($i = 0; $i < $strlen; ++$i) {
         if ($i < $length) {
             ++$uu;
             if ($uu == $strip) {
                 $ret .= substr($xoops_key, $i, 1) . '-';
-                $uu  = 0;
+                $uu = 0;
             } else {
                 if (substr($xoops_key, $i, 1) != '-') {
                     $ret .= substr($xoops_key, $i, 1);
@@ -544,6 +544,7 @@ function xoStripeKey($xoops_key)
 
     return $ret;
 }
+
 
 /**
  * @return string

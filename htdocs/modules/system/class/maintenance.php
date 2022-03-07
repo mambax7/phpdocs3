@@ -39,7 +39,7 @@ class SystemMaintenance
      */
     public function __construct()
     {
-        /* @var XoopsMySQLDatabase $db */
+        /** @var XoopsMySQLDatabase $db */
         $db           = XoopsDatabaseFactory::getDatabaseConnection();
         $this->db     = $db;
         $this->prefix = $this->db->prefix . '_';
@@ -61,7 +61,7 @@ class SystemMaintenance
             $value          = substr($value[0], strlen(XOOPS_DB_PREFIX) + 1);
             $tables[$value] = $value;
         }
-        if (true === (bool)$array) {
+        if (true === (bool) $array) {
             return $tables;
         } else {
             return implode(',', $tables);
@@ -123,7 +123,7 @@ class SystemMaintenance
                 }
                 closedir($dirHandle);
             }
-            file_put_contents($dir . 'index.php', '<?php' . PHP_EOL . 'header("HTTP/1.0 404 Not Found");');
+            file_put_contents($dir . 'index.php', '<?php' . PHP_EOL  . 'header("HTTP/1.0 404 Not Found");');
         }
     }
 
@@ -221,7 +221,7 @@ class SystemMaintenance
                     $ret .= '<td>&nbsp;</td>';
                 }
             }
-            $ret   .= '</tr>';
+            $ret .= '</tr>';
             $class = ($class === 'even') ? 'odd' : 'even';
         }
         $ret .= '</table>';
@@ -238,10 +238,10 @@ class SystemMaintenance
      */
     public function dump_tables($tables, $drop)
     {
-        $ret         = array();
-        $ret[0]      = "# \n";
-        $ret[0]      .= "# Dump SQL, Generate by Xoops \n";
-        $ret[0]      .= '# Date : ' . date('d-m-Y - H:i') . " \n";
+        $ret    = array();
+        $ret[0] = "# \n";
+        $ret[0] .= "# Dump SQL, Generate by Xoops \n";
+        $ret[0] .= '# Date : ' . date('d-m-Y - H:i') . " \n";
         $ret[1]      = '<table class="outer"><tr><th width="30%">' . _AM_SYSTEM_MAINTENANCE_DUMP_TABLES . '</th><th width="35%">' . _AM_SYSTEM_MAINTENANCE_DUMP_STRUCTURES . '</th><th  width="35%">' . _AM_SYSTEM_MAINTENANCE_DUMP_NB_RECORDS . '</th></tr>';
         $class       = 'odd';
         $tablesCount = count($tables);
@@ -252,7 +252,7 @@ class SystemMaintenance
             $ret   = $this->dump_table_datas($ret, $this->prefix . $tables[$i]);
             $class = ($class === 'even') ? 'odd' : 'even';
         }
-        $ret    = $this->dump_write($ret);
+        $ret = $this->dump_write($ret);
         $ret[1] .= '</table>';
 
         return $ret;
@@ -267,20 +267,20 @@ class SystemMaintenance
      */
     public function dump_modules($modules, $drop)
     {
-        $ret          = array();
-        $ret[0]       = "# \n";
-        $ret[0]       .= "# Dump SQL, Generate by Xoops \n";
-        $ret[0]       .= '# Date : ' . date('d-m-Y - H:i') . " \n";
-        $ret[0]       .= "# \n\n";
+        $ret    = array();
+        $ret[0] = "# \n";
+        $ret[0] .= "# Dump SQL, Generate by Xoops \n";
+        $ret[0] .= '# Date : ' . date('d-m-Y - H:i') . " \n";
+        $ret[0] .= "# \n\n";
         $ret[1]       = '<table class="outer"><tr><th width="30%">' . _AM_SYSTEM_MAINTENANCE_DUMP_TABLES . '</th><th width="35%">' . _AM_SYSTEM_MAINTENANCE_DUMP_STRUCTURES . '</th><th  width="35%">' . _AM_SYSTEM_MAINTENANCE_DUMP_NB_RECORDS . '</th></tr>';
         $class        = 'odd';
         $modulesCount = count($modules);
         for ($i = 0; $i < $modulesCount; ++$i) {
-            /* @var XoopsModuleHandler $module_handler */
+            /** @var XoopsModuleHandler $module_handler */
             $module_handler = xoops_getHandler('module');
             $module         = $module_handler->getByDirname($modules[$i]);
-            $ret[1]         .= '<tr><th colspan="3" align="left">' . ucfirst($modules[$i]) . '</th></tr>';
-            $modtables      = $module->getInfo('tables');
+            $ret[1] .= '<tr><th colspan="3" align="left">' . ucfirst($modules[$i]) . '</th></tr>';
+            $modtables = $module->getInfo('tables');
             if ($modtables !== false && is_array($modtables)) {
                 foreach ($modtables as $table) {
                     //structure
@@ -294,7 +294,7 @@ class SystemMaintenance
             }
         }
         $ret[1] .= '</table>';
-        $ret    = $this->dump_write($ret);
+        $ret = $this->dump_write($ret);
 
         return $ret;
     }
@@ -318,7 +318,7 @@ class SystemMaintenance
                 if ($drop == 1) {
                     $ret[0] .= 'DROP TABLE IF EXISTS `' . $table . "`;\n\n";
                 }
-                $verif  = true;
+                $verif = true;
                 $ret[0] .= $row['Create Table'] . ";\n\n";
             }
         }
@@ -349,13 +349,13 @@ class SystemMaintenance
                 $field_type = array();
                 $i          = 0;
                 while ($i < $num_fields) {
-                    $meta         = mysqli_fetch_field($result);
+                    $meta = mysqli_fetch_field($result);
                     $field_type[] = $meta->type;
                     ++$i;
                 }
 
                 $ret[0] .= 'INSERT INTO `' . $table . "` values\n";
-                $index  = 0;
+                $index = 0;
                 while ($row = $this->db->fetchRow($result)) {
                     ++$count;
                     $ret[0] .= '(';

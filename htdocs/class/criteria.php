@@ -1,5 +1,4 @@
 <?php
-
 /**
  * XOOPS Criteria parser for database query
  *
@@ -36,23 +35,27 @@ class CriteriaElement
      * @var string
      */
     public $order = 'ASC';
+
     /**
      *
      * @var string
      */
     public $sort = '';
+
     /**
      * Number of records to retrieve
      *
      * @var int
      */
     public $limit = 0;
+
     /**
      * Offset of first record
      *
      * @var int
      */
     public $start = 0;
+
     /**
      *
      * @var string
@@ -182,6 +185,7 @@ class CriteriaCompo extends CriteriaElement
      * @var array Array of {@link CriteriaElement} objects
      */
     public $criteriaElements = array();
+
     /**
      * Conditions
      *
@@ -193,7 +197,7 @@ class CriteriaCompo extends CriteriaElement
      * Constructor
      *
      * @param CriteriaElement|null $ele
-     * @param string               $condition
+     * @param string $condition
      */
     public function __construct(CriteriaElement $ele = null, $condition = 'AND')
     {
@@ -206,7 +210,7 @@ class CriteriaCompo extends CriteriaElement
      * Add an element
      *
      * @param \CriteriaElement $criteriaElement
-     * @param string           $condition
+     * @param string                 $condition
      *
      * @return CriteriaCompo reference to this collection
      */
@@ -302,18 +306,18 @@ class Criteria extends CriteriaElement
      */
     public $operator;
     /**
-     * @var string
+     * @var string|int|array
      */
     public $value;
 
     /**
      * Constructor
      *
-     * @param string     $column
-     * @param string|int $value
-     * @param string     $operator
-     * @param string     $prefix
-     * @param string     $function
+     * @param string           $column
+     * @param string|int|array $value
+     * @param string           $operator
+     * @param string           $prefix
+     * @param string           $function
      */
     public function __construct($column, $value = '', $operator = '=', $prefix = '', $function = '')
     {
@@ -332,7 +336,7 @@ class Criteria extends CriteriaElement
          *
          * The following is a temporary workaround for the old technique
          */
-        if ((int)$column === 1 && (int)$value === 1 && $operator === '=') {
+        if ((int) $column === 1 && (int) $value === 1 && $operator === '=') {
             $this->column = '';
             $this->value  = '';
         }
@@ -347,7 +351,7 @@ class Criteria extends CriteriaElement
     {
         $backtick = (false === strpos($this->column, '.')) ? '`' : '';
         $backtick = (false !== strpos($this->column, '(')) ? '' : $backtick;
-        $clause   = (!empty($this->prefix) ? "{$this->prefix}." : '') . $backtick . $this->column . $backtick;
+        $clause = (!empty($this->prefix) ? "{$this->prefix}." : '') . $backtick . $this->column . $backtick;
         if (!empty($this->function)) {
             $clause = sprintf($this->function, $clause);
         }
@@ -398,7 +402,7 @@ class Criteria extends CriteriaElement
             if ($this->operator === 'IN') {
                 $newvalue = str_replace(array('(', ')'), '', $this->value);
                 $tab      = explode(',', $newvalue);
-                $clause   = '';
+                $clause = '';
                 foreach ($tab as $uid) {
                     $clause .= "({$this->column}={$uid})";
                 }

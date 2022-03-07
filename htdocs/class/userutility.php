@@ -29,16 +29,16 @@ class XoopsUserUtility
     /**
      * XoopsUserUtility::sendWelcome
      *
-     * @param mixed $user
+     * @param XoopsUser|null $user
      *
      * @return bool
      */
-    public static function sendWelcome($user)
+    public static function sendWelcome(XoopsUser $user = null) //mb TODO not used anywhere, delete?
     {
         global $xoopsConfigUser, $xoopsConfig;
 
         if (empty($xoopsConfigUser)) {
-            /* @var XoopsConfigHandler $config_handler */
+            /** @var XoopsConfigHandler $config_handler */
             $config_handler  = xoops_getHandler('config');
             $xoopsConfigUser = $config_handler->getConfigsByCat(XOOPS_CONF_USER);
         }
@@ -47,7 +47,7 @@ class XoopsUserUtility
         }
 
         if (!empty($user) && !is_object($user)) {
-            /* @var XoopsMemberHandler $member_handler */
+            /** @var XoopsMemberHandler $member_handler */
             $member_handler = xoops_getHandler('member');
             $user           = $member_handler->getUser($user);
         }
@@ -115,7 +115,7 @@ class XoopsUserUtility
             $uname = $user->getVar('uname', 'n');
             $email = $user->getVar('email', 'n');
         }
-        /* @var XoopsConfigHandler $config_handler */
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler  = xoops_getHandler('config');
         $xoopsConfigUser = $config_handler->getConfigsByCat(XOOPS_CONF_USER);
 
@@ -141,6 +141,7 @@ class XoopsUserUtility
             }
         }
         $uname = xoops_trim($uname);
+        $restriction = '';
         switch ($xoopsConfigUser['uname_test_level']) {
             case 0:
                 // strict
@@ -216,8 +217,8 @@ class XoopsUserUtility
      *
      * Adapted from PMA_getIp() [phpmyadmin project]
      *
-     * @param bool $asString requiring integer or dotted string
-     * @return mixed string or integer value for the IP
+     * @param  bool $asString requiring integer or dotted string
+     * @return int|string|false string or integer value for the IP
      */
     public static function getIP($asString = false)
     {
@@ -257,9 +258,9 @@ class XoopsUserUtility
     /**
      * XoopsUserUtility::getUnameFromIds()
      *
-     * @param mixed $uid
-     * @param mixed $usereal
-     * @param mixed $linked
+     * @param  mixed $uid
+     * @param  mixed $usereal
+     * @param  mixed $linked
      * @return array
      */
     public static function getUnameFromIds($uid, $usereal = false, $linked = false)
@@ -300,9 +301,9 @@ class XoopsUserUtility
     /**
      * XoopsUserUtility::getUnameFromId()
      *
-     * @param mixed $userid
-     * @param mixed $usereal
-     * @param mixed $linked
+     * @param int|string $userid
+     * @param bool       $usereal
+     * @param bool       $linked
      * @return string
      */
     public static function getUnameFromId($userid, $usereal = false, $linked = false)
@@ -311,7 +312,7 @@ class XoopsUserUtility
         $userid   = (int)$userid;
         $username = '';
         if ($userid > 0) {
-            /* @var XoopsMemberHandler $member_handler */
+            /** @var XoopsMemberHandler $member_handler */
             $member_handler = xoops_getHandler('member');
             $user           = $member_handler->getUser($userid);
             if (is_object($user)) {

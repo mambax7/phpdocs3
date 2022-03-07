@@ -8,7 +8,6 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
-
 /**
  *  Xoops Language
  *
@@ -45,7 +44,7 @@ class XoopsMailerLocal extends XoopsMailer
      *
      * @param string $text
      *
-     * @return mixed
+     * @return string
      */
     public function encodeFromName($text)
     {
@@ -54,12 +53,13 @@ class XoopsMailerLocal extends XoopsMailer
         return $text;
     }
 
+
     /**
      * Multibyte languages are encouraged to make their proper method for encoding Subject
      *
      * @param string $text
      *
-     * @return mixed
+     * @return string
      */
     public function encodeSubject($text)
     {

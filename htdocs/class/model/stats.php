@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Object stats handler class.
  *
@@ -38,14 +37,14 @@ class XoopsModelStats extends XoopsModelAbstract
     {
         $field   = '';
         $groupby = false;
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             if ($criteria->groupby != '') {
                 $groupby = true;
                 $field   = $criteria->groupby . ', ';
             }
         }
         $sql = "SELECT {$field} COUNT(*) FROM `{$this->handler->table}`";
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
             $sql .= $criteria->getGroupby();
         }
@@ -56,11 +55,11 @@ class XoopsModelStats extends XoopsModelAbstract
         if ($groupby == false) {
             list($count) = $this->handler->db->fetchRow($result);
 
-            return (int)$count;
+            return (int) $count;
         } else {
             $ret = array();
             while (false !== (list($id, $count) = $this->handler->db->fetchRow($result))) {
-                $ret[$id] = (int)$count;
+                $ret[$id] = (int) $count;
             }
 
             return $ret;
@@ -80,7 +79,7 @@ class XoopsModelStats extends XoopsModelAbstract
         $limit       = null;
         $start       = null;
         $groupby_key = $this->handler->keyName;
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql_where = $criteria->renderWhere();
             $limit     = $criteria->getLimit();
             $start     = $criteria->getStart();
@@ -93,7 +92,7 @@ class XoopsModelStats extends XoopsModelAbstract
             return $ret;
         }
         while (false !== (list($id, $count) = $this->handler->db->fetchRow($result))) {
-            $ret[$id] = (int)$count;
+            $ret[$id] = (int) $count;
         }
 
         return $ret;

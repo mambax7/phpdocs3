@@ -1,5 +1,4 @@
 <?php
-
 /**
  * XOOPS Authentification base class
  *
@@ -55,9 +54,9 @@ class XoopsAuthAds extends XoopsAuthLdap
      *         Authenticate directly with uname in the DN
      *         Authenticate with manager, search the dn
      *
-     * @param string $uname Username
+     * @param  string $uname Username
      * @param  string $pwd   Password
-     * @return bool|null
+     * @return bool|XoopsUser|null
      */
     public function authenticate($uname, $pwd = null)
     {

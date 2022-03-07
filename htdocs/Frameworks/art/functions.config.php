@@ -17,7 +17,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
      * Load configs of a module
      *
      *
-     * @param string $dirname module dirname
+     * @param    string $dirname module dirname
      * @return array|null
      */
     function mod_loadConfig($dirname = '')
@@ -61,7 +61,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
      * Fetch configs of a module from database
      *
      *
-     * @param string $dirname module dirname
+     * @param    string $dirname module dirname
      * @return array|null
      */
     function mod_fetchConfig($dirname = '')
@@ -78,7 +78,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
             return null;
         }
 
-        /* @var XoopsConfigHandler $config_handler */
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler = xoops_getHandler('config');
         $criteria       = new CriteriaCompo(new Criteria('conf_modid', $module->getVar('mid')));
         $configs        = $config_handler->getConfigs($criteria);
@@ -104,7 +104,7 @@ if (!defined('FRAMEWORKS_ART_FUNCTIONS_CONFIG')):
      * clear config cache of a module
      *
      *
-     * @param string $dirname module dirname
+     * @param    string $dirname module dirname
      * @return    bool
      */
     function mod_clearConfig($dirname = '')

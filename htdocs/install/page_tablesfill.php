@@ -8,7 +8,6 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
-
 /**
  * Installer db inserting page
  *
@@ -34,8 +33,8 @@ $pageHasHelp = false;
 
 $vars =& $_SESSION['settings'];
 
-include_once '../mainfile.php';
-include_once './class/dbmanager.php';
+include_once dirname(__DIR__) . '/mainfile.php';
+include_once  __DIR__ . '/class/dbmanager.php';
 $dbm = new Db_manager();
 
 if (!$dbm->isConnectable()) {
@@ -54,43 +53,43 @@ $update  = false;
 
 extract($_SESSION['siteconfig'], EXTR_SKIP);
 
-include_once './include/makedata.php';
+include_once __DIR__ . '/include/makedata.php';
 //$cm = 'dummy';
 $wizard->loadLangFile('install2');
 
 $licenseFile = XOOPS_VAR_PATH . '/data/license.php';
-$touched     = touch($licenseFile);
+$touched = touch($licenseFile);
 if ($touched) {
     $licenseReport = '<div class="alert alert-success"><span class="fa fa-check text-success"></span> '
-                     . writeLicenseKey() . '</div>';
+        . writeLicenseKey() . '</div>';
 } else {
     $licenseReport = '<div class="alert alert-danger"><span class="fa fa-ban text-danger"></span> '
-                     . sprintf(LICENSE_NOT_WRITEABLE, $licenseFile) . '</div>';
+        . sprintf(LICENSE_NOT_WRITEABLE, $licenseFile) . '</div>';
 }
 $error = false;
 
 $hashedAdminPass = password_hash($adminpass, PASSWORD_DEFAULT);
 
 if ($process) {
-    $result = $dbm->queryFromFile('./sql/' . XOOPS_DB_TYPE . '.data.sql');
-    $result = $dbm->queryFromFile('./language/' . $wizard->language . '/' . XOOPS_DB_TYPE . '.lang.data.sql');
-    $group = make_groups($dbm);
-    $result = make_data($dbm, $adminname, $hashedAdminPass, $adminmail, $wizard->language, $group);
+    $result  = $dbm->queryFromFile( __DIR__ . '/sql/' . XOOPS_DB_TYPE . '.data.sql');
+    $result  = $dbm->queryFromFile( __DIR__ . '/language/' . $wizard->language . '/' . XOOPS_DB_TYPE . '.lang.data.sql');
+    $group   = make_groups($dbm);
+    $result  = make_data($dbm, $adminname, $hashedAdminPass, $adminmail, $wizard->language, $group);
     $content = '<div class="alert alert-success"><span class="fa fa-check text-success"></span> '
-               . DATA_INSERTED . '</div><div class="well">' . $dbm->report() . '</div>';
+        . DATA_INSERTED . '</div><div class="well">' . $dbm->report() . '</div>';
 } else {
     $content = '<div class="alert alert-info"><span class="fa fa-info-circle text-info"></span> '
-               . DATA_ALREADY_INSERTED . '</div>';
+        . DATA_ALREADY_INSERTED . '</div>';
 }
 $content .= $licenseReport;
 
-xoops_setcookie('xo_install_user', '', time() - 60 * 60 * 12);
+xoops_setcookie('xo_install_user', '', time()-60*60*12);
 if (!empty($_SESSION['settings']['authorized']) && !empty($adminname) && !empty($adminpass)) {
     $claims = array(
         'uname' => $adminname,
-        'sub'   => 'xoopsinstall',
+        'sub' => 'xoopsinstall',
     );
-    $token  = \Xmf\Jwt\TokenFactory::build('install', $claims, 60 * 60);
+    $token = \Xmf\Jwt\TokenFactory::build('install', $claims, 60*60);
 
     xoops_setcookie('xo_install_user', $token, 0, null, null, null, true);
 }

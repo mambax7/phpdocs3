@@ -33,7 +33,7 @@ if (!empty($_GET['op']) && in_array($_GET['op'], array('actv', 'activate'))) {
 xoops_load('XoopsUserUtility');
 $myts = MyTextSanitizer::getInstance();
 
-/* @var XoopsConfigHandler $config_handler */
+/** @var XoopsConfigHandler $config_handler */
 $config_handler             = xoops_getHandler('config');
 $GLOBALS['xoopsConfigUser'] = $config_handler->getConfigsByCat(XOOPS_CONF_USER);
 if (empty($GLOBALS['xoopsConfigUser']['allow_register'])) {
@@ -91,7 +91,7 @@ if (isset($steps[$current_step])) {
     $xoBreadcrumbs[] = array('title' => $steps[$current_step]['step_name']);
 }
 
-/* @var XoopsMemberHandler $member_handler */
+/** @var XoopsMemberHandler $member_handler */
 $member_handler  = xoops_getHandler('member');
 $profile_handler = xoops_getModuleHandler('profile');
 
@@ -221,7 +221,7 @@ if ($current_step > 0 && empty($stop) && (!empty($steps[$current_step - 1]['step
             $newuser->setVar('uname', $uname);
             $newuser->setVar('email', $email);
             $newuser->setVar('pass', $pass ? password_hash($pass, PASSWORD_DEFAULT) : '');
-            $actkey = substr(md5(uniqid(mt_rand(), 1)), 0, 8);
+            $actkey = substr(md5(uniqid((string)mt_rand(), true)), 0, 8);
             $newuser->setVar('actkey', $actkey, true);
             $newuser->setVar('user_regdate', time(), true);
             $newuser->setVar('uorder', $GLOBALS['xoopsConfig']['com_order'], true);
@@ -331,7 +331,7 @@ if (!empty($stop) || isset($steps[$current_step])) {
     if ($GLOBALS['xoopsConfigUser']['activation_type'] == 1 && !empty($_SESSION['profile_post']['pass'])) {
         $GLOBALS['xoopsTpl']->assign('finish_login', _PROFILE_MA_FINISH_LOGIN);
         $GLOBALS['xoopsTpl']->assign('finish_uname', $newuser->getVar('uname'));
-        $GLOBALS['xoopsTpl']->assign('finish_pass', htmlspecialchars($_SESSION['profile_post']['pass']));
+        $GLOBALS['xoopsTpl']->assign('finish_pass', htmlspecialchars($_SESSION['profile_post']['pass'], ENT_QUOTES | ENT_HTML5));
     }
     if (isset($_SESSION['profile_post']['_message_'])) {
         //todo, if user is activated by admin, then we should inform it along with error messages.  _US_YOURREGMAILNG is not enough

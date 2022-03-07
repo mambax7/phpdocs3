@@ -1,5 +1,4 @@
 <?php
-
 /**
  * XOOPS Notifications
  *
@@ -29,7 +28,7 @@ if ($xoops_notification['show']) {
     $categories  =& notificationSubscribableCategoryInfo();
     $event_count = 0;
     if (!empty($categories)) {
-        /* @var  XoopsNotificationHandler $notification_handler */
+        /** @var XoopsNotificationHandler $notification_handler */
         $notification_handler = xoops_getHandler('notification');
         foreach ($categories as $category) {
             $section['name']        = $category['name'];
@@ -48,9 +47,9 @@ if ($xoops_notification['show']) {
                 $subscribed                        = in_array($event['name'], $subscribed_events) ? 1 : 0;
                 $section['events'][$event['name']] = array(
                     'name'        => $event['name'],
-                                                           'title'       => $event['title'],
-                                                           'caption'     => $event['caption'],
-                                                           'description' => $event['description'],
+                    'title'       => $event['title'],
+                    'caption'     => $event['caption'],
+                    'description' => $event['description'],
                     'subscribed'  => $subscribed);
                 ++$event_count;
             }

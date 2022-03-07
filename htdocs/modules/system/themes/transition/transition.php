@@ -67,9 +67,9 @@ class XoopsGuiTransition extends XoopsSystemGui
         // Determine if information box must be shown
         $currentScript = str_replace(XOOPS_ROOT_PATH . '/', '', $_SERVER['SCRIPT_FILENAME']);
 
-        if ('admin.php' == $currentScript) {
+        if('admin.php' == $currentScript){
             $show = isset($_GET['show']) ? $_GET['show'] : '';
-            if ('info' == $show) {
+            if('info' == $show){
                 $tpl->assign('showTransitionInfo', true);
             }
         }
@@ -189,7 +189,7 @@ class XoopsGuiTransition extends XoopsSystemGui
         $tpl->assign('moddir', $moddir);
 
         // add MODULES  Menu items
-        /* @var XoopsModuleHandler $module_handler */
+        /** @var XoopsModuleHandler $module_handler */
         $module_handler = xoops_getHandler('module');
         $criteria       = new CriteriaCompo();
         $criteria->add(new Criteria('hasadmin', 1));
@@ -197,8 +197,8 @@ class XoopsGuiTransition extends XoopsSystemGui
         $criteria->setSort('mid');
         $mods = $module_handler->getObjects($criteria);
 
-        $menu = array();
-        /* @var XoopsGroupPermHandler $moduleperm_handler */
+        $menu               = array();
+        /** @var XoopsGroupPermHandler $moduleperm_handler */
         $moduleperm_handler = xoops_getHandler('groupperm');
         foreach ($mods as $mod) {
             $rtn        = array();

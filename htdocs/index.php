@@ -17,8 +17,7 @@
  * @author              Skalpa Keo <skalpa@xoops.org>
  * @author              Taiwen Jiang <phppp@users.sourceforge.net>
  */
-
-/* @var  XoopsUser $xoopsUser */
+/** @var  XoopsUser $xoopsUser */
 
 if (file_exists(__DIR__ . '/mainfile.php')) {
     include __DIR__ . '/mainfile.php';
@@ -39,7 +38,7 @@ if (isset($xoopsConfig['startpage']) && $xoopsConfig['startpage'] != '' && $xoop
     define('XOOPS_STARTPAGE_REDIRECTED', 1);
 
     global $xoopsModuleConfig;
-    /* @var XoopsModuleHandler $module_handler */
+    /** @var XoopsModuleHandler $module_handler */
     $module_handler = xoops_getHandler('module');
     $xoopsModule    = $module_handler->getByDirname($xoopsConfig['startpage']);
     if (!$xoopsModule || !$xoopsModule->getVar('isactive')) {
@@ -48,7 +47,7 @@ if (isset($xoopsConfig['startpage']) && $xoopsConfig['startpage'] != '' && $xoop
         include_once $GLOBALS['xoops']->path('footer.php');
         exit();
     }
-    /* @var  XoopsGroupPermHandler $moduleperm_handler */
+    /** @var XoopsGroupPermHandler $moduleperm_handler */
     $moduleperm_handler = xoops_getHandler('groupperm');
     if ($xoopsUser) {
         if (!$moduleperm_handler->checkRight('module_read', $xoopsModule->getVar('mid'), $xoopsUser->getGroups())) {
@@ -81,7 +80,7 @@ if (isset($xoopsConfig['startpage']) && $xoopsConfig['startpage'] != '' && $xoop
     include $GLOBALS['xoops']->path('modules/' . $xoopsConfig['startpage'] . '/index.php');
     exit();
 } else {
-    $xoopsOption['show_cblock']              = 1;
+    $xoopsOption['show_cblock']   = 1;
     $GLOBALS['xoopsOption']['template_main'] = 'db:system_homepage.tpl';
     include $GLOBALS['xoops']->path('header.php');
     include $GLOBALS['xoops']->path('footer.php');

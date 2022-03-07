@@ -1,11 +1,17 @@
 <?php
 
-//require_once XOOPS_ROOT_PATH.'/include/cp_header.php' ;
-include_once 'admin_header.php'; //mb problem: it shows always the same "Center" tab
+use Xmf\Request;
+use XoopsModules\Protector;
+use XoopsModules\Protector\XoopsGTicket;
+use XoopsModules\Protector\Guardian;
+
+require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
-include __DIR__ . '/mymenu.php';
+
+require __DIR__ . '/mymenu.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-require_once dirname(__DIR__) . '/class/gtickets.php';
+//require_once dirname(__DIR__) . '/class/gtickets.php';
+$xoopsGTicket = new XoopsGTicket();
 
 //dirty trick to get navigation working with system menus
 if (isset($_GET['num'])) {
@@ -13,19 +19,20 @@ if (isset($_GET['num'])) {
 }
 
 $myts = MyTextSanitizer::getInstance();
+/** @var \XoopsMySQLDatabase $db */
 $db   = XoopsDatabaseFactory::getDatabaseConnection();
 
 // GET vars
-$pos = empty($_GET['pos']) ? 0 : (int)$_GET['pos'];
-$num = empty($_GET['num']) ? 20 : (int)$_GET['num'];
+$pos = Request::getInt('pos', 0, 'GET'); //empty($_GET['pos']) ? 0 : (int)$_GET['pos'];
+$num = Request::getInt('num', 20, 'GET'); //empty($_GET['num']) ? 20 : (int)$_GET['num'];
 
+$mydirname = basename( dirname(__DIR__) ) ;
 // Table Name
 $log_table = $db->prefix($mydirname . '_log');
 
 // Protector object
-require_once dirname(__DIR__) . '/class/protector.php';
-$db        = XoopsDatabaseFactory::getDatabaseConnection();
-$protector = Protector::getInstance($db->conn);
+//require_once dirname(__DIR__) . '/class/protector.php';
+$protector = Guardian::getInstance();
 $conf      = $protector->getConf();
 
 //
@@ -33,12 +40,13 @@ $conf      = $protector->getConf();
 //
 
 if (!empty($_POST['action'])) {
+
     // Ticket check
     if (!$xoopsGTicket->check(true, 'protector_admin')) {
         redirect_header(XOOPS_URL . '/', 3, $xoopsGTicket->getErrors());
     }
 
-    if ($_POST['action'] === 'update_ips') {
+    if ('update_ips' === $_POST['action']) {
         $error_msg = '';
 
         $lines   = empty($_POST['bad_ips']) ? array() : explode("\n", trim($_POST['bad_ips']));
@@ -55,7 +63,7 @@ if (!empty($_POST['action'])) {
         foreach (array_keys($group1_ips) as $i) {
             $group1_ips[$i] = trim($group1_ips[$i]);
         }
-        $fp = @fopen($protector->get_filepath4group1ips(), 'w');
+        $fp = @fopen($protector::get_filepath4group1ips(), 'wb');
         if ($fp) {
             @flock($fp, LOCK_EX);
             fwrite($fp, serialize(array_unique($group1_ips)) . "\n");
@@ -65,10 +73,10 @@ if (!empty($_POST['action'])) {
             $error_msg .= _AM_MSG_GROUP1IPSCANTOPEN;
         }
 
-        $redirect_msg = $error_msg ?: _AM_MSG_IPFILESUPDATED;
+        $redirect_msg = $error_msg ? : _AM_MSG_IPFILESUPDATED;
         redirect_header('center.php?page=center', 2, $redirect_msg);
         exit;
-    } elseif ($_POST['action'] === 'delete' && isset($_POST['ids']) && is_array($_POST['ids'])) {
+    } elseif ('delete' === $_POST['action'] && isset($_POST['ids']) && is_array($_POST['ids'])) {
         // remove selected records
         foreach ($_POST['ids'] as $lid) {
             $lid = (int)$lid;
@@ -76,10 +84,10 @@ if (!empty($_POST['action'])) {
         }
         redirect_header('center.php?page=center', 2, _AM_MSG_REMOVED);
         exit;
-    } elseif ($_POST['action'] === 'banbyip' && isset($_POST['ids']) && is_array($_POST['ids'])) {
+    } elseif ('banbyip' === $_POST['action'] && isset($_POST['ids']) && is_array($_POST['ids'])) {
         // remove selected records
         foreach ($_POST['ids'] as $lid) {
-            $lid    = (int)$lid;
+            $lid = (int)$lid;
             $result = $db->query("SELECT `ip` FROM $log_table WHERE lid='$lid'");
             if (false !== $result) {
                 list($ip) = $db->fetchRow($result);
@@ -89,17 +97,17 @@ if (!empty($_POST['action'])) {
         }
         redirect_header('center.php?page=center', 2, _AM_MSG_BANNEDIP);
         exit;
-    } elseif ($_POST['action'] === 'deleteall') {
+    } elseif ('deleteall' === $_POST['action']) {
         // remove all records
         $db->query("DELETE FROM $log_table");
         redirect_header('center.php?page=center', 2, _AM_MSG_REMOVED);
         exit;
-    } elseif ($_POST['action'] === 'compactlog') {
+    } elseif ('compactlog' === $_POST['action']) {
         // compactize records (removing duplicated records (ip,type)
         $result = $db->query("SELECT `lid`,`ip`,`type` FROM $log_table ORDER BY lid DESC");
         $buf    = array();
         $ids    = array();
-        while (false !== (list($lid, $ip, $type) = $db->fetchRow($result))) {
+        while (list($lid, $ip, $type) = $db->fetchRow($result)) {
             if (isset($buf[$ip . $type])) {
                 $ids[] = $lid;
             } else {
@@ -119,7 +127,8 @@ if (!empty($_POST['action'])) {
 // query for listing
 $rs = $db->query("SELECT count(lid) FROM $log_table");
 list($numrows) = $db->fetchRow($rs);
-$prs = $db->query("SELECT l.lid, l.uid, l.ip, l.agent, l.type, l.description, UNIX_TIMESTAMP(l.timestamp), u.uname FROM $log_table l LEFT JOIN " . $db->prefix('users') . " u ON l.uid=u.uid ORDER BY timestamp DESC LIMIT $pos,$num");
+$sql = "SELECT l.lid, l.uid, l.ip, l.agent, l.type, l.description, UNIX_TIMESTAMP(l.timestamp), u.uname FROM $log_table l LEFT JOIN " . $db->prefix('users') . " u ON l.uid=u.uid ORDER BY timestamp DESC LIMIT $pos,$num";
+$prs = $db->query($sql);
 
 // Page Navigation
 $nav      = new XoopsPageNav($numrows, $num, $pos, 'pos', "page=center&num=$num");
@@ -143,6 +152,8 @@ foreach ($num_array as $n) {
 
 // beggining of Output
 
+global $xoopsModule;
+
 // title
 echo "<h3 style='text-align:left;'>" . $xoopsModule->name() . "</h3>\n";
 echo '<style>td.log_description {width: 60em; display: inline-block; word-wrap: break-word; white-space: pre-line;}</style>';
@@ -157,8 +168,8 @@ $bad_ips = $protector->get_bad_ips(true);
 uksort($bad_ips, 'protector_ip_cmp');
 $bad_ips4disp = '';
 foreach ($bad_ips as $bad_ip => $jailed_time) {
-    $line         = $jailed_time ? $bad_ip . ':' . $jailed_time : $bad_ip;
-    $line         = str_replace(':2147483647', '', $line); // remove :0x7fffffff
+    $line = $jailed_time ? $bad_ip . ':' . $jailed_time : $bad_ip;
+    $line = str_replace(':2147483647', '', $line); // remove :0x7fffffff
     $bad_ips4disp .= htmlspecialchars($line, ENT_QUOTES) . "\n";
 }
 
@@ -171,7 +182,7 @@ $group1_ips4disp = htmlspecialchars(implode("\n", $group1_ips), ENT_QUOTES);
 echo "
 <form name='ConfigForm' action='' method='POST'>
 " . $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'protector_admin') . "
-<input type='hidden' name='action' value='update_ips' />
+<input type='hidden' name='action' value='update_ips'>
 <table width='95%' class='outer' cellpadding='4' cellspacing='1'>
   <tr valign='top' align='left'>
     <td class='head'>
@@ -180,7 +191,7 @@ echo "
     <td class='even'>
       <textarea name='bad_ips' id='bad_ips' style='width:200px;height:60px;'>$bad_ips4disp</textarea>
       <br>
-      " . htmlspecialchars($protector->get_filepath4badips()) . "
+      " . htmlspecialchars($protector::get_filepath4badips(), ENT_QUOTES | ENT_HTML5) . "
     </td>
   </tr>
   <tr valign='top' align='left'>
@@ -190,14 +201,14 @@ echo "
     <td class='even'>
       <textarea name='group1_ips' id='group1_ips' style='width:200px;height:60px;'>$group1_ips4disp</textarea>
       <br>
-      " . htmlspecialchars($protector->get_filepath4group1ips()) . "
+      " . htmlspecialchars($protector::get_filepath4group1ips(), ENT_QUOTES | ENT_HTML5) . "
     </td>
   </tr>
   <tr valign='top' align='left'>
     <td class='head'>
     </td>
     <td class='even'>
-      <input type='submit' value='" . _GO . "' />
+      <input type='submit' value='" . _GO . "'>
     </td>
   </tr>
 </table>
@@ -222,10 +233,10 @@ echo "
 </form>
 <form name='MainForm' action='' method='POST' style='margin-top:0;'>
 " . $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'protector_admin') . "
-<input type='hidden' name='action' value='' />
+<input type='hidden' name='action' value=''>
 <table width='95%' class='outer' cellpadding='4' cellspacing='1'>
   <tr valign='middle'>
-    <th width='5'><input type='checkbox' name='dummy' onclick=\"with(document.MainForm){for (i=0;i<length;i++) {if (elements[i].type=='checkbox') {elements[i].checked=this.checked;}}}\" /></th>
+    <th width='5'><input type='checkbox' name='dummy' onclick=\"with(document.MainForm){for (i=0;i<length;i++) {if (elements[i].type=='checkbox') {elements[i].checked=this.checked;}}}\"></th>
     <th>" . _AM_TH_DATETIME . '</th>
     <th>' . _AM_TH_USER . '</th>
     <th>' . _AM_TH_IP . '<br>' . _AM_TH_AGENT . '</th>
@@ -236,21 +247,21 @@ echo "
 
 // body of log listing
 $oddeven = 'odd';
-while (false !== (list($lid, $uid, $ip, $agent, $type, $description, $timestamp, $uname) = $db->fetchRow($prs))) {
-    $oddeven = ($oddeven === 'odd' ? 'even' : 'odd');
-    $style   = '';
+while (list($lid, $uid, $ip, $agent, $type, $description, $timestamp, $uname) = $db->fetchRow($prs)) {
+    $oddeven = ('odd' === $oddeven ? 'even' : 'odd');
+    $style = '';
 
-    $ip   = htmlspecialchars($ip, ENT_QUOTES);
+    $ip = htmlspecialchars($ip, ENT_QUOTES);
     $type = htmlspecialchars($type, ENT_QUOTES);
-    if ('{"' == substr($description, 0, 2)) {
+    if ('{"' == substr($description, 0, 2) && defined('JSON_PRETTY_PRINT')) {
         $temp = json_decode($description);
         if (is_object($temp)) {
-            $description = json_encode($temp, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-            $style       = ' log_description';
+            $description = json_encode($temp, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+            $style = ' log_description';
         }
     }
     $description = htmlspecialchars($description, ENT_QUOTES);
-    $uname       = htmlspecialchars(($uid ? $uname : _GUESTS), ENT_QUOTES);
+    $uname = htmlspecialchars(($uid ? $uname : _GUESTS), ENT_QUOTES);
 
     // make agents shorter
     if (preg_match('/MSIE\s+([0-9.]+)/', $agent, $regs)) {
@@ -261,11 +272,11 @@ while (false !== (list($lid, $uid, $ip, $agent, $type, $description, $timestamp,
         $agent_short = substr($agent, 0, strpos($agent, ' '));
     }
     $agent4disp = htmlspecialchars($agent, ENT_QUOTES);
-    $agent_desc = $agent == $agent_short ? $agent4disp : htmlspecialchars($agent_short, ENT_QUOTES) . "<img src='../images/dotdotdot.gif' alt='$agent4disp' title='$agent4disp' />";
+    $agent_desc = $agent == $agent_short ? $agent4disp : htmlspecialchars($agent_short, ENT_QUOTES) . "<img src='../images/dotdotdot.gif' alt='$agent4disp' title='$agent4disp'>";
 
     echo "
   <tr>
-    <td class='$oddeven'><input type='checkbox' name='ids[]' value='$lid' /></td>
+    <td class='$oddeven'><input type='checkbox' name='ids[]' value='$lid'></td>
     <td class='$oddeven'>" . formatTimestamp($timestamp) . "</td>
     <td class='$oddeven'>$uname</td>
     <td class='$oddeven'>$ip<br>$agent_desc</td>
@@ -277,8 +288,8 @@ while (false !== (list($lid, $uid, $ip, $agent, $type, $description, $timestamp,
 // footer of log listing
 echo "
   <tr>
-    <td colspan='8' align='left'>" . _AM_LABEL_REMOVE . "<input type='button' value='" . _AM_BUTTON_REMOVE . "' onclick='if (confirm(\"" . _AM_JS_REMOVECONFIRM . "\")) {document.MainForm.action.value=\"delete\"; submit();}' />
-    &nbsp " . _AM_LABEL_BAN_BY_IP . "<input type='button' value='" . _AM_BUTTON_BAN_BY_IP . "' onclick='if (confirm(\"" . _AM_JS_BANCONFIRM . "\")) {document.MainForm.action.value=\"banbyip\"; submit();}' /></td>
+    <td colspan='8' align='left'>" . _AM_LABEL_REMOVE . "<input type='button' value='" . _AM_BUTTON_REMOVE . "' onclick='if (confirm(\"" . _AM_JS_REMOVECONFIRM . "\")) {document.MainForm.action.value=\"delete\"; submit();}'>
+    &nbsp " . _AM_LABEL_BAN_BY_IP . "<input type='button' value='" . _AM_BUTTON_BAN_BY_IP . "' onclick='if (confirm(\"" . _AM_JS_BANCONFIRM . "\")) {document.MainForm.action.value=\"banbyip\"; submit();}'></td>
   </tr>
 </table>
 <div align='right'>
@@ -286,9 +297,9 @@ echo "
 </div>
 <div style='clear:both;'><br><br></div>
 <div align='right'>
-" . _AM_LABEL_COMPACTLOG . "<input type='button' value='" . _AM_BUTTON_COMPACTLOG . "' onclick='if (confirm(\"" . _AM_JS_COMPACTLOGCONFIRM . "\")) {document.MainForm.action.value=\"compactlog\"; submit();}' />
+" . _AM_LABEL_COMPACTLOG . "<input type='button' value='" . _AM_BUTTON_COMPACTLOG . "' onclick='if (confirm(\"" . _AM_JS_COMPACTLOGCONFIRM . "\")) {document.MainForm.action.value=\"compactlog\"; submit();}'>
 &nbsp;
-" . _AM_LABEL_REMOVEALL . "<input type='button' value='" . _AM_BUTTON_REMOVEALL . "' onclick='if (confirm(\"" . _AM_JS_REMOVEALLCONFIRM . "\")) {document.MainForm.action.value=\"deleteall\"; submit();}' />
+" . _AM_LABEL_REMOVEALL . "<input type='button' value='" . _AM_BUTTON_REMOVEALL . "' onclick='if (confirm(\"" . _AM_JS_REMOVEALLCONFIRM . "\")) {document.MainForm.action.value=\"deleteall\"; submit();}'>
 </div>
 </form>
 </td></tr></table>
@@ -297,17 +308,17 @@ echo "
 xoops_cp_footer();
 
 /**
- * @param $a
- * @param $b
+ * @param string $a
+ * @param string $b
  *
  * @return int
  */
 function protector_ip_cmp($a, $b)
 {
     $as   = explode('.', $a);
-    $aval = @$as[0] * 167777216 + @$as[1] * 65536 + @$as[2] * 256 + @$as[3];
+    $aval = @(int)$as[0] * 167777216 + @(int)$as[1] * 65536 + @(int)$as[2] * 256 + @(int)$as[3];
     $bs   = explode('.', $b);
-    $bval = @$bs[0] * 167777216 + @$bs[1] * 65536 + @$bs[2] * 256 + @$bs[3];
+    $bval = @(int)$bs[0] * 167777216 + @(int)$bs[1] * 65536 + @(int)$bs[2] * 256 + @(int)$bs[3];
 
     return $aval > $bval ? 1 : -1;
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * TextSanitizer extension
  *
@@ -22,7 +21,7 @@ defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 /**
  * Replaces banned words in a string with their replacements or terminate current request
  *
- * @param string $text
+ * @param   string $text
  * @return  string
  *
  */
@@ -38,7 +37,7 @@ class MytsCensor extends MyTextSanitizerExtension
     {
         static $censorConf;
         if (!isset($censorConf)) {
-            /* @var XoopsConfigHandler $config_handler */
+            /** @var XoopsConfigHandler $config_handler */
             $config_handler = xoops_getHandler('config');
             $censorConf     = $config_handler->getConfigsByCat(XOOPS_CONF_CENSOR);
             $config         = parent::loadConfig(__DIR__);

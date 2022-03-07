@@ -1,5 +1,4 @@
 <?php
-
 /**
  * XOOPS Authentification base class
  *
@@ -161,11 +160,12 @@ class XoopsAuthLdap extends XoopsAuth
      * LATIN CAPITAL LETTER Y WITH DIAERESIS
      * @var string
      */
+
     public $ldap_server;
     /**
      * @var string
      */
-    public $ldap_port = '389';
+    public $ldap_port    = '389';
     /**
      * @var string
      */
@@ -216,7 +216,7 @@ class XoopsAuthLdap extends XoopsAuth
     {
         $this->_dao = $dao;
         // The config handler object allows us to look at the configuration options that are stored in the database
-        /* @var XoopsConfigHandler $config_handler */
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler = xoops_getHandler('config');
         $config         = $config_handler->getConfigsByCat(XOOPS_CONF_AUTH);
         $confcount      = count($config);
@@ -243,8 +243,8 @@ class XoopsAuthLdap extends XoopsAuth
      *         Authenticate directly with uname in the DN
      *         Authenticate with manager, search the dn
      *
-     * @param string $uname Username
-     * @param  string $pwd   Password     
+     * @param  string $uname Username
+     * @param  string $pwd   Password
      * @return bool|null
      */
     public function authenticate($uname, $pwd = null)
@@ -337,9 +337,9 @@ class XoopsAuthLdap extends XoopsAuth
     /**
      * XoopsAuthLdap::loadXoopsUser()
      *
-     * @param mixed $userdn
-     * @param mixed $uname
-     * @param mixed $pwd
+     * @param  mixed $userdn
+     * @param  mixed $uname
+     * @param  mixed $pwd
      * @return XoopsUser|bool
      */
     public function loadXoopsUser($userdn, $uname, $pwd = null)

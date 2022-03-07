@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Extended User Profile
  *
@@ -52,7 +51,7 @@ if ($op === 'main') {
 
     $redirect = Request::getUrl('xoops_redirect', '', 'GET');
     if (!empty($redirect)) {
-        $urlParts      = parse_url($redirect);
+        $urlParts = parse_url($redirect);
         $xoopsUrlParts = parse_url(XOOPS_URL);
         if (false !== $urlParts) {
             // make sure $redirect is somewhere inside XOOPS_URL
@@ -62,8 +61,8 @@ if ($op === 'main') {
             $hostMatch = (!isset($urlParts['host'])) || (0 === strcasecmp($urlParts['host'], $xoopsUrlParts['host']));
             // path only, or path matches
             $pathMatch = (isset($urlParts['path']) && !isset($urlParts['host']) && !isset($urlParts['scheme']))
-                         || ($hostMatch && isset($urlParts['path']) && isset($xoopsUrlParts['path'])
-                             && 0 === strncmp($urlParts['path'], $xoopsUrlParts['path'], strlen($xoopsUrlParts['path'])));
+                || ($hostMatch && isset($urlParts['path']) && isset($xoopsUrlParts['path'])
+                    && 0 === strncmp($urlParts['path'], $xoopsUrlParts['path'], strlen($xoopsUrlParts['path'])));
             if ($badScheme || !($hostMatch && $pathMatch)) {
                 $redirect = XOOPS_URL;
             }
@@ -90,7 +89,7 @@ if ($op === 'logout') {
     xoops_setcookie($GLOBALS['xoopsConfig']['usercookie'], null, time() - 3600, '/');
     // clear entry from online users table
     if (is_object($GLOBALS['xoopsUser'])) {
-        /* @var XoopsOnlineHandler $online_handler */
+        /** @var XoopsOnlineHandler $online_handler */
         $online_handler = xoops_getHandler('online');
         $online_handler->destroy($GLOBALS['xoopsUser']->getVar('uid'));
     }
@@ -107,7 +106,7 @@ if ($op === 'actv') {
 }
 
 if ($op === 'delete') {
-    /* @var XoopsConfigHandler $config_handler */
+    /** @var XoopsConfigHandler $config_handler */
     $config_handler             = xoops_getHandler('config');
     $GLOBALS['xoopsConfigUser'] = $config_handler->getConfigsByCat(XOOPS_CONF_USER);
     if (!$GLOBALS['xoopsUser'] || $GLOBALS['xoopsConfigUser']['self_delete'] != 1) {
@@ -128,11 +127,11 @@ if ($op === 'delete') {
                           ), 'user.php', _US_SURETODEL . '<br>' . _US_REMOVEINFO);
             include __DIR__ . '/footer.php';
         } else {
-            $del_uid = $GLOBALS['xoopsUser']->getVar('uid');
-            /* @var XoopsMemberHandler $member_handler */
+            $del_uid        = $GLOBALS['xoopsUser']->getVar('uid');
+            /** @var XoopsMemberHandler $member_handler */
             $member_handler = xoops_getHandler('member');
             if (false !== $member_handler->deleteUser($GLOBALS['xoopsUser'])) {
-                /* @var XoopsOnlineHandler $online_handler */
+                /** @var XoopsOnlineHandler $online_handler */
                 $online_handler = xoops_getHandler('online');
                 $online_handler->destroy($del_uid);
                 xoops_notification_deletebyuser($del_uid);

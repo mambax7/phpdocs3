@@ -46,7 +46,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -56,7 +56,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_id($format = '')
@@ -66,7 +66,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_name
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_name($format = '')
@@ -76,7 +76,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_nicename
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_nicename($format = '')
@@ -86,7 +86,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_mimetype
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_mimetype($format = '')
@@ -96,7 +96,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_created
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_created($format = '')
@@ -106,7 +106,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_display
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_display($format = '')
@@ -116,7 +116,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_weight
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_weight($format = '')
@@ -126,7 +126,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable image_body
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function image_body($format = '')
@@ -136,7 +136,7 @@ class XoopsImage extends XoopsObject
 
     /**
      * Returns Class Base Variable imgcat_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function imgcat_id($format = '')
@@ -161,7 +161,7 @@ class XoopsImageHandler extends XoopsObjectHandler
     /**
      * Create a new {@link XoopsImage}
      *
-     * @param bool $isNew Flag the object as "new"
+     * @param  bool $isNew Flag the object as "new"
      * @return XoopsImage
      **/
     public function create($isNew = true)
@@ -182,7 +182,7 @@ class XoopsImageHandler extends XoopsObjectHandler
      **/
     public function get($id)
     {
-        $image  = false;
+        $image = false;
         $id = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT i.*, b.image_body FROM ' . $this->db->prefix('image') . ' i LEFT JOIN ' . $this->db->prefix('imagebody') . ' b ON b.image_id=i.image_id WHERE i.image_id=' . $id;
@@ -202,7 +202,7 @@ class XoopsImageHandler extends XoopsObjectHandler
     /**
      * Write a {@link XoopsImage} object to the database
      *
-     * @param XoopsObject|XoopsImage $image a XoopsImage object
+     * @param  XoopsObject|XoopsImage $image a XoopsImage object
      *
      * @return bool true on success, otherwise false
      **/
@@ -262,7 +262,7 @@ class XoopsImageHandler extends XoopsObjectHandler
     /**
      * Delete an image from the database
      *
-     * @param XoopsObject|XoopsImage $image a XoopsImage object
+     * @param  XoopsObject|XoopsImage $image a XoopsImage object
      *
      * @return bool true on success, otherwise false
      **/
@@ -287,9 +287,9 @@ class XoopsImageHandler extends XoopsObjectHandler
     /**
      * Load {@link XoopsImage}s from the database
      *
-     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param bool                       $id_as_key Use the ID as key into the array
-     * @param bool                       $getbinary
+     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
+     * @param  bool         $id_as_key Use the ID as key into the array
+     * @param  bool         $getbinary
      * @return array           Array of {@link XoopsImage} objects
      **/
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false, $getbinary = false)
@@ -301,10 +301,10 @@ class XoopsImageHandler extends XoopsObjectHandler
         } else {
             $sql = 'SELECT * FROM ' . $this->db->prefix('image');
         }
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql   .= ' ' . $criteria->renderWhere();
-            $sort  = $criteria->getSort() == '' ? 'image_weight' : $criteria->getSort();
-            $sql   .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
+            $sql .= ' ' . $criteria->renderWhere();
+            $sort = $criteria->getSort() == '' ? 'image_weight' : $criteria->getSort();
+            $sql .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -329,13 +329,13 @@ class XoopsImageHandler extends XoopsObjectHandler
     /**
      * Count some images
      *
-     * @param CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
+     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement}
      * @return int
      **/
     public function getCount(CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('image');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -349,7 +349,7 @@ class XoopsImageHandler extends XoopsObjectHandler
     /**
      * Get a list of images
      *
-     * @param int       $imgcat_id
+     * @param  int  $imgcat_id
      * @param bool|null $image_display
      * @return array Array of {@link XoopsImage} objects
      **/

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * XOOPS Kernel Class
  *
@@ -147,13 +146,13 @@ class XoopsPrivmessage extends XoopsObject
  * @copyright       (c) 2000-2016 XOOPS Project (www.xoops.org)
  *
  *
- * @todo                Why is this not a XoopsPersistableObjectHandler?
+ * @todo Why is this not a XoopsPersistableObjectHandler?
  */
 class XoopsPrivmessageHandler extends XoopsObjectHandler
 {
     /**
      * Create a new {@link XoopsPrivmessage} object
-     * @param bool $isNew Flag as "new"?
+     * @param  bool $isNew Flag as "new"?
      * @return XoopsPrivmessage
      **/
     public function create($isNew = true)
@@ -168,12 +167,12 @@ class XoopsPrivmessageHandler extends XoopsObjectHandler
 
     /**
      * Load a {@link XoopsPrivmessage} object
-     * @param int $id ID of the message
-     * @return XoopsPrivmessage|false
+     * @param  int $id ID of the message
+     * @return XoopsPrivmessage
      **/
     public function get($id)
     {
-        $pm     = false;
+        $pm = false;
         $id = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT * FROM ' . $this->db->prefix('priv_msgs') . ' WHERE msg_id=' . $id;
@@ -195,7 +194,7 @@ class XoopsPrivmessageHandler extends XoopsObjectHandler
      *
      * @param  XoopsPrivmessage $pm    {@link XoopsPrivmessage} object
      * @param  bool   $force flag to force the query execution skip request method check, which might be required in some situations
-     * @param XoopsObject|XoopsPrivmessage $pm    a XoopsMembership object
+     * @param  XoopsObject|XoopsPrivmessage $pm a XoopsMembership object
      *
      * @return bool true on success, otherwise false
      */
@@ -235,7 +234,7 @@ class XoopsPrivmessageHandler extends XoopsObjectHandler
 
     /**
      * Delete from the database
-     * @param XoopsPrivmessage $pm {@link XoopsPrivmessage} object
+     * @param  XoopsPrivmessage $pm {@link XoopsPrivmessage} object
      * @return bool
      **/
     public function delete(XoopsObject $pm)
@@ -254,8 +253,8 @@ class XoopsPrivmessageHandler extends XoopsObjectHandler
 
     /**
      * Load messages from the database
-     * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} object
-     * @param bool                          $id_as_key use ID as key into the array?
+     * @param  CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement} object
+     * @param  bool   $id_as_key use ID as key into the array?
      * @return array  Array of {@link XoopsPrivmessage} objects
      **/
     public function getObjects(CriteriaElement $criteria = null, $id_as_key = false)
@@ -263,13 +262,13 @@ class XoopsPrivmessageHandler extends XoopsObjectHandler
         $ret   = array();
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('priv_msgs');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql   .= ' ' . $criteria->renderWhere();
-            $sort  = !in_array($criteria->getSort(), array(
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
+            $sql .= ' ' . $criteria->renderWhere();
+            $sort = !in_array($criteria->getSort(), array(
                 'msg_id',
                 'msg_time',
                 'from_userid')) ? 'msg_id' : $criteria->getSort();
-            $sql   .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
+            $sql .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -293,13 +292,13 @@ class XoopsPrivmessageHandler extends XoopsObjectHandler
 
     /**
      * Count message
-     * @param CriteriaElement|CriteriaCompo $criteria = null     {@link CriteriaElement} object
+     * @param  CriteriaElement|CriteriaCompo $criteria = null     {@link CriteriaElement} object
      * @return int
      **/
     public function getCount(CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('priv_msgs');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -312,7 +311,7 @@ class XoopsPrivmessageHandler extends XoopsObjectHandler
 
     /**
      * Mark a message as read
-     * @param XoopsPrivmessage $pm {@link XoopsPrivmessage} object
+     * @param  XoopsPrivmessage $pm {@link XoopsPrivmessage} object
      * @return bool
      **/
     public function setRead(XoopsPrivmessage $pm)

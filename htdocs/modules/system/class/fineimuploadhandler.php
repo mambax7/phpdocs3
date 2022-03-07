@@ -59,15 +59,15 @@ class SystemFineImUploadHandler extends SystemFineUploadHandler
 
     protected function storeUploadedFile($target, $mimeType, $uuid)
     {
-        /* @var XoopsImagecategoryHandler */
+        /** @var XoopsImageCategoryHandler */
         $imgcatHandler = xoops_getHandler('imagecategory');
-        $imgcat        = $imgcatHandler->get($this->claims->cat);
+        $imgcat = $imgcatHandler->get($this->claims->cat);
 
         $pathParts = pathinfo($this->getName());
 
-        $imageName     = uniqid('img') . '.' . strtolower($pathParts['extension']);
+        $imageName = uniqid('img') . '.' . strtolower($pathParts['extension']);
         $imageNicename = str_replace(array('_','-'), ' ', $pathParts['filename']);
-        $imagePath     = XOOPS_ROOT_PATH . '/uploads/images/' . $imageName;
+        $imagePath = XOOPS_ROOT_PATH . '/uploads/images/' . $imageName;
 
         $fbinary = null;
         if ($imgcat->getVar('imgcat_storetype') === 'db') {
@@ -78,12 +78,12 @@ class SystemFineImUploadHandler extends SystemFineUploadHandler
             }
         }
 
-        /* @var XoopsImageHandler $imageHandler */
+        /** @var XoopsImageHandler $imageHandler */
         $imageHandler = xoops_getHandler('image');
-        $image        = $imageHandler->create();
+        $image = $imageHandler->create();
 
         $image->setVar('image_nicename', $imageNicename);
-        $image->setVar('image_mimetype', $mimeType);
+        $image->setVar('image_mimetype',  $mimeType);
         $image->setVar('image_created', time());
         $image->setVar('image_display', 1);
         $image->setVar('image_weight', 0);

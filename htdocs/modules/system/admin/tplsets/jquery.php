@@ -18,9 +18,9 @@ use Xmf\Assert;
  * @author              Maxime Cointin (AKA Kraven30)
  * @package             system
  */
-/* @var XoopsUser $xoopsUser */
-/* @var XoopsModule $xoopsModule */
-/* @var XoopsConfigItem $xoopsConfig */
+/** @var XoopsUser $xoopsUser */
+/** @var XoopsModule $xoopsModule */
+/** @var XoopsConfigItem $xoopsConfig */
 
 include dirname(dirname(__DIR__)) . '/header.php';
 
@@ -97,13 +97,13 @@ switch ($op) {
         break;
     // Edit File
     case 'tpls_edit_file':
-        $clean_file      = XoopsRequest::getString('file', '');
+        $clean_file = XoopsRequest::getString('file', '');
         $clean_path_file = XoopsRequest::getString('path_file', '');
-        $path_file       = realpath(XOOPS_ROOT_PATH . '/themes' . trim($clean_path_file));
-        $check_path      = realpath(XOOPS_ROOT_PATH . '/themes');
+        $path_file = realpath(XOOPS_ROOT_PATH.'/themes'.trim($clean_path_file));
+        $check_path = realpath(XOOPS_ROOT_PATH.'/themes');
         try {
             Assert::startsWith($path_file, $check_path, _AM_SYSTEM_TEMPLATES_ERROR);
-        } catch (\InvalidArgumentException $e) {
+        } catch(\InvalidArgumentException $e) {
             // handle the exception
             redirect_header(XOOPS_URL . '/modules/system/admin.php?fct=tplsets', 2, $e->getMessage());
             exit;
@@ -148,16 +148,16 @@ switch ($op) {
                 </tr>
                 <tr>
                     <td><textarea id="code_mirror" name="templates" rows=24 cols=110>'
-             . htmlentities($content, ENT_QUOTES)
-             . '</textarea></td>
+                        . htmlentities($content, ENT_QUOTES)
+                    . '</textarea></td>
                 </tr>
               </table>';
         XoopsLoad::load('XoopsFormHiddenToken');
         $xoopsToken = new XoopsFormHiddenToken();
         echo $xoopsToken->render();
         echo '<input type="hidden" name="path_file" value="' . htmlentities($clean_path_file, ENT_QUOTES)
-             . '"><input type="hidden" name="file" value="' . htmlentities(trim($clean_file), ENT_QUOTES)
-             . '"><input type="hidden" name="ext" value="' . htmlentities($ext, ENT_QUOTES) . '"></form>';
+            .'"><input type="hidden" name="file" value="' . htmlentities(trim($clean_file), ENT_QUOTES)
+            .'"><input type="hidden" name="ext" value="' . htmlentities($ext, ENT_QUOTES) . '"></form>';
         break;
 
     // Restore backup file
@@ -186,4 +186,5 @@ switch ($op) {
         }
         xoops_error(_AM_SYSTEM_TEMPLATES_RESTORE_NOTOK);
         break;
+
 }

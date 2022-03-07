@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Cache engine For XOOPS
  *
@@ -56,10 +55,11 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Instance of File class
      *
-     * @var object
+     * @var object|null
      * @access private
      */
     private $file;
+
     /**
      * settings
      *                path = absolute path to cache directory, default => CACHE
@@ -72,6 +72,7 @@ class XoopsCacheFile extends XoopsCacheEngine
      * @access public
      */
     public $settings = array();
+
     /**
      * Set to true if FileEngine::init(); and FileEngine::active(); do not fail.
      *
@@ -79,6 +80,7 @@ class XoopsCacheFile extends XoopsCacheEngine
      * @access private
      */
     private $active = false;
+
     /**
      * True unless FileEngine::active(); fails
      *
@@ -93,7 +95,7 @@ class XoopsCacheFile extends XoopsCacheEngine
      * Called automatically by the cache frontend
      * To reinitialize the settings call Cache::engine('EngineName', [optional] settings = array());
      *
-     * @param array $settings array of setting for the engine
+     * @param  array $settings array of setting for the engine
      * @return bool True if the engine has been successfully initialized, false if not
      * @access   public
      */
@@ -135,9 +137,9 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Write data for key into cache
      *
-     * @param string $key      Identifier for the data
+     * @param  string $key      Identifier for the data
      * @param mixed  $value    Data to be cached
-     * @param mixed  $duration How long to cache the data, in seconds
+     * @param  mixed  $duration How long to cache the data, in seconds
      * @return bool True if the data was successfully cached, false on failure
      * @access public
      */
@@ -185,7 +187,7 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Read a key from the cache
      *
-     * @param string $key Identifier for the data
+     * @param  string $key Identifier for the data
      * @return mixed  The cached data, or false if the data doesn't exist, has expired, or if there was an error fetching it
      * @access public
      */
@@ -227,7 +229,7 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Delete a key from the cache
      *
-     * @param string $key Identifier for the data
+     * @param  string $key Identifier for the data
      * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
      * @access public
      */
@@ -243,7 +245,7 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Delete all values from the cache
      *
-     * @param bool $check Optional - only delete expired cache items
+     * @param  bool $check Optional - only delete expired cache items
      * @return bool True if the cache was successfully cleared, false otherwise
      * @access public
      */
@@ -285,7 +287,7 @@ class XoopsCacheFile extends XoopsCacheEngine
     /**
      * Get absolute file for a given key
      *
-     * @param string $key The key
+     * @param  string $key The key
      * @return bool|null Absolute cache file for the given key or false if erroneous
      * @access private
      */

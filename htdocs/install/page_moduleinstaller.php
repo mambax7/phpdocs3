@@ -19,30 +19,30 @@ $xoopsOption['hascommon']  = true;
 require_once __DIR__ . '/include/common.inc.php';
 defined('XOOPS_INSTALL') || die('XOOPS Installation wizard die');
 
-if (!@include_once "../language/{$wizard->language}/global.php") {
-    include_once '../language/english/global.php';
+if (!@include_once dirname(__DIR__) . "/language/{$wizard->language}/global.php") {
+    include_once dirname(__DIR__) . '/language/english/global.php';
 }
-if (!@include_once "../modules/system/language/{$wizard->language}/admin.php") {
-    include_once '../modules/system/language/english/admin.php';
+if (!@include_once dirname(__DIR__) . "/modules/system/language/{$wizard->language}/admin.php") {
+    include_once dirname(__DIR__) . '/modules/system/language/english/admin.php';
 }
-if (!@include_once "../modules/system/language/{$wizard->language}/admin/modulesadmin.php") {
-    include_once '../modules/system/language/english/admin/modulesadmin.php';
+if (!@include_once dirname(__DIR__) . "/modules/system/language/{$wizard->language}/admin/modulesadmin.php") {
+    include_once dirname(__DIR__) . '/modules/system/language/english/admin/modulesadmin.php';
 }
 
-require_once '../class/xoopsformloader.php';
-require_once '../class/xoopslists.php';
+require_once dirname(__DIR__) . '/class/xoopsformloader.php';
+require_once dirname(__DIR__) . '/class/xoopslists.php';
 
 $pageHasForm = true;
 $pageHasHelp = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    include_once '../class/xoopsblock.php';
-    include_once '../kernel/module.php';
-    include_once '../include/cp_functions.php';
-    include_once '../include/version.php';
-    include_once './include/modulesadmin.php';
+    include_once dirname(__DIR__) . '/class/xoopsblock.php';
+    include_once dirname(__DIR__) . '/kernel/module.php';
+    include_once dirname(__DIR__) . '/include/cp_functions.php';
+    include_once dirname(__DIR__) . '/include/version.php';
+    include_once __DIR__ . '/include/modulesadmin.php';
 
-    /* @var XoopsConfigHandler $config_handler */
+    /** @var XoopsConfigHandler $config_handler */
     $config_handler = xoops_getHandler('config');
     $xoopsConfig    = $config_handler->getConfigsByCat(XOOPS_CONF);
 
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Get installed modules
-    /* @var XoopsModuleHandler $module_handler */
+    /** @var XoopsModuleHandler $module_handler */
     $module_handler = xoops_getHandler('module');
     $installed_mods = $module_handler->getObjects();
     $listed_mods    = array();
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $listed_mods[] = $module->getVar('dirname');
     }
 
-    include_once '../class/xoopslists.php';
+    include_once dirname(__DIR__) . '/class/xoopslists.php';
     $dirlist  = XoopsLists::getModulesList();
     $toinstal = 0;
 

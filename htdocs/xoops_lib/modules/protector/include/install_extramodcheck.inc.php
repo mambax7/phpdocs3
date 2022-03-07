@@ -1,12 +1,17 @@
 <?php
 
 /**
- * @param $xoops_root_path
- * @param $mytrustdirname
+ * @param string $xoops_root_path
+ * @param string $mytrustdirname
  *
  * @return array
  */
-function get_writeoks_from_protector($xoops_root_path, $mytrustdirname)
+
+use XoopsModules\Protector;
+
+require_once dirname(__DIR__) . '/preloads/autoloader.php';
+
+function get_writeoks_from_protector( $xoops_root_path , $mytrustdirname )
 {
-    return array(__DIR__ . '/configs');
+    return array( __DIR__ . '/configs' ) ;
 }

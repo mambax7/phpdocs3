@@ -16,7 +16,6 @@
  * @since
  * @author       XOOPS Development Team, Kazumi Ono (AKA onokazu)
  */
-
 use Xmf\Request;
 
 // Check users rights
@@ -47,6 +46,7 @@ $xoBreadCrumb->addLink(_AM_SYSTEM_PREFERENCES_NAV_MAIN, system_adminVersion('pre
 
 //Display part
 switch ($op) {
+
     case 'show':
         if (empty($confcat_id)) {
             $confcat_id = 1;
@@ -61,8 +61,8 @@ switch ($op) {
         $xoBreadCrumb->render();
         $xoopsTpl->assign('breadcrumb', 1);
 
-        $form = new XoopsThemeForm(constant($confcat->getVar('confcat_name')), 'pref_form', 'admin.php?fct=preferences', 'post', true);
-        /* @var XoopsConfigHandler $config_handler */
+        $form           = new XoopsThemeForm(constant($confcat->getVar('confcat_name')), 'pref_form', 'admin.php?fct=preferences', 'post', true);
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler = xoops_getHandler('config');
         $criteria       = new CriteriaCompo();
         $criteria->add(new Criteria('conf_modid', 0));
@@ -74,6 +74,7 @@ switch ($op) {
             $desc  = ($config[$i]->getVar('conf_desc') != '') ? constant($config[$i]->getVar('conf_desc')) : '';
 
             switch ($config[$i]->getVar('conf_formtype')) {
+
                 case 'textarea':
                     $myts = MyTextSanitizer::getInstance();
                     if ($config[$i]->getVar('conf_valuetype') === 'array') {
@@ -243,6 +244,7 @@ switch ($op) {
                     $myts = MyTextSanitizer::getInstance();
                     $ele  = new XoopsFormText($title, $config[$i]->getVar('conf_name'), 50, 255, $myts->htmlSpecialChars($config[$i]->getConfValueForOutput()));
                     break;
+
             }
             $hidden = new XoopsFormHidden('conf_ids[]', $config[$i]->getVar('conf_id'));
             $ele->setDescription($desc);
@@ -257,7 +259,7 @@ switch ($op) {
 
     case 'showmod':
 
-        /* @var XoopsConfigHandler $config_handler */
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler = xoops_getHandler('config');
         $mod            = isset($_REQUEST['mod']) ? (int)$_REQUEST['mod'] : 0;
         if ($mod <= 0) {
@@ -297,6 +299,7 @@ switch ($op) {
             $title       = constant($config[$i]->getVar('conf_title'));
             $description = defined($config[$i]->getVar('conf_desc')) ? constant($config[$i]->getVar('conf_desc')) : '';
             switch ($config[$i]->getVar('conf_formtype')) {
+
                 case 'textarea':
                     $myts = MyTextSanitizer::getInstance();
                     if ($config[$i]->getVar('conf_valuetype') === 'array') {
@@ -379,6 +382,7 @@ switch ($op) {
                     $myts = MyTextSanitizer::getInstance();
                     $ele  = new XoopsFormText($title, $config[$i]->getVar('conf_name'), 50, 255, $myts->htmlSpecialChars($config[$i]->getConfValueForOutput()));
                     break;
+
             }
             if (isset($ele)) {
                 $ele->setDescription($description);
@@ -430,7 +434,7 @@ switch ($op) {
 
                     // if default theme has been changed
                     if (!$theme_updated && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') === 'theme_set') {
-                        /* @var XoopsMemberHandler $member_handler */
+                        /** @var XoopsMemberHandler $member_handler */
                         $member_handler = xoops_getHandler('member');
                         $member_handler->updateUsersByField('theme', ${$config->getVar('conf_name')});
                         $theme_updated = true;
@@ -481,10 +485,10 @@ switch ($op) {
 
                     // add read permission for the start module to all groups
                     if (!$startmod_updated && $new_value != '--' && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') === 'startpage') {
-                        /* @var XoopsMemberHandler $member_handler */
-                        $member_handler = xoops_getHandler('member');
-                        $groups         = $member_handler->getGroupList();
-                        /* @var XoopsGroupPermHandler $moduleperm_handler */
+                        /** @var XoopsMemberHandler $member_handler */
+                        $member_handler     = xoops_getHandler('member');
+                        $groups             = $member_handler->getGroupList();
+                        /** @var XoopsGroupPermHandler $moduleperm_handler */
                         $moduleperm_handler = xoops_getHandler('groupperm');
                         $module_handler     = xoops_getHandler('module');
                         $module             = $module_handler->getByDirname($new_value);

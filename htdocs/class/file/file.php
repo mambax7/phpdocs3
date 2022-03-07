@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File engine For XOOPS
  *
@@ -58,6 +57,7 @@ class XoopsFileHandler
      * @access public
      */
     public $folder;
+
     /**
      * Filename
      *
@@ -65,6 +65,7 @@ class XoopsFileHandler
      * @access public
      */
     public $name;
+
     /**
      * file info
      *
@@ -72,6 +73,7 @@ class XoopsFileHandler
      * @access public
      */
     public $info = array();
+
     /**
      * Holds the file handler resource if the file is opened
      *
@@ -79,6 +81,7 @@ class XoopsFileHandler
      * @access public
      */
     public $handle;
+
     /**
      * enable locking for file reading and writing
      *
@@ -90,9 +93,9 @@ class XoopsFileHandler
     /**
      * Constructor
      *
-     * @param string $path   Path to file
-     * @param bool   $create Create file if it does not exist (if true)
-     * @param int    $mode   Mode to apply to the folder holding the file
+     * @param string  $path   Path to file
+     * @param bool $create Create file if it does not exist (if true)
+     * @param int $mode   Mode to apply to the folder holding the file
      * @access private
      */
     public function __construct($path, $create = false, $mode = 0755)
@@ -145,8 +148,8 @@ class XoopsFileHandler
     /**
      * Opens the current file with a given $mode
      *
-     * @param string $mode  A valid 'fopen' mode string (r|w|a ...)
-     * @param bool   $force If true then the file will be re-opened even if its already opened, otherwise it won't
+     * @param  string  $mode  A valid 'fopen' mode string (r|w|a ...)
+     * @param  bool $force If true then the file will be re-opened even if its already opened, otherwise it won't
      * @return bool True on success, false on failure
      * @access public
      */
@@ -172,8 +175,8 @@ class XoopsFileHandler
      * Return the contents of this File as a string.
      *
      * @param bool|string|int $bytes where to start
-     * @param string          $mode
-     * @param bool            $force If true then the file will be re-opened even if its already opened, otherwise it won't
+     * @param string      $mode
+     * @param bool     $force If true then the file will be re-opened even if its already opened, otherwise it won't
      *
      * @return false|string string on success, false on failure
      * @access public
@@ -210,7 +213,7 @@ class XoopsFileHandler
      * Sets or gets the offset for the currently opened file.
      *
      * @param int|false $offset The $offset in bytes to seek. If set to false then the current offset is returned.
-     * @param int   $seek   PHP Constant SEEK_SET | SEEK_CUR | SEEK_END determining what the $offset is relative to
+     * @param int $seek   PHP Constant SEEK_SET | SEEK_CUR | SEEK_END determining what the $offset is relative to
      * @return bool|int   True on success, false on failure (set mode), false on failure or integer offset on success (get mode)
      */
     public function offset($offset = false, $seek = SEEK_SET)
@@ -230,7 +233,7 @@ class XoopsFileHandler
      * Prepares a ascii string for writing
      * fixes line endings
      *
-     * @param string $data Data to prepare for writing.
+     * @param  string $data Data to prepare for writing.
      * @return string
      * @access public
      */
@@ -251,9 +254,9 @@ class XoopsFileHandler
     /**
      * Write given data to this File.
      *
-     * @param string      $data  Data to write to this File.
-     * @param string      $mode  Mode of writing. {@link http://php.net/fwrite See fwrite()}.
-     * @param bool|string $force force the file to open
+     * @param  string      $data  Data to write to this File.
+     * @param  string      $mode  Mode of writing. {@link http://php.net/fwrite See fwrite()}.
+     * @param  bool|string $force force the file to open
      * @return bool     Success
      * @access public
      */
@@ -280,8 +283,8 @@ class XoopsFileHandler
     /**
      * Append given data string to this File.
      *
-     * @param string      $data  Data to write
-     * @param bool|string $force force the file to open
+     * @param  string      $data  Data to write
+     * @param  bool|string $force force the file to open
      * @return bool     Success
      * @access public
      */
@@ -380,7 +383,7 @@ class XoopsFileHandler
      * makes filename safe for saving
      *
      * @param string|null $name the name of the file to make safe if different from $this->name
-     * @param string|null $ext
+     * @param  string|null   $ext
      * @return string $ext the extension of the file
      */
     public function safe($name = null, $ext = null)
@@ -398,7 +401,7 @@ class XoopsFileHandler
     /**
      * Get md5 Checksum of file with previous check of Filesize
      *
-     * @param mixed $maxsize in MB or true to force
+     * @param  mixed $maxsize in MB or true to force
      * @return string|false md5 Checksum {@link http://php.net/md5_file See md5_file()}
      * @access public
      */
@@ -458,7 +461,7 @@ class XoopsFileHandler
     /**
      * Returns the Filesize, either in bytes or in human-readable format.
      *
-     * @return false|int filesize as int or as a human-readable string
+     * @return false|int filesize as int or as a human-readable string  //mb TODO originally included also string
      * @access   public
      */
     public function size()

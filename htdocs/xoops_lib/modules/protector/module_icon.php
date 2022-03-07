@@ -1,11 +1,14 @@
 <?php
 
+use XoopsModules\Protector;
+use XoopsModules\Protector\Registry;
+
 // start hack by Trabis
-if (!class_exists('ProtectorRegistry')) {
+if (!class_exists('XoopsModules\Protector\Registry')) {
     exit('Registry not found');
 }
 
-$registry  = ProtectorRegistry::getInstance();
+$registry  = Registry::getInstance();
 $mydirname = $registry->getEntry('mydirname');
 $mydirpath = $registry->getEntry('mydirpath');
 $language  = $registry->getEntry('language');
@@ -42,9 +45,9 @@ if (file_exists($mydirpath . '/' . $file)) {
 if ($draw_dirname && function_exists('imagecreatefrompng') && function_exists('imagecolorallocate') && function_exists('imagestring') && function_exists('imagepng')) {
     $im = imagecreatefrompng($icon_fullpath);
 
-    $color = imagecolorallocate($im, 0, 0, 0); // black
-    $px    = (92 - 6 * strlen($mydirname)) / 2;
-    imagestring($im, 3, $px, 34, $mydirname, $color);
+    $color = (int)imagecolorallocate($im, 0, 0, 0); // black
+    $px    = (int)(92 - 6 * strlen((string)$mydirname)) / 2;
+    imagestring($im, 3, (int)$px, 34, (string)$mydirname, $color);
     imagepng($im);
     imagedestroy($im);
 } else {

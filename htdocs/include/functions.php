@@ -192,7 +192,7 @@ function xoops_getActiveModules()
 function xoops_setActiveModules()
 {
     xoops_load('XoopsCache');
-    /* @var XoopsModuleHandler $module_handler */
+    /** @var XoopsModuleHandler $module_handler */
     $module_handler = xoops_getHandler('module');
     $modules_obj    = $module_handler->getObjects(new Criteria('isactive', 1));
     $modules_active = array();
@@ -676,6 +676,7 @@ function xoops_getbanner()
 {
     global $xoopsConfig;
 
+    /** @var XoopsMySQLDatabase $db */
     $db      = XoopsDatabaseFactory::getDatabaseConnection();
     $bresult = $db->query('SELECT COUNT(*) FROM ' . $db->prefix('banner'));
     list($numrows) = $db->fetchRow($bresult);
@@ -921,10 +922,11 @@ function xoops_getMailer()
  *
  * @param int   $rank_id
  * @param mixed $posts
- * @return array|false
+ * @return array
  */
 function xoops_getrank($rank_id = 0, $posts = 0)
 {
+    /** @var XoopsMySQLDatabase $db */
     $db      = XoopsDatabaseFactory::getDatabaseConnection();
     $myts    = MyTextSanitizer::getInstance();
     $rank_id = (int)$rank_id;
@@ -962,12 +964,13 @@ function xoops_substr($str, $start, $length, $trimmarker = '...')
 // We want to be able to delete by module, by user, or by item.
 // How do we specify this??
 /**
- * @param $module_id
+ * @param int $module_id
  *
- * @return mixed
+ * @return bool
  */
 function xoops_notification_deletebymodule($module_id)
 {
+    /** @var \XoopsNotificationHandler $notification_handler */
     $notification_handler = xoops_getHandler('notification');
 
     return $notification_handler->unsubscribeByModule($module_id);
@@ -981,6 +984,7 @@ function xoops_notification_deletebymodule($module_id)
  */
 function xoops_notification_deletebyuser($user_id)
 {
+    /** @var \XoopsNotificationHandler $notification_handler */
     $notification_handler = xoops_getHandler('notification');
 
     return $notification_handler->unsubscribeByUser($user_id);
@@ -996,6 +1000,7 @@ function xoops_notification_deletebyuser($user_id)
  */
 function xoops_notification_deletebyitem($module_id, $category, $item_id)
 {
+    /** @var \XoopsNotificationHandler $notification_handler */
     $notification_handler = xoops_getHandler('notification');
 
     return $notification_handler->unsubscribeByItem($module_id, $category, $item_id);
@@ -1045,7 +1050,7 @@ function xoops_comment_delete($module_id, $item_id)
                     }
                 }
             }
-            /* @var XoopsMemberHandler $member_handler */
+            /** @var XoopsMemberHandler $member_handler */
             $member_handler = xoops_getHandler('member');
             foreach ($deleted_num as $user_id => $post_num) {
                 // update user posts
@@ -1078,7 +1083,7 @@ function xoops_groupperm_deletebymoditem($module_id, $perm_name, $item_id = null
     if ((int)$module_id <= 1) {
         return false;
     }
-    /* @var  XoopsGroupPermHandler $gperm_handler */
+    /** @var XoopsGroupPermHandler $gperm_handler */
     $gperm_handler = xoops_getHandler('groupperm');
 
     return $gperm_handler->deleteByModule($module_id, $perm_name, $item_id);
@@ -1148,11 +1153,11 @@ function xoops_getOption($option)
 /**
  * xoops_getConfigOption()
  *
- * @param array        $option
+ * @param string|int   $option
  * @param array|string $type
- * @internal param string $dirname
- * @deprecated
  * @return bool|string
+ * @deprecated
+ * @internal param string $dirname
  */
 function xoops_getConfigOption($option, $type = 'XOOPS_CONF')
 {
@@ -1162,7 +1167,7 @@ function xoops_getConfigOption($option, $type = 'XOOPS_CONF')
         return $coreOptions[$option];
     }
     $ret            = false;
-    /* @var XoopsConfigHandler $config_handler */
+    /** @var XoopsConfigHandler $config_handler */
     $config_handler = xoops_getHandler('config');
     $configs        = $config_handler->getConfigsByCat(is_array($type) ? $type : constant($type));
     if ($configs) {
@@ -1203,7 +1208,7 @@ function xoops_setConfigOption($option, $new = null)
  *
  * @param mixed  $option
  * @param string $dirname
- * @return bool
+ * @return mixed
  * @deprecated
  */
 function xoops_getModuleOption($option, $dirname = '')
@@ -1214,10 +1219,10 @@ function xoops_getModuleOption($option, $dirname = '')
     }
 
     $ret            = false;
-    /* @var XoopsModuleHandler $module_handler */
+    /** @var XoopsModuleHandler $module_handler */
     $module_handler = xoops_getHandler('module');
     $module         = $module_handler->getByDirname($dirname);
-    /* @var XoopsConfigHandler $config_handler */
+    /** @var XoopsConfigHandler $config_handler */
     $config_handler = xoops_getHandler('config');
     if (is_object($module)) {
         $moduleConfig = $config_handler->getConfigsByCat(0, $module->getVar('mid'));

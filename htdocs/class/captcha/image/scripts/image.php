@@ -17,7 +17,7 @@
  * @subpackage          CAPTCHA
  */
 
-include __DIR__ . '/../../../../mainfile.php';
+include __DIR__  . '/../../../../mainfile.php';
 
 error_reporting(0);
 $xoopsLogger->activated = false;
@@ -30,7 +30,7 @@ class XoopsCaptchaImageHandler
     /**
      * @var array
      */
-    public $config = array();
+    public $config  = array();
     /**
      * @var mixed
      */
@@ -38,7 +38,7 @@ class XoopsCaptchaImageHandler
     /**
      * @var string
      */
-    public $mode = 'gd';
+    public $mode    = 'gd';
     /**
      * @var bool
      */
@@ -75,7 +75,7 @@ class XoopsCaptchaImageHandler
     {
         xoops_load('XoopsCaptcha');
         $this->captchaHandler = XoopsCaptcha::getInstance();
-        $this->config         = $this->captchaHandler->loadConfig('image');
+        $this->config          = $this->captchaHandler->loadConfig('image');
     }
 
     public function loadImage()
@@ -98,7 +98,7 @@ class XoopsCaptchaImageHandler
             $this->config['num_chars'] = 4;
             $this->code                = mt_rand(pow(10, $this->config['num_chars'] - 1), (int)str_pad('9', $this->config['num_chars'], '9'));
         } else {
-            $raw_code = md5(uniqid(mt_rand(), 1));
+            $raw_code = md5(uniqid((string)mt_rand(), true));
             if (!empty($this->config['skip_characters'])) {
                 $valid_code = str_replace($this->config['skip_characters'], '', $raw_code);
                 $this->code = substr($valid_code, 0, $this->config['num_chars']);
@@ -411,11 +411,12 @@ class XoopsCaptchaImageHandler
         }
     }
     /**#@-*/
+
     /**
      *  Create CAPTCHA image with BMP
      *
      *  TODO
-     * @param string $file
+     * @param  string $file
      * @return string|null
      */
     public function createImageBmp($file = '')

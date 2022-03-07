@@ -42,7 +42,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function id($format = 'N')
@@ -52,7 +52,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_id
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function confcat_id($format = '')
@@ -62,7 +62,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_name
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function confcat_name($format = '')
@@ -72,7 +72,7 @@ class XoopsConfigCategory extends XoopsObject
 
     /**
      * Returns Class Base Variable confcat_order
-     * @param string $format
+     * @param  string $format
      * @return mixed
      */
     public function confcat_order($format = '')
@@ -203,7 +203,7 @@ class XoopsConfigCategoryHandler extends XoopsObjectHandler
      * Get some {@link XoopsConfigCategory}s
      *
      * @param CriteriaElement|CriteriaCompo $criteria  {@link CriteriaElement}
-     * @param bool                          $id_as_key Use the IDs as keys to the array?
+     * @param bool            $id_as_key Use the IDs as keys to the array?
      *
      * @return array Array of {@link XoopsConfigCategory}s
      */
@@ -212,13 +212,13 @@ class XoopsConfigCategoryHandler extends XoopsObjectHandler
         $ret   = array();
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('configcategory');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
-            $sql   .= ' ' . $criteria->renderWhere();
-            $sort  = !in_array($criteria->getSort(), array(
+        if (($criteria instanceof \CriteriaCompo) || ($criteria instanceof \Criteria)) {
+            $sql .= ' ' . $criteria->renderWhere();
+            $sort = !in_array($criteria->getSort(), array(
                 'confcat_id',
                 'confcat_name',
                 'confcat_order')) ? 'confcat_order' : $criteria->getSort();
-            $sql   .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
+            $sql .= ' ORDER BY ' . $sort . ' ' . $criteria->getOrder();
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }

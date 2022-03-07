@@ -91,7 +91,7 @@ class XoopsUser extends XoopsObject
             if (is_array($id)) {
                 $this->assignVars($id);
             } else {
-                /* @var XoopsMemberHandler $member_handler */
+                /** @var XoopsMemberHandler $member_handler */
                 $member_handler = xoops_getHandler('member');
                 $user           = $member_handler->getUser($id);
                 foreach ($user->vars as $k => $v) {
@@ -116,8 +116,8 @@ class XoopsUser extends XoopsObject
      * Updated by Catzwolf 11 Jan 2004
      * find the username for a given ID
      *
-     * @param int $userid  ID of the user to find
-     * @param int $usereal switch for usename or realname
+     * @param  int $userid  ID of the user to find
+     * @param  int $usereal switch for usename or realname
      * @return string name of the user. name for 'anonymous' if not found.
      */
     public static function getUnameFromId($userid, $usereal = 0)
@@ -125,7 +125,7 @@ class XoopsUser extends XoopsObject
         $userid  = (int)$userid;
         $usereal = (int)$usereal;
         if ($userid > 0) {
-            /* @var XoopsMemberHandler $member_handler */
+            /** @var XoopsMemberHandler $member_handler */
             $member_handler = xoops_getHandler('member');
             $user           = $member_handler->getUser($userid);
             if (is_object($user)) {
@@ -154,7 +154,7 @@ class XoopsUser extends XoopsObject
      */
     public function incrementPost()
     {
-        /* @var XoopsMemberHandler $member_handler */
+        /** @var XoopsMemberHandler $member_handler */
         $member_handler = xoops_getHandler('member');
 
         return $member_handler->updateUserByField($this, 'posts', $this->getVar('posts') + 1);
@@ -180,7 +180,7 @@ class XoopsUser extends XoopsObject
     public function &getGroups()
     {
         if (empty($this->_groups)) {
-            /* @var XoopsMemberHandler $member_handler */
+            /** @var XoopsMemberHandler $member_handler */
             $member_handler = xoops_getHandler('member');
             $this->_groups  = $member_handler->getGroupsByUser($this->getVar('uid'));
         }
@@ -218,7 +218,7 @@ class XoopsUser extends XoopsObject
         } elseif ((int)$module_id < 1) {
             $module_id = 0;
         }
-        /* @var XoopsGroupPermHandler $moduleperm_handler */
+        /** @var XoopsGroupPermHandler $moduleperm_handler */
         $moduleperm_handler = xoops_getHandler('groupperm');
 
         return $moduleperm_handler->checkRight('module_admin', $module_id, $this->getGroups());
@@ -254,7 +254,7 @@ class XoopsUser extends XoopsObject
     public function isOnline()
     {
         if (!isset($this->_isOnline)) {
-            /* @var XoopsOnlineHandler $online_handler */
+            /** @var XoopsOnlineHandler $online_handler */
             $onlinehandler   = xoops_getHandler('online');
             $this->_isOnline = ($onlinehandler->getCount(new Criteria('online_uid', $this->getVar('uid'))) > 0);// ? true : false;
         }
@@ -264,7 +264,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the users UID
-     * @param string $format
+     * @param  string $format
      * @return int
      */
     public function uid($format = '')
@@ -274,7 +274,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the users UID
-     * @param string $format
+     * @param  string $format
      * @return int
      */
     public function id($format = 'N')
@@ -284,7 +284,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the users name
-     * @param string $format format for the output, see {@link XoopsObject::getVar($format = '')}
+     * @param  string $format format for the output, see {@link XoopsObject::getVar($format = '')}
      * @return string
      */
     public function name($format = 'S')
@@ -294,7 +294,7 @@ class XoopsUser extends XoopsObject
 
     /**
      * get the user's uname
-     * @param string $format format for the output, see {@link XoopsObject::getVar($format = '')}
+     * @param  string $format format for the output, see {@link XoopsObject::getVar($format = '')}
      * @return string
      */
     public function uname($format = 'S')
@@ -305,7 +305,7 @@ class XoopsUser extends XoopsObject
     /**
      * get the user's email
      *
-     * @param string $format format for the output, see {@link XoopsObject::getVar($format = '')}
+     * @param  string $format format for the output, see {@link XoopsObject::getVar($format = '')}
      * @return string
      */
     public function email($format = 'S')
@@ -504,7 +504,6 @@ class XoopsUser extends XoopsObject
     }
 
     // RMV-NOTIFY
-
     /**
      * @param string $format
      *
@@ -555,6 +554,7 @@ class XoopsUser extends XoopsObject
         return $this->getVar('user_intrest', $format);
     }
     /**#@-*/
+
     /**#@+
      * @deprecated
      */
@@ -610,9 +610,9 @@ class XoopsUserHandler extends XoopsPersistableObjectHandler
     }
 
     /**#@+
-     * @param bool   $uname
+     * @param bool $uname
      * @param string $pwd
-     * @param bool   $md5
+     * @param bool $md5
      * @return bool|false
      * @deprecated
      */

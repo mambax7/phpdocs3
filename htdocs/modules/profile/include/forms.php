@@ -236,7 +236,7 @@ function profile_getFieldForm(ProfileField $field, $action = false)
                 break;
         }
     }
-    /* @var XoopsGroupPermHandler $groupperm_handler */
+    /** @var XoopsGroupPermHandler $groupperm_handler */
     $groupperm_handler = xoops_getHandler('groupperm');
     $searchable_types  = array(
         'textbox',
@@ -329,7 +329,7 @@ function profile_getRegisterForm(XoopsUser $user, $profile, $step = null)
 
     include_once $GLOBALS['xoops']->path('class/xoopsformloader.php');
     if (empty($GLOBALS['xoopsConfigUser'])) {
-        /* @var XoopsConfigHandler $config_handler */
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler             = xoops_getHandler('config');
         $GLOBALS['xoopsConfigUser'] = $config_handler->getConfigsByCat(XOOPS_CONF_USER);
     }
@@ -416,7 +416,7 @@ function profile_getRegisterForm(XoopsUser $user, $profile, $step = null)
 
     if ($step_no == 1 && $GLOBALS['xoopsConfigUser']['reg_dispdsclmr'] != 0 && $GLOBALS['xoopsConfigUser']['reg_disclaimer'] != '') {
         $disc_tray = new XoopsFormElementTray(_US_DISCLAIMER, '<br>');
-        $disc_text = new XoopsFormLabel('', "<div class=\"pad5\">" . $GLOBALS['myts']->displayTarea($GLOBALS['xoopsConfigUser']['reg_disclaimer'], 1) . '</div>');
+        $disc_text = new XoopsFormLabel('', '<div class="pad5">' . $GLOBALS['myts']->displayTarea($GLOBALS['xoopsConfigUser']['reg_disclaimer'], 1) . '</div>');
         $disc_tray->addElement($disc_text);
         $agree_chk = new XoopsFormCheckBox('', 'agree_disc');
         $agree_chk->addOption(1, _US_IAGREE);
@@ -455,7 +455,7 @@ function profile_getUserForm(XoopsUser $user, ProfileProfile $profile = null, $a
         $action = $_SERVER['REQUEST_URI'];
     }
     if (empty($GLOBALS['xoopsConfigUser'])) {
-        /* @var XoopsConfigHandler $config_handler */
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler             = xoops_getHandler('config');
         $GLOBALS['xoopsConfigUser'] = $config_handler->getConfigsByCat(XOOPS_CONF_USER);
     }
@@ -465,18 +465,18 @@ function profile_getUserForm(XoopsUser $user, ProfileProfile $profile = null, $a
     $title = $user->isNew() ? _PROFILE_AM_ADDUSER : _US_EDITPROFILE;
 
     $form = new XoopsThemeForm($title, 'userinfo', $action, 'post', true);
-    /* @var ProfileProfileHandler $profile_handler */
+    /** @var ProfileProfileHandler $profile_handler */
     $profile_handler = xoops_getModuleHandler('profile');
     // Dynamic fields
     if (!$profile) {
-        /* @var ProfileProfileHandler $profile_handler */
+        /** @var ProfileProfileHandler $profile_handler */
         $profile_handler = xoops_getModuleHandler('profile', 'profile');
         $profile         = $profile_handler->get($user->getVar('uid'));
     }
     // Get fields
     $fields = $profile_handler->loadFields();
     // Get ids of fields that can be edited
-    /* @var  XoopsGroupPermHandler $gperm_handler */
+    /** @var XoopsGroupPermHandler $gperm_handler */
     $gperm_handler   = xoops_getHandler('groupperm');
     $editable_fields = $gperm_handler->getItemIds('profile_edit', $GLOBALS['xoopsUser']->getGroups(), $GLOBALS['xoopsModule']->getVar('mid'));
 
@@ -569,7 +569,7 @@ function profile_getUserForm(XoopsUser $user, ProfileProfile $profile = null, $a
 
     if ($GLOBALS['xoopsUser'] && $GLOBALS['xoopsUser']->isAdmin()) {
         xoops_loadLanguage('admin', 'profile');
-        /* @var  XoopsGroupPermHandler $gperm_handler */
+        /** @var XoopsGroupPermHandler $gperm_handler */
         $gperm_handler = xoops_getHandler('groupperm');
         //If user has admin rights on groups
         include_once $GLOBALS['xoops']->path('modules/system/constants.php');
@@ -616,7 +616,7 @@ function profile_getStepForm(ProfileRegstep $step = null, $action = false)
         $action = $_SERVER['REQUEST_URI'];
     }
     if (empty($GLOBALS['xoopsConfigUser'])) {
-        /* @var XoopsConfigHandler $config_handler */
+        /** @var XoopsConfigHandler $config_handler */
         $config_handler             = xoops_getHandler('config');
         $GLOBALS['xoopsConfigUser'] = $config_handler->getConfigsByCat(XOOPS_CONF_USER);
     }

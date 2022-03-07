@@ -127,26 +127,18 @@ class XoopsXmlRpcTag
     /**
      * @param string $text
      *
-     * @return array|string|string[]|null
+     * @return mixed
      */
     public function &encode(&$text)
     {
-        $text = preg_replace(array(
-                                 '/\&([a-z\d\#]+)\;/i',
-                                 '/\&/',
-                                 '/\#\|\|([a-z\d\#]+)\|\|\#/i',
-                             ), array(
-                                 "#||\\1||#",
-                                 '&amp;',
-                                 "&\\1;",
-                             ), str_replace(array(
-                                                '<',
-                                                '>',
-                                            ), array(
-                                                '&lt;',
-                                                '&gt;',
-                                            ), $text)
-        );
+        $text = preg_replace(array("/\&([a-z\d\#]+)\;/i", "/\&/", "/\#\|\|([a-z\d\#]+)\|\|\#/i"), array(
+            "#||\\1||#",
+            '&amp;',
+            "&\\1;"), str_replace(array(
+                                      '<',
+                                      '>'), array(
+                                      '&lt;',
+                                      '&gt;'), $text));
 
         return $text;
     }
@@ -190,7 +182,7 @@ class XoopsXmlRpcFault extends XoopsXmlRpcTag
     public $_extra;
 
     /**
-     * @param int         $code
+     * @param int $code
      * @param string|null $extra
      */
     public function __construct($code, $extra = null)
@@ -471,7 +463,7 @@ class XoopsXmlRpcStruct extends XoopsXmlRpcTag
     }
 
     /**
-     * @param string          $name
+     * @param string $name
      * @param \XoopsXmlRpcTag $tagobj
      */
     public function add($name, $tagobj)

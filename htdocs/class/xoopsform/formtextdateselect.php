@@ -25,15 +25,15 @@ defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 class XoopsFormTextDateSelect extends XoopsFormText
 {
     /**
-     * @param string $caption
-     * @param string $name
-     * @param int    $size
-     * @param int    $value
+     * @param string     $caption
+     * @param string     $name
+     * @param int        $size
+     * @param int|string $value
      */
     public function __construct($caption, $name, $size = 15, $value = 0)
     {
-        $value   = !is_numeric($value) ? time() : (int)$value;
-        $value   = ($value == 0) ? time() : $value;
+        $value = !is_numeric($value) ? time() : (int)$value;
+        $value = ($value == 0) ? time() : $value;
         parent::__construct($caption, $name, $size, 25, $value);
     }
 

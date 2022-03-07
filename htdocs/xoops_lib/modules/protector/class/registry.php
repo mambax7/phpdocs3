@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Protector;
+
 //  Author: Trabis
 //  URL: http://www.xuups.com
 //  E-Mail: lusopoemas@gmail.com
@@ -6,9 +7,9 @@
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 /**
- * Class ProtectorRegistry
+ * Class Registry
  */
-class ProtectorRegistry
+class Registry
 {
     /**
      * @var array
@@ -20,7 +21,7 @@ class ProtectorRegistry
     public $_locks;
 
     /**
-     * ProtectorRegistry constructor.
+     * Registry constructor.
      */
     protected function __construct()
     {
@@ -29,27 +30,27 @@ class ProtectorRegistry
     }
 
     /**
-     * @return ProtectorRegistry
+     * @return Registry
      */
     public static function getInstance()
     {
         static $instance = false;
         if (!$instance) {
-            $instance = new ProtectorRegistry();
+            $instance = new Registry();
         }
 
         return $instance;
     }
 
     /**
-     * @param $key
-     * @param $item
+     * @param string $key
+     * @param string $item
      *
      * @return bool
      */
     public function setEntry($key, $item)
     {
-        if ($this->isLocked($key) == true) {
+        if (true === $this->isLocked($key)) {
             trigger_error('Unable to set entry `' . $key . '`. Entry is locked.', E_USER_WARNING);
 
             return false;
@@ -61,7 +62,7 @@ class ProtectorRegistry
     }
 
     /**
-     * @param $key
+     * @param string $key
      */
     public function unsetEntry($key)
     {
@@ -69,13 +70,13 @@ class ProtectorRegistry
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
-     * @return null
+     * @return string|null
      */
     public function getEntry($key)
     {
-        if (isset($this->_entries[$key]) == false) {
+        if (false === isset($this->_entries[$key])) {
             return null;
         }
 
@@ -83,17 +84,17 @@ class ProtectorRegistry
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */
     public function isEntry($key)
     {
-        return ($this->getEntry($key) !== null);
+        return (null !== $this->getEntry($key));
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */
@@ -105,7 +106,7 @@ class ProtectorRegistry
     }
 
     /**
-     * @param $key
+     * @param string $key
      */
     public function unlockEntry($key)
     {
@@ -113,13 +114,13 @@ class ProtectorRegistry
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */
     public function isLocked($key)
     {
-        return (isset($this->_locks[$key]) == true);
+        return (true === isset($this->_locks[$key]));
     }
 
     public function unsetAll()

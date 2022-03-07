@@ -1,5 +1,4 @@
 <?php
-
 /**
  * XOOPS authentication/authorization
  *
@@ -21,16 +20,16 @@ xoops_loadLanguage('user');
 
 // from $_POST we use keys: uname, pass, rememberme, xoops_redirect
 XoopsLoad::load('XoopsRequest');
-$uname      = XoopsRequest::getString('uname', '', 'POST');
-$pass       = XoopsRequest::getString('pass', '', 'POST');
+$uname = XoopsRequest::getString('uname', '', 'POST');
+$pass = XoopsRequest::getString('pass', '', 'POST');
 $rememberme = XoopsRequest::getString('rememberme', '', 'POST');
-$redirect   = XoopsRequest::getUrl('xoops_redirect', '', 'POST');
+$redirect = XoopsRequest::getUrl('xoops_redirect', '', 'POST');
 
 if ($uname == '' || $pass == '') {
     redirect_header(XOOPS_URL . '/user.php', 1, _US_INCORRECTLOGIN);
 }
 
-/* @var XoopsMemberHandler $member_handler */
+/** @var XoopsMemberHandler $member_handler */
 $member_handler = xoops_getHandler('member');
 $myts           = MyTextSanitizer::getInstance();
 
@@ -77,8 +76,8 @@ if (false !== $user) {
             $claims = array(
                 'uid' => $_SESSION['xoopsUserId'],
             );
-            $rememberTime = 60 * 60 * 24 * 30;
-            $token        = \Xmf\Jwt\TokenFactory::build('rememberme', $claims, $rememberTime);
+            $rememberTime = 60*60*24*30;
+            $token = \Xmf\Jwt\TokenFactory::build('rememberme', $claims, $rememberTime);
             xoops_setcookie(
                 $GLOBALS['xoopsConfig']['usercookie'],
                 $token,

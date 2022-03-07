@@ -1,5 +1,11 @@
 <?php
 
+
+use XoopsModules\Protector;
+use XoopsModules\Protector\Guardian;
+
+require_once dirname(__DIR__) . '/preloads/autoloader.php';
+
 /**
  * @return bool|null
  */
@@ -11,10 +17,10 @@ function protector_prepare()
     }
 
     // Protector class
-    require_once dirname(__DIR__) . '/class/protector.php';
+//    require_once dirname(__DIR__) . '/class/protector.php';
 
     // Protector object
-    $protector = Protector::getInstance();
+    $protector = Guardian::getInstance();
     $conf      = $protector->getConf();
 
     // bandwidth limitation
@@ -22,7 +28,7 @@ function protector_prepare()
         $bwexpire = $protector->get_bwlimit();
         if ($bwexpire > time()) {
             header('HTTP/1.0 503 Service unavailable');
-            $protector->call_filter('precommon_bwlimit', 'This website is very busy now. Please try later.');
+            $protector->call_filter('PrecommonBwlimit', 'This website is very busy now. Please try later.');
         }
     }
 
@@ -30,7 +36,7 @@ function protector_prepare()
     $bad_ips      = $protector->get_bad_ips(true);
     $bad_ip_match = $protector->ip_match($bad_ips);
     if ($bad_ip_match) {
-        $protector->call_filter('precommon_badip', 'You are registered as BAD_IP by Protector.');
+        $protector->call_filter('PrecommonBadip', 'You are registered as BAD_IP by Protector.');
     }
 
     // global enabled or disabled

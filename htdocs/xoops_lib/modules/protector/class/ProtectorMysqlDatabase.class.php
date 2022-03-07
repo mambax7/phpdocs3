@@ -1,4 +1,4 @@
-<?php
+<?php namespace XoopsModules\Protector;
 
 if (file_exists(XOOPS_ROOT_PATH . '/class/database/drivers/' . XOOPS_DB_TYPE . '/database.php')) {
     require_once XOOPS_ROOT_PATH . '/class/database/drivers/' . XOOPS_DB_TYPE . '/database.php';
@@ -9,9 +9,9 @@ if (file_exists(XOOPS_ROOT_PATH . '/class/database/drivers/' . XOOPS_DB_TYPE . '
 require_once XOOPS_ROOT_PATH . '/class/database/database.php';
 
 /**
- * Class ProtectorMySQLDatabase
+ * Class ProtectorMysqlDatabase
  */
-class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
+class ProtectorMysqlDatabase extends XoopsMySQLDatabaseProxy
 {
     /**
      * @var array
@@ -30,30 +30,30 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
     );
 
     /**
-     * ProtectorMySQLDatabase constructor.
+     * ProtectorMysqlDatabase constructor.
      */
     public function __construct()
     {
-        $protector               = Protector::getInstance();
+        $protector               = Guardian::getInstance();
         $this->doubtful_requests = $protector->getDblayertrapDoubtfuls();
         $this->doubtful_needles  = array_merge($this->doubtful_needles, $this->doubtful_requests);
     }
 
     /**
-     * @param $sql
+     * @param string $sql
      */
     public function injectionFound($sql)
     {
-        $protector = Protector::getInstance();
+        $protector = Guardian::getInstance();
 
         $protector->last_error_type = 'SQL Injection';
-        $protector->message         .= $sql;
+        $protector->message .= $sql;
         $protector->output_log($protector->last_error_type);
         die('SQL Injection found');
     }
 
     /**
-     * @param $sql
+     * @param string $sql
      *
      * @return array
      */
@@ -72,13 +72,13 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
             $char = $sql[$i];
             if ($in_string) {
                 while (1) {
-                    $new_i          = strpos($sql, $string_start, $i);
+                    $new_i = strpos($sql, $string_start, $i);
                     $current_string .= substr($sql, $i, $new_i - $i + 1);
-                    $i              = $new_i;
-                    if ($i === false) {
+                    $i = $new_i;
+                    if (false === $i) {
                         break 2;
                     } elseif (/* $string_start == '`' || */
-                        $sql[$i - 1] !== '\\'
+                        '\\' !== $sql[$i - 1]
                     ) {
                         $string_start = '';
                         $in_string    = false;
@@ -87,7 +87,7 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
                     } else {
                         $j                 = 2;
                         $escaped_backslash = false;
-                        while ($i - $j > 0 && $sql[$i - $j] === '\\') {
+                        while ($i - $j > 0 && '\\' === $sql[$i - $j]) {
                             $escaped_backslash = !$escaped_backslash;
                             ++$j;
                         }
@@ -101,7 +101,7 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
                         }
                     }
                 }
-            } elseif ($char === '"' || $char === "'") { // dare to ignore ``
+            } elseif ('"' === $char || "'" === $char) { // dare to ignore ``
                 $in_string      = true;
                 $string_start   = $char;
                 $current_string = $char;
@@ -119,7 +119,7 @@ class ProtectorMySQLDatabase extends XoopsMySQLDatabaseProxy
     }
 
     /**
-     * @param $sql
+     * @param string $sql
      */
     public function checkSql($sql)
     {

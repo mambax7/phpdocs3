@@ -29,8 +29,8 @@ if ($email == '') {
     redirect_header('user.php', 2, _US_SORRYNOTFOUND);
 }
 
-$myts = MyTextSanitizer::getInstance();
-/* @var XoopsMemberHandler $member_handler */
+$myts           = MyTextSanitizer::getInstance();
+/** @var XoopsMemberHandler $member_handler */
 $member_handler = xoops_getHandler('member');
 $getuser        = $member_handler->getUsers(new Criteria('email', $myts->addSlashes($email)));
 

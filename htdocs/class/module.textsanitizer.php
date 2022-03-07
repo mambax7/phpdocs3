@@ -35,7 +35,7 @@ class MyTextSanitizerExtension
      */
     public $ts;
     /**
-     * @var \XoopsConfig
+     * @var array
      */
     public $config;
     /**
@@ -62,17 +62,17 @@ class MyTextSanitizerExtension
      */
     public static function loadConfig($path = null)
     {
-        $ts            = MyTextSanitizer::getInstance();
+        $ts   = MyTextSanitizer::getInstance();
         $extensionName = (null === $path) ? '' : basename($path);
-        $pathDist      = $ts->path_basic;
-        $pathConfig    = $ts->path_config;
+        $pathDist = $ts->path_basic;
+        $pathConfig = $ts->path_config;
 
         if ('' !== $extensionName) {
             $configFileName = $pathConfig . '/config.' . $extensionName . '.php';
-            $distFileName   = $pathDist . '/' . $extensionName . '/config.' . $extensionName . '.dist.php';
+            $distFileName = $pathDist . '/' . $extensionName . '/config.' . $extensionName . '.dist.php';
         } else {
             $configFileName = $pathConfig . '/config.php';
-            $distFileName   = $pathDist . '/config.dist.php';
+            $distFileName = $pathDist . '/config.dist.php';
         }
         if (!file_exists($configFileName)) {
             if (false === copy($distFileName, $configFileName)) {
@@ -87,8 +87,8 @@ class MyTextSanitizerExtension
     /**
      * Merge Config
      *
-     * @param array $config_default
-     * @param array $config_custom
+     * @param  array $config_default
+     * @param  array $config_custom
      * @return array
      */
     public static function mergeConfig($config_default, $config_custom)
@@ -121,7 +121,7 @@ class MyTextSanitizerExtension
     /**
      * decode
      *
-     * @param string     $url
+     * @param string $url
      * @param string|int $width
      * @param string|int $height
      *
@@ -152,23 +152,26 @@ class MyTextSanitizer
      * @var array
      */
     public $smileys = array();
+
     /**
      * @var \MytsCensor
      */
     public $censorConf;
+
     /**
      *
      * @var string holding reference to text
      */
-    public $text = '';
+    public $text         = '';
     /**
      * @var array
      */
-    public $patterns = array();
+    public $patterns     = array();
     /**
      * @var array
      */
     public $replacements = array();
+
     //mb------------------------------
     /**
      * @var array
@@ -177,7 +180,7 @@ class MyTextSanitizer
     /**
      * @var array
      */
-    public $callbacks = array();
+    public $callbacks        = array();
     //mb------------------------------
     /**
      * @var string
@@ -192,7 +195,7 @@ class MyTextSanitizer
      */
     public $path_plugin;
     /**
-     * @var \XoopsConfig
+     * @var array|string
      */
     public $config;
 
@@ -228,10 +231,10 @@ class MyTextSanitizer
         }
 
         $configFileName = $this->path_config . '/config.php';
-        $distFileName   = $this->path_basic . '/config.dist.php';
+        $distFileName = $this->path_basic . '/config.dist.php';
 
         if (!file_exists($configFileName)) {
-            if (false === copy($distFileName, $configFileName)) {
+            if (false===copy($distFileName, $configFileName)) {
                 trigger_error('Could not create textsanitizer config file ' . basename($configFileName));
                 return array();
             }
@@ -242,8 +245,8 @@ class MyTextSanitizer
     /**
      * Enter description here...
      *
-     * @param array $config_default
-     * @param array $config_custom
+     * @param  array $config_default
+     * @param  array $config_custom
      * @return array
      */
     public function mergeConfig($config_default, $config_custom)
@@ -286,8 +289,8 @@ class MyTextSanitizer
     public function getSmileys($isAll = true)
     {
         if (count($this->smileys) == 0) {
-            /* @var XoopsMySQLDatabase $xoopsDB */
-            $xoopsDB = XoopsDatabaseFactory::getDatabaseConnection();
+            /** @var XoopsMySQLDatabase $xoopsDB */
+            $xoopsDB = \XoopsDatabaseFactory::getDatabaseConnection();
             if ($getsmiles = $xoopsDB->query('SELECT * FROM ' . $xoopsDB->prefix('smiles'))) {
                 while (false !== ($smiles = $xoopsDB->fetchArray($getsmiles))) {
                     $this->smileys[] = $smiles;
@@ -312,7 +315,7 @@ class MyTextSanitizer
     /**
      * Replace emoticons in the message with smiley images
      *
-     * @param string $message
+     * @param  string $message
      * @return string
      */
     public function smiley($message)
@@ -368,7 +371,7 @@ class MyTextSanitizer
     /**
      * Make links in the text clickable
      *
-     * @param string $text
+     * @param  string $text
      * @return string
      */
     public function makeClickable(&$text)
@@ -416,7 +419,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::truncate()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return mixed|string
      */
     public function truncate($text)
@@ -425,7 +428,7 @@ class MyTextSanitizer
         if (empty($text) || empty($instance->config['truncate_length']) || strlen($text) < $instance->config['truncate_length']) {
             return $text;
         }
-        $len = floor($instance->config['truncate_length'] / 2);
+        $len = (int)floor($instance->config['truncate_length'] / 2);
         $ret = substr($text, 0, $len) . ' ... ' . substr($text, 5 - $len);
 
         return $ret;
@@ -434,8 +437,8 @@ class MyTextSanitizer
     /**
      * Replace XoopsCodes with their equivalent HTML formatting
      *
-     * @param string   $text
-     * @param bool|int $allowimage  Allow images in the text?
+     * @param  string   $text
+     * @param  bool|int $allowimage Allow images in the text?
      *                              On FALSE, uses links to images.
      * @return string
      */
@@ -498,7 +501,7 @@ class MyTextSanitizer
     /**
      * Convert quote tags
      *
-     * @param string $text
+     * @param  string $text
      * @return string
      */
     public function quoteConv($text)
@@ -544,7 +547,7 @@ class MyTextSanitizer
     /**
      * Convert linebreaks to <br> tags
      *
-     * @param string $text
+     * @param  string $text
      * @return string
      */
     public function nl2Br($text)
@@ -555,7 +558,7 @@ class MyTextSanitizer
     /**
      * Add slashes to the text if magic_quotes_gpc is turned off.
      *
-     * @param string $text
+     * @param  string $text
      * @return string
      */
     public function addSlashes($text)
@@ -583,9 +586,9 @@ class MyTextSanitizer
         }
 
         if (version_compare(phpversion(), '5.2.3', '>=')) {
-            $text = htmlspecialchars(isset($text) ? $text : '', $quote_style, $charset ?: (defined('_CHARSET') ? _CHARSET : 'UTF-8'), $double_encode);
+            $text = htmlspecialchars(($text) ?: '', $quote_style, $charset ?: (defined('_CHARSET') ? _CHARSET : 'UTF-8'), $double_encode);
         } else {
-            $text = htmlspecialchars(isset($text) ? $text : '', $quote_style);
+            $text = htmlspecialchars(($text) ?: '', $quote_style);
         }
 
         return preg_replace(array('/&amp;/i', '/&nbsp;/i'), array('&', '&amp;nbsp;'), $text);
@@ -594,7 +597,7 @@ class MyTextSanitizer
     /**
      * Reverses {@link htmlSpecialChars()}
      *
-     * @param string $text
+     * @param  string $text
      * @return string
      */
     public function undoHtmlSpecialChars($text)
@@ -605,19 +608,19 @@ class MyTextSanitizer
     /**
      * Filters textarea form data in DB for display
      *
-     * @param string   $text
-     * @param bool|int $html   allow html?
-     * @param bool|int $smiley allow smileys?
-     * @param bool|int $xcode  allow xoopscode?
-     * @param bool|int $image  allow inline images?
-     * @param bool|int $br     convert linebreaks?
+     * @param  string   $text
+     * @param  bool|int $html   allow html?
+     * @param  bool|int $smiley allow smileys?
+     * @param  bool|int $xcode  allow xoopscode?
+     * @param  bool|int $image  allow inline images?
+     * @param  bool|int $br     convert linebreaks?
      * @return string
      */
     public function &displayTarea($text, $html = 0, $smiley = 1, $xcode = 1, $image = 1, $br = 1)
     {
         $charset = (defined('_CHARSET') ? _CHARSET : 'UTF-8');
         if (function_exists('mb_convert_encoding')) {
-            $text = mb_convert_encoding(isset($text) ? $text : '', $charset, mb_detect_encoding(isset($text) ? $text : '', mb_detect_order(), true));
+            $text = mb_convert_encoding(($text) ?: '', $charset, mb_detect_encoding(($text) ?: '', mb_detect_order(), true));
         }
         if ($html && $br) {
             $testText = strip_tags($text);
@@ -660,12 +663,12 @@ class MyTextSanitizer
     /**
      * Filters textarea form data submitted for preview
      *
-     * @param string   $text
-     * @param bool|int $html   allow html?
-     * @param bool|int $smiley allow smileys?
-     * @param bool|int $xcode  allow xoopscode?
-     * @param bool|int $image  allow inline images?
-     * @param bool|int $br     convert linebreaks?
+     * @param  string   $text
+     * @param  bool|int $html   allow html?
+     * @param  bool|int $smiley allow smileys?
+     * @param  bool|int $xcode  allow xoopscode?
+     * @param  bool|int $image  allow inline images?
+     * @param  bool|int $br     convert linebreaks?
      * @return string
      */
     public function &previewTarea($text, $html = 0, $smiley = 1, $xcode = 1, $image = 1, $br = 1)
@@ -679,7 +682,7 @@ class MyTextSanitizer
     /**
      * Replaces banned words in a string with their replacements
      *
-     * @param string $text
+     * @param  string $text
      * @return string
      * @deprecated
      */
@@ -696,8 +699,8 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::codePreConv()
      *
-     * @param mixed $text
-     * @param mixed $xcode
+     * @param  mixed $text
+     * @param  mixed $xcode
      * @return mixed
      */
     public function codePreConv($text, $xcode = 1)
@@ -707,10 +710,10 @@ class MyTextSanitizer
             //            $replacements = "'[code\\1]'.base64_encode('\\2').'[/code]'";
 
             $patterns = '/\[code([^\]]*?)\](.*)\[\/code\]/sU';
-            $text     = preg_replace_callback(
+            $text = preg_replace_callback(
                 $patterns,
                 function ($matches) {
-                    return '[code' . $matches[1] . ']' . base64_encode($matches[2]) . '[/code]';
+                    return '[code'. $matches[1] . ']' . base64_encode($matches[2]) . '[/code]';
                 },
                 $text
             );
@@ -720,7 +723,7 @@ class MyTextSanitizer
     }
 
     /**
-     * @param $match
+     * @param array $match
      *
      * @return string
      */
@@ -732,8 +735,8 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::codeConv()
      *
-     * @param mixed $text
-     * @param mixed $xcode
+     * @param  mixed $text
+     * @param  mixed $xcode
      * @return mixed
      */
     public function codeConv($text, $xcode = 1)
@@ -770,7 +773,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::loadExtension()
      *
-     * @param mixed $name
+     * @param  mixed $name
      * @return MyTextSanitizerExtension|false
      */
     public function loadExtension($name)
@@ -794,7 +797,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::executeExtension()
      *
-     * @param mixed $name
+     * @param  mixed $name
      * @return mixed
      */
     public function executeExtension($name)
@@ -813,8 +816,8 @@ class MyTextSanitizer
      * Filter out possible malicious text
      * kses project at SF could be a good solution to check
      *
-     * @param string $text  text to filter
-     * @param bool   $force force filtering
+     * @param  string $text  text to filter
+     * @param  bool   $force force filtering
      * @return string filtered text
      */
     public function textFilter($text, $force = false)
@@ -832,7 +835,7 @@ class MyTextSanitizer
     /**
      * if magic_quotes_gpc is on, strip back slashes
      *
-     * @param string $text
+     * @param  string $text
      * @return string
      * @deprecated as of XOOPS 2.5.11 and will be removed in next XOOPS version
      *
@@ -850,8 +853,8 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::codeSanitizer()
      *
-     * @param mixed $str
-     * @param mixed $image
+     * @param  mixed $str
+     * @param  mixed $image
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -867,10 +870,10 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::sanitizeForDisplay()
      *
-     * @param mixed $text
-     * @param int   $allowhtml
-     * @param int   $smiley
-     * @param mixed $bbcode
+     * @param  mixed   $text
+     * @param int $allowhtml
+     * @param int $smiley
+     * @param  mixed   $bbcode
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -899,10 +902,10 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::sanitizeForPreview()
      *
-     * @param mixed $text
-     * @param int   $allowhtml
-     * @param int   $smiley
-     * @param mixed $bbcode
+     * @param  mixed   $text
+     * @param int $allowhtml
+     * @param int $smiley
+     * @param  mixed   $bbcode
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -932,7 +935,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTboxData4Save()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -947,8 +950,8 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTboxData4Show()
      *
-     * @param mixed $text
-     * @param mixed $smiley
+     * @param  mixed $text
+     * @param  mixed $smiley
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -963,7 +966,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTboxData4Edit()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -977,8 +980,8 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTboxData4Preview()
      *
-     * @param mixed $text
-     * @param mixed $smiley
+     * @param  mixed $text
+     * @param  mixed $smiley
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -994,7 +997,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTboxData4PreviewInForm()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1009,7 +1012,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTareaData4Save()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1023,10 +1026,10 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTareaData4Show()
      *
-     * @param mixed $text
-     * @param int   $html
-     * @param int   $smiley
-     * @param mixed $xcode
+     * @param  mixed   $text
+     * @param int $html
+     * @param int $smiley
+     * @param  mixed   $xcode
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1041,7 +1044,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTareaData4Edit()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1055,10 +1058,10 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTareaData4Preview()
      *
-     * @param mixed $text
-     * @param int   $html
-     * @param int   $smiley
-     * @param mixed $xcode
+     * @param  mixed   $text
+     * @param int $html
+     * @param int $smiley
+     * @param  mixed   $xcode
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1073,7 +1076,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTareaData4PreviewInForm()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1089,7 +1092,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::makeTareaData4InsideQuotes()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1103,7 +1106,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::oopsStripSlashesGPC()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1117,7 +1120,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::oopsStripSlashesRT()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return mixed|string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1134,7 +1137,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::oopsAddSlashes()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1148,7 +1151,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::oopsHtmlSpecialChars()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
@@ -1162,7 +1165,7 @@ class MyTextSanitizer
     /**
      * MyTextSanitizer::oopsNl2Br()
      *
-     * @param mixed $text
+     * @param  mixed $text
      * @return string
      * @deprecated will be removed in next XOOPS version
      */
